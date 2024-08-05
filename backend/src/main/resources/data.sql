@@ -1,0 +1,60 @@
+-- data.sql
+
+-- Insertar datos en la tabla de Supplier
+
+INSERT INTO supplier (name, contact, phone) VALUES
+('EnergyTech Supplies Inc.', 'James Smith', '+1-800-123-4567'),
+('Nuclear Solutions Ltd.', 'Maria Garcia', '+1-800-234-5678'),
+('Advanced Safety Equipment', 'John Doe', '+1-800-345-6789'),
+('ProTech Engineering', 'Sarah Lee', '+1-800-456-7890'),
+('Global Energy Components', 'Michael Brown', '+1-800-567-8901'),
+('SafeGuard Technologies', 'Linda White', '+1-800-678-9012'),
+('Power Systems International', 'David Green', '+1-800-789-0123'),
+('EnviroTech Materials', 'Emily Clark', '+1-800-890-1234'),
+('Precision Instruments Co.', 'Robert Miller', '+1-800-901-2345'),
+('Thermal Dynamics Corp.', 'Patricia Taylor', '+1-800-012-3456'),
+('HydroTech Solutions', 'Tom Harris', '+1-800-234-6789'),
+('TechnoSafe Instruments', 'Jessica Martin', '+1-800-345-7890'),
+('Elite Energy Parts', 'Daniel Allen', '+1-800-456-8901'),
+('SafetyFirst Gear', 'Olivia Thompson', '+1-800-567-9012'),
+('Innovative Cooling Systems', 'Laura Wilson', '+1-800-678-0123');
+
+-- Insertar datos en la tabla de Material
+
+INSERT INTO material (name, type, quantity, unit_of_measure, supplier_id) VALUES
+('Uranium Fuel Rod', 'FUEL', 100, 'kg', (SELECT id FROM supplier WHERE name = 'Global Energy Components')),
+('Coolant Liquid', 'COOLANT', 5000, 'liters', (SELECT id FROM supplier WHERE name = 'EnergyTech Supplies Inc.')),
+('Safety Helmet', 'TOOL', 150, 'units', (SELECT id FROM supplier WHERE name = 'Advanced Safety Equipment')),
+('Miscellaneous Tools', 'OTHER', 200, 'units', (SELECT id FROM supplier WHERE name = 'Advanced Safety Equipment')),
+('Hydrogen Fuel Cell', 'FUEL', 50, 'units', (SELECT id FROM supplier WHERE name = 'Elite Energy Parts')),
+('Graphite Moderator', 'FUEL', 1200, 'kg', (SELECT id FROM supplier WHERE name = 'Global Energy Components')),
+('Control Rods', 'TOOL', 75, 'units', (SELECT id FROM supplier WHERE name = 'ProTech Engineering')),
+('Emergency Flashlights', 'TOOL', 80, 'units', (SELECT id FROM supplier WHERE name = 'Advanced Safety Equipment')),
+('Lubricating Oil', 'COOLANT', 3000, 'liters', (SELECT id FROM supplier WHERE name = 'Nuclear Solutions Ltd.')),
+('De-ionized Water', 'COOLANT', 6000, 'liters', (SELECT id FROM supplier WHERE name = 'Nuclear Solutions Ltd.')),
+('Radiation Detectors', 'TOOL', 25, 'units', (SELECT id FROM supplier WHERE name = 'Precision Instruments Co.')),
+('High Voltage Cables', 'OTHER', 200, 'meters', (SELECT id FROM supplier WHERE name = 'Electrical Wiring Ltd.')),
+('Heat Exchanger Parts', 'OTHER', 50, 'units', (SELECT id FROM supplier WHERE name = 'Global Energy Components')),
+('Cooling Fans', 'TOOL', 30, 'units', (SELECT id FROM supplier WHERE name = 'Power Systems International')),
+('Pump Seals', 'OTHER', 150, 'units', (SELECT id FROM supplier WHERE name = 'Elite Energy Parts')),
+('Heat Insulation Material', 'OTHER', 500, 'kg', (SELECT id FROM supplier WHERE name = 'Innovative Cooling Systems')),
+('Welding Equipment', 'TOOL', 60, 'units', (SELECT id FROM supplier WHERE name = 'ProTech Engineering')),
+('Calibration Instruments', 'TOOL', 20, 'units', (SELECT id FROM supplier WHERE name = 'Precision Instruments Co.')),
+('Spare Parts for Generators', 'OTHER', 100, 'units', (SELECT id FROM supplier WHERE name = 'Thermal Dynamics Corp.')),
+('Chemical Reactants', 'FUEL', 200, 'kg', (SELECT id FROM supplier WHERE name = 'Global Energy Components')),
+('Protective Gloves', 'TOOL', 300, 'units', (SELECT id FROM supplier WHERE name = 'Advanced Safety Equipment')),
+('First Aid Kits', 'TOOL', 25, 'units', (SELECT id FROM supplier WHERE name = 'Advanced Safety Equipment')),
+('Storage Containers', 'OTHER', 100, 'units', (SELECT id FROM supplier WHERE name = 'EnviroTech Materials')),
+('Data Acquisition Systems', 'OTHER', 15, 'units', (SELECT id FROM supplier WHERE name = 'Innovative Cooling Systems')),
+('Power Transformers', 'OTHER', 10, 'units', (SELECT id FROM supplier WHERE name = 'Thermal Dynamics Corp.')),
+('Emergency Generators', 'FUEL', 5, 'units', (SELECT id FROM supplier WHERE name = 'Elite Energy Parts')),
+('Cryogenic Liquids', 'COOLANT', 2000, 'liters', (SELECT id FROM supplier WHERE name = 'HydroTech Solutions')),
+('Radiation Shielding Material', 'FUEL', 800, 'kg', (SELECT id FROM supplier WHERE name = 'Global Energy Components')),
+('Safety Barriers', 'TOOL', 50, 'units', (SELECT id FROM supplier WHERE name = 'Advanced Safety Equipment')),
+('Hydraulic Fluids', 'COOLANT', 1500, 'liters', (SELECT id FROM supplier WHERE name = 'HydroTech Solutions')),
+('Electrical Wiring', 'OTHER', 5000, 'meters', (SELECT id FROM supplier WHERE name = 'Electrical Wiring Ltd.')),
+('Ventilation Systems', 'TOOL', 25, 'units', (SELECT id FROM supplier WHERE name = 'Power Systems International')),
+('Monitoring Systems', 'OTHER', 40, 'units', (SELECT id FROM supplier WHERE name = 'Innovative Cooling Systems')),
+('Chemical Storage Tanks', 'OTHER', 20, 'units', (SELECT id FROM supplier WHERE name = 'EnviroTech Materials')),
+('Precision Measurement Tools', 'TOOL', 30, 'units', (SELECT id FROM supplier WHERE name = 'Precision Instruments Co.')),
+('Explosion-Proof Fixtures', 'OTHER', 10, 'units', (SELECT id FROM supplier WHERE name = 'Thermal Dynamics Corp.'));
