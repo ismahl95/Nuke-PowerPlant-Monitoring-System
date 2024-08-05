@@ -22,13 +22,22 @@ public class Maintenance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String description; // Descripción
-    private LocalDateTime startDate; // Fecha de inicio
-    private LocalDateTime endDate;   // Fecha de fin
+    private String description;  // Descripción
+    private LocalDateTime startDate;  // Fecha de inicio
+    private LocalDateTime endDate;    // Fecha de fin
+
     @Enumerated(EnumType.STRING)
-    private MaintenanceStatus status; // Estado (completado, en curso)
+    private MaintenanceStatus status; // Estado del mantenimiento
 
     @ManyToOne
-    @JoinColumn(name = "reactor_id")
-    private Reactor reactor;  // Relación con Reactor
+    @JoinColumn(name = "reactor_id", nullable = true)
+    private Reactor reactor; // Relación opcional con Reactor
+
+    @ManyToOne
+    @JoinColumn(name = "equipment_id", nullable = true)
+    private Equipment equipment; // Relación opcional con Equipment
+
+    @ManyToOne
+    @JoinColumn(name = "maintenance_plan_id")
+    private MaintenancePlan maintenancePlan; // Relación con MaintenancePlan
 }

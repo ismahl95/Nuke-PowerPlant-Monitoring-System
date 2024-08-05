@@ -18,7 +18,7 @@ public class SensorReading {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double value;         // Valor de la lectura
+    private double measurementValue;         // Valor de la lectura
     private LocalDateTime date;   // Fecha de la lectura
 
     @ManyToOne
