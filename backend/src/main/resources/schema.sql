@@ -1,5 +1,7 @@
 -- src/main/resources/schema.sql
 
+-- Vista de los materiales y sus proveedores
+
 CREATE VIEW material_supplier_view AS
 SELECT
     m.name AS "MATERIAL NAME",
@@ -16,21 +18,7 @@ JOIN
 ON
     m.supplier_id = s.id;
 
--- Crear una vista para mostrar sensores y sus lecturas
-
-CREATE VIEW sensor_readings_summary AS
-SELECT
-    s.type AS "TYPE",
-    s.location AS "LOCATION",
-    sr.measurement_value AS "VALUE",
-    sr.date AS "DATE"
-FROM
-    sensor s
-JOIN
-    sensor_reading sr
-ON
-    s.id = sr.sensor_id;
-
+-- Vista de los reactores
 
 CREATE VIEW reactor_overview AS
 SELECT
@@ -45,4 +33,24 @@ JOIN
     nuclear_plant np
 ON
     r.nuclear_plant_id = np.id;
+
+-- Vista de lecturas de los sensores por reactor y su planta asociada
+
+CREATE VIEW plant_reactor_sensor_readings AS
+SELECT
+    np.name AS plant_name,
+    r.name AS reactor_name,
+    s.type AS sensor_type,
+    s.location AS sensor_location,
+    sr.measurement_value,
+    sr.date AS reading_date
+FROM
+    nuclear_plant np
+JOIN
+    reactor r ON np.id = r.nuclear_plant_id
+JOIN
+    sensor s ON r.id = s.reactor_id
+JOIN
+    sensor_reading sr ON s.id = sr.sensor_id;
+
 
