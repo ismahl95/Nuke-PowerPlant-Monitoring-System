@@ -8,6 +8,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.ihl95.nuclear.enums.SensorType;
@@ -24,6 +26,10 @@ public class Sensor {
     @Enumerated(EnumType.STRING)
     private SensorType type; // Tipo de sensor
     private String location; // Ubicación del sensor
+
+    @ManyToOne
+    @JoinColumn(name = "reactor_id")
+    private Reactor reactor; // Relación con Reactor
 
     @OneToMany(mappedBy = "sensor")
     private List<SensorReading> sensorReadings; // Relación con SensorReading
