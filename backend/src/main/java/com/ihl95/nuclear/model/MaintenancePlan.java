@@ -1,6 +1,7 @@
 package com.ihl95.nuclear.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Data;
 
@@ -26,4 +28,9 @@ public class MaintenancePlan {
     @ManyToOne
     @JoinColumn(name = "nuclear_plant_id")
     private NuclearPlant nuclearPlant; // Relación con PlantaNuclear
+
+    private boolean isCompleted;    // Indica si el plan de mantenimiento está completado
+
+    @OneToMany(mappedBy = "maintenancePlan")
+    private List<Maintenance> maintenances; // Relación con mantenimientos específicos
 }
