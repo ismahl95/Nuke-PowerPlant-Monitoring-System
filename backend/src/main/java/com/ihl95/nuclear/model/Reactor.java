@@ -37,9 +37,6 @@ public class Reactor {
     private NuclearPlant nuclearPlant; // Relación con PlantaNuclear
 
     @OneToMany(mappedBy = "reactor")
-    private List<ReactorState> states; // Relación con EstadoReactor
-
-    @OneToMany(mappedBy = "reactor")
     private List<Anomaly> anomalies;    // Relación con Anomalia
 
     @OneToMany(mappedBy = "reactor")

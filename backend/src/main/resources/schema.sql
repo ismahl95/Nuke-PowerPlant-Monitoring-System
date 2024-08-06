@@ -34,7 +34,7 @@ JOIN
 ON
     r.nuclear_plant_id = np.id;
 
--- Vista de lecturas de los sensores por reactor y su planta asociada
+-- Vista de lecturas de los sensores por reactor y planta asociada
 
 CREATE VIEW plant_reactor_sensor_readings AS
 SELECT
