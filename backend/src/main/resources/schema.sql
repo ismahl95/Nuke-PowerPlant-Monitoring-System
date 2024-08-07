@@ -53,4 +53,30 @@ JOIN
 JOIN
     sensor_reading sr ON s.id = sr.sensor_id;
 
+-- Vista para mostrar el mantenimiento, equipo, plan de mantenimiento y reactor
 
+CREATE VIEW maintenance_overview AS
+SELECT
+    m.description AS "DESCRIPTION",
+    m.start_date AS "START DATE",
+    m.end_date AS "END DATE",
+    m.status AS "STATUS",
+    e.name AS "EQUIPMENT NAME",
+    e.manufacturer AS "EQUIPMENT MANUFACTURER",
+    e.installation_date AS "EQUIPMENT INSTALLATION DATE",
+    mp.name AS "PLAN NAME",
+    mp.description AS "PLAN DESCRIPTION",
+    r.name AS "REACTOR NAME",
+    r.type AS "REACTOR TYPE",
+    np.name AS "PLANT NAME",
+    np.location AS "PLANT LOCATION"
+FROM
+    maintenance m
+LEFT JOIN
+    equipment e ON m.equipment_id = e.id
+LEFT JOIN
+    maintenance_plan mp ON m.maintenance_plan_id = mp.id
+LEFT JOIN
+    reactor r ON m.reactor_id = r.id
+LEFT JOIN
+    nuclear_plant np ON r.nuclear_plant_id = np.id;
