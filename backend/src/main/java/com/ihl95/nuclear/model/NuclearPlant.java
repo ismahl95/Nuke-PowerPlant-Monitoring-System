@@ -31,4 +31,7 @@ public class NuclearPlant {
 
     @OneToMany(mappedBy = "nuclearPlant")
     private List<Incident> incidents; // Relación con Incident
+
+    @OneToMany(mappedBy = "nuclearPlant") // Relación con Operator
+    private List<Operator> operators;
 }
