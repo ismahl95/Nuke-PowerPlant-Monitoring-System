@@ -1,7 +1,5 @@
 package com.ihl95.nuclear.mapper;
 
-import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -9,17 +7,18 @@ import org.mapstruct.factory.Mappers;
 import com.ihl95.nuclear.dto.MaintenancePlanDTO;
 import com.ihl95.nuclear.model.MaintenancePlan;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {MaintenanceMapper.class})
 public interface MaintenancePlanMapper {
     MaintenancePlanMapper INSTANCE = Mappers.getMapper(MaintenancePlanMapper.class);
 
     @Mapping(source = "nuclearPlant", target = "nuclearPlant")
+    @Mapping(source = "maintenances", target = "maintenances")
+    @Mapping(source = "completed", target = "isCompleted")
     MaintenancePlanDTO toMaintenancePlanDTO(MaintenancePlan maintenancePlan);
 
     @Mapping(source = "nuclearPlant", target = "nuclearPlant")
+    @Mapping(source = "maintenances", target = "maintenances")
+    @Mapping(source = "isCompleted", target = "completed")
     MaintenancePlan toMaintenancePlan(MaintenancePlanDTO maintenancePlanDTO);
-
-    List<MaintenancePlanDTO> maintenancePlanListToMaintenancePlanDTOList(List<MaintenancePlan> maintenancePlans);
-    List<MaintenancePlan> maintenancePlanDTOListToMaintenancePlanList(List<MaintenancePlanDTO> maintenancePlanDTOs);
 }
 

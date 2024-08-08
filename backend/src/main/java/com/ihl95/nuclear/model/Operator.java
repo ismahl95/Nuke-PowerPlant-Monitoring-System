@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Entity
@@ -25,8 +28,10 @@ public class Operator {
 
     @ManyToOne
     @JoinColumn(name = "nuclear_plant_id")
+    @JsonBackReference // Evita recursión infinita al serializar la relación con NuclearPlant
     private NuclearPlant nuclearPlant; // Relación con PlantaNuclear
 
     @OneToMany(mappedBy = "operator")
+    @JsonManagedReference // Maneja la serialización de la lista de entrenamientos
     private List<Training> trainings; // Relación con Training
 }

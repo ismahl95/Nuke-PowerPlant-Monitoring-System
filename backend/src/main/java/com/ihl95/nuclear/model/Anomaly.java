@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ihl95.nuclear.enums.AnomalySeverity;
 
 import lombok.Data;
@@ -29,5 +30,8 @@ public class Anomaly {
 
     @ManyToOne
     @JoinColumn(name = "reactor_id")
+    @JsonBackReference // Evitar recursión infinita
     private Reactor reactor;    // Relación con Reactor
+
+    // Getters and Setters
 }

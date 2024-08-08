@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ihl95.nuclear.enums.MaintenanceStatus;
 
 import lombok.Data;
@@ -31,13 +32,16 @@ public class Maintenance {
 
     @ManyToOne
     @JoinColumn(name = "reactor_id", nullable = true)
+    @JsonBackReference // Evita la recursión infinita en la serialización/deserialización
     private Reactor reactor; // Relación opcional con Reactor
 
     @ManyToOne
     @JoinColumn(name = "equipment_id", nullable = true)
+    @JsonBackReference // Evita la recursión infinita en la serialización/deserialización
     private Equipment equipment; // Relación opcional con Equipment
 
     @ManyToOne
     @JoinColumn(name = "maintenance_plan_id")
+    @JsonBackReference // Evita la recursión infinita en la serialización/deserialización
     private MaintenancePlan maintenancePlan; // Relación con MaintenancePlan
 }

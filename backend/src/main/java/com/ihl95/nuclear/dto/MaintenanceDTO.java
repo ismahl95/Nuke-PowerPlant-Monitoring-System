@@ -10,7 +10,7 @@ public record MaintenanceDTO(
     LocalDateTime startDate,
     LocalDateTime endDate,
     MaintenanceStatus status,
-    ReactorDTO reactor,
-    EquipmentDTO equipment,
-    MaintenancePlanDTO maintenancePlan
+    Long reactorId,  // Solo el ID, no el objeto completo
+    Long equipmentId, // Solo el ID, no el objeto completo
+    Long maintenancePlanId // Solo el ID, no el objeto completo
 ) {}

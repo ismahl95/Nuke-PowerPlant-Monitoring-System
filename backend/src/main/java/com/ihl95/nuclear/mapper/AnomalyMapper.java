@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 import com.ihl95.nuclear.dto.AnomalyDTO;
 import com.ihl95.nuclear.model.Anomaly;
 
-@Mapper(uses = ReactorMapper.class)
+@Mapper(componentModel = "spring")
 public interface AnomalyMapper {
     AnomalyMapper INSTANCE = Mappers.getMapper(AnomalyMapper.class);
 

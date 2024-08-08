@@ -6,9 +6,9 @@ public record NuclearPlantDTO(
     Long id,
     String name,
     String location,
-    List<ReactorDTO> reactors,
-    List<MaintenancePlanDTO> maintenancePlans,
-    List<EmergencyPlanDTO> emergencyPlans,
-    List<IncidentDTO> incidents,
-    List<OperatorDTO> operators
+    List<Long> reactorIds,
+    List<Long> maintenancePlanIds,
+    List<Long> emergencyPlanIds,
+    List<Long> incidentIds,
+    List<Long> operatorIds
 ) {}

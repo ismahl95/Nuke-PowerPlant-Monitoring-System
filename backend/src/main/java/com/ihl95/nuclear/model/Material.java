@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ihl95.nuclear.enums.MaterialType;
 import com.ihl95.nuclear.enums.UnitOfMeasure;
 
@@ -33,5 +34,8 @@ public class Material {
 
     @ManyToOne
     @JoinColumn(name = "supplier_id") // La columna que se usará para la FK
+    @JsonBackReference // Evita la recursividad al serializar la relación con Supplier
     private Supplier supplier; // Relación con Supplier
+
+    // Getters y setters
 }

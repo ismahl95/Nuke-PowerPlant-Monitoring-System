@@ -2,20 +2,16 @@ package com.ihl95.nuclear.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-
 import com.ihl95.nuclear.dto.IncidentDTO;
 import com.ihl95.nuclear.model.Incident;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface IncidentMapper {
 
-    IncidentMapper INSTANCE = Mappers.getMapper(IncidentMapper.class);
-
-    @Mapping(source = "nuclearPlant", target = "nuclearPlant")
+    @Mapping(source = "nuclearPlant.id", target = "nuclearPlantId") // Mapea el ID de nuclearPlant
     IncidentDTO toIncidentDTO(Incident incident);
 
-    @Mapping(source = "nuclearPlant", target = "nuclearPlant")
+    @Mapping(source = "nuclearPlantId", target = "nuclearPlant.id") // Mapea el ID de nuclearPlant en lugar del objeto completo
     Incident toIncident(IncidentDTO incidentDTO);
 }
 

@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ihl95.nuclear.enums.EquipmentType;
 
 import lombok.Data;
@@ -30,7 +31,8 @@ public class Equipment {
     private EquipmentType type; // Tipo de equipo (bomba, válvula, etc.)
 
     @OneToMany(mappedBy = "equipment")
+    @JsonManagedReference // Evitar recursión infinita
     private List<Maintenance> maintenances; // Relación con Mantenimiento
 
-    // Otros atributos relevantes
+    // Getters and Setters
 }

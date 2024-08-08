@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ihl95.nuclear.enums.ControlSystemType;
 
 import lombok.Data;
@@ -27,5 +28,6 @@ public class ControlSystem {
 
     @ManyToOne
     @JoinColumn(name = "reactor_id")
+    @JsonBackReference
     private Reactor reactor; // Relación con Reactor
 }

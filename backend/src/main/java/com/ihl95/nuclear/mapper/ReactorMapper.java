@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.ihl95.nuclear.dto.ReactorDTO;
 import com.ihl95.nuclear.model.Reactor;
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ReactorMapper {
     ReactorMapper INSTANCE = Mappers.getMapper(ReactorMapper.class);
 

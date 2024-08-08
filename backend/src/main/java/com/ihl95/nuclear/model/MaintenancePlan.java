@@ -1,8 +1,10 @@
 package com.ihl95.nuclear.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
@@ -27,10 +32,14 @@ public class MaintenancePlan {
 
     @ManyToOne
     @JoinColumn(name = "nuclear_plant_id")
+    @JsonBackReference // Evita recursividad desde MaintenancePlan hacia NuclearPlant
     private NuclearPlant nuclearPlant; // Relación con PlantaNuclear
 
     private boolean isCompleted;    // Indica si el plan de mantenimiento está completado
 
-    @OneToMany(mappedBy = "maintenancePlan")
-    private List<Maintenance> maintenances; // Relación con mantenimientos específicos
+    @OneToMany(mappedBy = "maintenancePlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // Maneja la serialización desde MaintenancePlan hacia Maintenance
+    private List<Maintenance> maintenances = new ArrayList<>();
+
+    // Getters y setters
 }

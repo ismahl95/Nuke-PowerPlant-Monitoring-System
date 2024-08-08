@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ihl95.nuclear.enums.IncidentSeverity;
 
 import lombok.Data;
@@ -29,5 +30,6 @@ public class Incident {
 
     @ManyToOne
     @JoinColumn(name = "nuclear_plant_id")
+    @JsonBackReference
     private NuclearPlant nuclearPlant; // Relación con PlantaNuclear
 }

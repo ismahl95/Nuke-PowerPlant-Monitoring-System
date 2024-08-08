@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Entity
@@ -18,10 +20,13 @@ public class SensorReading {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double measurementValue;         // Valor de la lectura
-    private LocalDateTime date;   // Fecha de la lectura
+    private double measurementValue; // Valor de la lectura
+    private LocalDateTime date;       // Fecha de la lectura
 
     @ManyToOne
     @JoinColumn(name = "sensor_id")
-    private Sensor sensor;        // Relación con Sensor
+    @JsonBackReference // Evita la recursión infinita al serializar la relación con Sensor
+    private Sensor sensor; // Relación con Sensor
+
+    // Otros atributos y métodos
 }

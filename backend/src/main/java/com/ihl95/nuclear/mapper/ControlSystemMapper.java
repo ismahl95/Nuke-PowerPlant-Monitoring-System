@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 import com.ihl95.nuclear.dto.ControlSystemDTO;
 import com.ihl95.nuclear.model.ControlSystem;
 
-@Mapper(uses = ReactorMapper.class)
+@Mapper(componentModel = "spring")
 public interface ControlSystemMapper {
     ControlSystemMapper INSTANCE = Mappers.getMapper(ControlSystemMapper.class);
 

@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Entity
@@ -24,5 +26,8 @@ public class EmergencyPlan {
 
     @ManyToOne
     @JoinColumn(name = "nuclear_plant_id")
+    @JsonBackReference // Evitar recursión infinita
     private NuclearPlant nuclearPlant; // Relación con PlantaNuclear
+
+    // Getters and Setters
 }

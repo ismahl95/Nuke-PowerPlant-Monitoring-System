@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 import com.ihl95.nuclear.dto.EquipmentDTO;
 import com.ihl95.nuclear.model.Equipment;
 
-@Mapper(uses = MaintenanceMapper.class)
+@Mapper(componentModel = "spring", uses = MaintenanceMapper.class) // Asegúrate de incluir el uso de MaintenanceMapper
 public interface EquipmentMapper {
     EquipmentMapper INSTANCE = Mappers.getMapper(EquipmentMapper.class);
 
