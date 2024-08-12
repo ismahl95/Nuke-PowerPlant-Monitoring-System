@@ -7,5 +7,5 @@ public record EmergencyPlanDTO(
     String name,
     String description,
     LocalDateTime creationDate,
-    NuclearPlantDTO nuclearPlant
+    Long nuclearPlantId
 ) {}

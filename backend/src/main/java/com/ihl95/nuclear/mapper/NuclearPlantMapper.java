@@ -9,7 +9,13 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ihl95.nuclear.dto.EmergencyPlanDTO;
+import com.ihl95.nuclear.dto.IncidentDTO;
+import com.ihl95.nuclear.dto.MaintenancePlanDTO;
+import com.ihl95.nuclear.dto.NuclearPlantCompleteDTO;
 import com.ihl95.nuclear.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.dto.OperatorDTO;
+import com.ihl95.nuclear.dto.ReactorDTO;
 import com.ihl95.nuclear.model.EmergencyPlan;
 import com.ihl95.nuclear.model.Incident;
 import com.ihl95.nuclear.model.MaintenancePlan;
@@ -22,11 +28,10 @@ import com.ihl95.nuclear.service.MaintenancePlanService;
 import com.ihl95.nuclear.service.OperatorService;
 import com.ihl95.nuclear.service.ReactorService;
 
-@Mapper(componentModel = "spring")
-@Component
+/* @Mapper(componentModel = "spring") */
 public abstract class NuclearPlantMapper {
 
-    @Autowired
+/*     @Autowired
     private ReactorService reactorService;
 
     @Autowired
@@ -40,6 +45,21 @@ public abstract class NuclearPlantMapper {
 
     @Autowired
     private OperatorService operatorService;
+
+    @Autowired
+    private ReactorMapper reactorMapper;
+
+    @Autowired
+    private MaintenancePlanMapper maintenancePlanMapper;
+
+    @Autowired
+    private EmergencyPlanMapper emergencyPlanMapper;
+
+    @Autowired
+    private IncidentMapper incidentMapper;
+
+    @Autowired
+    private OperatorMapper operatorMapper;
 
     @Mapping(target = "reactorIds", source = "reactors", qualifiedByName = "toReactorIds")
     @Mapping(target = "maintenancePlanIds", source = "maintenancePlans", qualifiedByName = "toMaintenancePlanIds")
@@ -73,11 +93,50 @@ public abstract class NuclearPlantMapper {
         return operators.stream().map(Operator::getId).collect(Collectors.toList());
     }
 
-    @Mapping(target = "reactors", source = "reactorIds", qualifiedByName = "toReactors")
-    @Mapping(target = "maintenancePlans", source = "maintenancePlanIds", qualifiedByName = "toMaintenancePlans")
-    @Mapping(target = "emergencyPlans", source = "emergencyPlanIds", qualifiedByName = "toEmergencyPlans")
-    @Mapping(target = "incidents", source = "incidentIds", qualifiedByName = "toIncidents")
-    @Mapping(target = "operators", source = "operatorIds", qualifiedByName = "toOperators")
+    @Mapping(target = "reactors", source = "reactors")
+    @Mapping(target = "maintenancePlans", source = "maintenancePlans")
+    @Mapping(target = "emergencyPlans", source = "emergencyPlans")
+    @Mapping(target = "incidents", source = "incidents")
+    @Mapping(target = "operators", source = "operators")
+    public abstract NuclearPlantCompleteDTO toNuclearPlantCompleteDTO(NuclearPlant nuclearPlant);
+
+    // Métodos de conversión de listas de entidades a listas de DTOs
+    public List<ReactorDTO> toReactorDTOs(List<Reactor> reactors) {
+        return reactors.stream()
+                .map(reactorMapper::toReactorDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<MaintenancePlanDTO> toMaintenancePlanDTOs(List<MaintenancePlan> maintenancePlans) {
+        return maintenancePlans.stream()
+                .map(maintenancePlanMapper::toMaintenancePlanDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<EmergencyPlanDTO> toEmergencyPlanDTOs(List<EmergencyPlan> emergencyPlans) {
+        return emergencyPlans.stream()
+                .map(emergencyPlanMapper::toEmergencyPlanDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<IncidentDTO> toIncidentDTOs(List<Incident> incidents) {
+        return incidents.stream()
+                .map(incidentMapper::toIncidentDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<OperatorDTO> toOperatorDTOs(List<Operator> operators) {
+        return operators.stream()
+                .map(operatorMapper::toOperatorDTO)
+                .collect(Collectors.toList());
+    }
+
+    // Métodos que llaman a los servicios para obtener las entidades a partir de los IDs
+    @Mapping(target = "reactors", source = "reactors")
+    @Mapping(target = "maintenancePlans", source = "maintenancePlans")
+    @Mapping(target = "emergencyPlans", source = "emergencyPlans")
+    @Mapping(target = "incidents", source = "incidents")
+    @Mapping(target = "operators", source = "operators")
     public NuclearPlant toNuclearPlant(NuclearPlantDTO nuclearPlantDTO) {
         List<Reactor> reactors = nuclearPlantDTO.reactorIds().stream()
                 .map(reactorService::getReactorById)
@@ -109,7 +168,8 @@ public abstract class NuclearPlantMapper {
                 .incidents(incidents)
                 .operators(operators)
                 .build();
-    }
+    } */
 }
+
 
 

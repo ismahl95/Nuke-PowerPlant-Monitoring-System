@@ -33,7 +33,7 @@ public class NuclearPlant {
     @JsonManagedReference
     private List<Reactor> reactors; // Relación con Reactor
 
-    @OneToMany(mappedBy = "nuclearPlant", cascade = CascadeType.ALL, orphanRemoval = true)
+/*     @OneToMany(mappedBy = "nuclearPlant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<MaintenancePlan> maintenancePlans; // Relación con MaintenancePlan
 
@@ -47,7 +47,7 @@ public class NuclearPlant {
 
     @OneToMany(mappedBy = "nuclearPlant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Operator> operators; // Relación con Operator
+    private List<Operator> operators; // Relación con Operator */
 
     // Getters and Setters
 }

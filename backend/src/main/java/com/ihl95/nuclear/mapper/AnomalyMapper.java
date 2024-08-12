@@ -11,9 +11,9 @@ import com.ihl95.nuclear.model.Anomaly;
 public interface AnomalyMapper {
     AnomalyMapper INSTANCE = Mappers.getMapper(AnomalyMapper.class);
 
-    @Mapping(source = "reactor", target = "reactor")
+    /* @Mapping(source = "reactor", target = "reactor") QUITARLO DEFINITIVAMENTE */
     AnomalyDTO toAnomalyDTO(Anomaly anomaly);
 
-    @Mapping(source = "reactor", target = "reactor")
-    Anomaly toAnomaly(AnomalyDTO anomalyDTO);
+    /* @Mapping(source = "reactor", target = "reactor")
+    Anomaly toAnomaly(AnomalyDTO anomalyDTO); */
 }

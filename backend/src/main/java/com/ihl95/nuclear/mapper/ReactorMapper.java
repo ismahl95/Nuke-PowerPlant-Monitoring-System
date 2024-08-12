@@ -11,11 +11,11 @@ import com.ihl95.nuclear.model.Reactor;
 public interface ReactorMapper {
     ReactorMapper INSTANCE = Mappers.getMapper(ReactorMapper.class);
 
-    @Mapping(source = "nuclearPlant", target = "nuclearPlant")
+    @Mapping(source = "nuclearPlant.id", target = "nuclearPlantId")
     ReactorDTO toReactorDTO(Reactor reactor);
 
-    @Mapping(source = "nuclearPlant", target = "nuclearPlant")
-    Reactor toReactor(ReactorDTO reactorDTO);
+    /* @Mapping(source = "nuclearPlant", target = "nuclearPlant")
+    Reactor toReactor(ReactorDTO reactorDTO); */
 
     List<ReactorDTO> reactorListToReactorDTOList(List<Reactor> reactors);
     List<Reactor> reactorDTOListToReactorList(List<ReactorDTO> reactorDTOs);

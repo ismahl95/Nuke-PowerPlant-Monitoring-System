@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ihl95.nuclear.dto.NuclearPlantCompleteDTO;
 import com.ihl95.nuclear.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.service.NuclearPlantService;
 
@@ -24,7 +25,7 @@ public class NuclearPlantController {
     @Autowired
     private NuclearPlantService nuclearPlantService;
 
-    @GetMapping
+/*     @GetMapping
     public ResponseEntity<List<NuclearPlantDTO>> getAllNuclearPlants() {
         List<NuclearPlantDTO> nuclearPlants = nuclearPlantService.getAllNuclearPlants();
         return ResponseEntity.ok(nuclearPlants);
@@ -34,9 +35,15 @@ public class NuclearPlantController {
     public ResponseEntity<NuclearPlantDTO> getNuclearPlantById(@PathVariable Long id) {
         NuclearPlantDTO nuclearPlant = nuclearPlantService.getNuclearPlantById(id);
         return ResponseEntity.ok(nuclearPlant);
+    } */
+
+    @GetMapping("/complete/{id}")
+    public ResponseEntity<NuclearPlantCompleteDTO> getNuclearPlantCompleteById(@PathVariable Long id) {
+        NuclearPlantCompleteDTO nuclearPlantComplete = nuclearPlantService.getNuclearPlantCompleteById(id);
+        return ResponseEntity.ok(nuclearPlantComplete);
     }
 
-    @PostMapping
+/*     @PostMapping
     public ResponseEntity<NuclearPlantDTO> createNuclearPlant(@RequestBody NuclearPlantDTO nuclearPlantDTO) {
         NuclearPlantDTO createdNuclearPlant = nuclearPlantService.createNuclearPlant(nuclearPlantDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNuclearPlant);
@@ -54,5 +61,5 @@ public class NuclearPlantController {
     public ResponseEntity<Void> deleteNuclearPlant(@PathVariable Long id) {
         nuclearPlantService.deleteNuclearPlant(id);
         return ResponseEntity.noContent().build();
-    }
+    } */
 }

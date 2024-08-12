@@ -8,6 +8,5 @@ public record AnomalyDTO(
     Long id,
     String description,
     LocalDateTime date,
-    AnomalySeverity severity,
-    ReactorDTO reactor
+    AnomalySeverity severity
 ) {}

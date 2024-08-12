@@ -9,7 +9,7 @@ public record MaintenancePlanDTO(
     String description,
     LocalDateTime startDate,
     LocalDateTime endDate,
-    NuclearPlantDTO nuclearPlant,
+    Long nuclearPlantId,
     boolean isCompleted,
     List<MaintenanceDTO> maintenances
 ) {}
