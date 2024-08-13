@@ -1,0 +1,94 @@
+/* Estilos para el contenedor del menú */
+.layout-content-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  width: 250px; /* Ancho del menú */
+  background-color: #111418; /* Asegúrate de que el fondo sea consistente */
+  z-index: 1000; /* Asegúrate de que el menú esté por encima de otros elementos */
+  overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es demasiado grande */
+}
+
+/* Estilos para el menú colapsado */
+.layout-content-container.collapsed {
+  width: 60px; /* Ajusta el ancho según sea necesario */
+}
+
+/* Ocultar los elementos del menú cuando esté colapsado */
+.layout-content-container.collapsed .menu-item p {
+  display: none;
+}
+
+/* Estilos para el botón de colapsar/desplegar */
+#toggle-menu {
+  cursor: pointer;
+  z-index: 1001; /* Asegúrate de que el botón esté por encima del menú */
+}
+
+/* Ajustar el contenido principal para que no se superponga con el menú */
+.main-content {
+  margin-left: 250px; /* Debe coincidir con el ancho del menú */
+  padding: 20px; /* Añadir un poco de espacio alrededor del contenido */
+}
+
+/* Ajustar el contenido principal cuando el menú esté colapsado */
+.layout-content-container.collapsed ~ .main-content {
+  margin-left: 60px; /* Debe coincidir con el ancho del menú colapsado */
+}
+
+/* Estilos para la barra lateral */
+.sidebar {
+  transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+.sidebar-button {
+  position: absolute;
+  top: 20px;
+  right: -50px;
+  width: 40px;
+  height: 40px;
+  background: #293038;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Estilos para las columnas de la tabla */
+@container(max-width:120px) {
+  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-120 {
+    display: none;
+  }
+}
+
+@container(max-width:240px) {
+  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-240 {
+    display: none;
+  }
+}
+
+@container(max-width:360px) {
+  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-360 {
+    display: none;
+  }
+}
+
+@container(max-width:480px) {
+  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-480 {
+    display: none;
+  }
+}
+
+@container(max-width:600px) {
+  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-600 {
+    display: none;
+  }
+}
