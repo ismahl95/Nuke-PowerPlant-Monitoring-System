@@ -1,90 +1,56 @@
 <!DOCTYPE html>
-<html lang="es">
-  <head>
+<html lang="en">
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Preconexión a Google Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
-    <!-- Carga de fuentes de Google Fonts -->
-    <link
-      rel="stylesheet"
-      as="style"
-      onload="this.rel='stylesheet'"
-      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
-    />
-    <!-- Título de la página -->
-    <title>Galileo Design</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
-    <!-- Tailwind CSS con plugins -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Enlace al archivo CSS -->
+    <title>Nuke Power Plant</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <!-- Contenedor del menú -->
-    <div class="layout-content-container flex flex-col w-80">
-        <!-- Contenido del menú -->
-        <div class="flex h-full min-h-[700px] flex-col justify-between bg-[#111418] p-4">
-            <div class="flex flex-col gap-4">
-                <h1 class="text-white text-base font-medium leading-normal">Nuclear Power Co.</h1>
-                <div class="flex flex-col gap-2">
-                    <!-- Botón para plegar/desplegar el menú -->
-                    <button id="toggle-menu" class="text-white px-3 py-2 flex items-center justify-center">
-                        Boton
-                    </button>
-                    <div class="menu-item flex items-center gap-3 px-3 py-2">
-                        <div class="text-white" data-icon="House" data-size="24px" data-weight="regular">
-                            <!-- SVG Icono -->
-                        </div>
-                        <p class="text-white text-sm font-medium leading-normal">Dashboard</p>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col gap-1">
-                <div class="menu-item flex items-center gap-3 px-3 py-2">
-                    <div class="text-white" data-icon="Gear" data-size="24px" data-weight="regular">
-                        <!-- SVG Icono -->
-                    </div>
-                    <p class="text-white text-sm font-medium leading-normal">Settings</p>
-                </div>
-            </div>
+    <div class="flex">
+        <div class="bg-gray-200 w-auto h-screen flex flex-col collapsed">
+            <ul class="py-4 flex-grow">
+                <li class="px-4 py-2">
+                    <a href="#" class="inline-flex items-center">
+                        <img src="icons/nuclear-plant.png" alt="Nuclear Plant">
+                        <span>Plantas</span>
+                    </a>
+                </li>
+                <li class="px-4 py-2">
+                    <a href="#" class="inline-flex items-center">
+                        <img src="icons/reactor.png" alt="Reactor">
+                        <span>Reactores</span>
+                    </a>
+                </li>
+                <li class="px-4 py-2">
+                    <a href="#" class="inline-flex items-center">
+                        <img src="icons/sensor.png" alt="Sensor">
+                        <span>Sensores</span>
+                    </a>
+                </li>
+                <li class="px-4 py-2">
+                    <a href="#" class="inline-flex items-center">
+                        <img src="icons/operator.png" alt="Operator">
+                        <span>Operadores</span>
+                    </a>
+                </li>
+                <li class="px-4 py-2">
+                    <a href="#" class="inline-flex items-center">
+                        <img src="icons/material.png" alt="Material">
+                        <span>Materiales</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="flex-1">
+            <!-- Content goes here -->
         </div>
     </div>
-    <!-- Contenedor principal del contenido -->
-    <div class="main-content">
-        <!-- Contenido principal de la página -->
-        <table>
-            <tr class="border-t border-t-[#3c4753]">
-                <td class="table-98265893-2262-4eb2-a8fe-283b5325ed64-column-480 h-[72px] px-4 py-2 w-[400px] text-[#9daab8] text-sm font-normal leading-normal">
-                    Cooling System
-                </td>
-                <td class="table-98265893-2262-4eb2-a8fe-283b5325ed64-column-600 h-[72px] px-4 py-2 w-[400px] text-[#9daab8] text-sm font-normal leading-normal">
-                    15 minutes ago
-                </td>
-            </tr>
-            <tr class="border-t border-t-[#3c4753]">
-                <td class="table-98265893-2262-4eb2-a8fe-283b5325ed64-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
-                    Water Level
-                </td>
-                <td class="table-98265893-2262-4eb2-a8fe-283b5325ed64-column-240 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
-                    <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#293038] text-white text-sm font-medium leading-normal w-full">
-                        <span class="truncate">Warning</span>
-                    </button>
-                </td>
-                <td class="table-98265893-2262-4eb2-a8fe-283b5325ed64-column-360 h-[72px] px-4 py-2 w-[400px] text-[#9daab8] text-sm font-normal leading-normal">
-                    75%
-                </td>
-                <td class="table-98265893-2262-4eb2-a8fe-283b5325ed64-column-480 h-[72px] px-4 py-2 w-[400px] text-[#9daab8] text-sm font-normal leading-normal">
-                    Containment Vessel
-                </td>
-                <td class="table-98265893-2262-4eb2-a8fe-283b5325ed64-column-600 h-[72px] px-4 py-2 w-[400px] text-[#9daab8] text-sm font-normal leading-normal">
-                    3 minutes ago
-                </td>
-            </tr>
-        </table>
-    </div>
-    <!-- Enlace al archivo JavaScript -->
-    <script src="script.js"></script>
+
+    <script src="script.js"></script> <!-- Vínculo al archivo JavaScript -->
 </body>
+
 </html>

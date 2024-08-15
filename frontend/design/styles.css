@@ -1,94 +1,70 @@
-/* Estilos para el contenedor del menú */
-.layout-content-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh; /* Ocupa toda la altura de la pantalla */
-  width: 250px; /* Ancho del menú */
-  background-color: #111418; /* Asegúrate de que el fondo sea consistente */
-  z-index: 1000; /* Asegúrate de que el menú esté por encima de otros elementos */
-  overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es demasiado grande */
+/* Contenedor del menú */
+.bg-gray-200 {
+  position: relative;
+  width: 170px; /* Ancho inicial del menú */
+  transition: width 0.3s ease;
+  overflow: hidden; /* Oculta el contenido desbordado */
+  display: flex;
+  flex-direction: column;
 }
 
-/* Estilos para el menú colapsado */
-.layout-content-container.collapsed {
-  width: 60px; /* Ajusta el ancho según sea necesario */
+/* Estado del menú en pliegue */
+.bg-gray-200.collapsed {
+  width: 60px; /* Ancho cuando está plegado */
+  padding-right: 3.7%; /* Espaciado a la derecha */
+  padding-left: 0%; /* Sin espaciado a la izquierda */
 }
 
-/* Ocultar los elementos del menú cuando esté colapsado */
-.layout-content-container.collapsed .menu-item p {
+/* Estilo de los enlaces dentro del menú */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Permite que la lista ocupe el espacio restante */
+}
+
+/* Estilo de cada elemento de lista */
+li {
+  padding: 0;
+  margin: 0;
+}
+
+/* Contenedor del contenido del enlace */
+a {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem; /* Espaciado interno */
+  transition: background-color 0.3s ease;
+  text-decoration: none; /* Elimina el subrayado del enlace */
+}
+
+/* Estilo específico para los íconos dentro del enlace */
+a img {
+  width: 24px; /* Tamaño fijo del ícono */
+  height: 24px; /* Tamaño fijo del ícono */
+  object-fit: contain; /* Asegura que la imagen no se deforme */
+  margin: 0; /* Elimina el margen adicional alrededor de los íconos */
+  flex-shrink: 0; /* Evita que el ícono se reduzca */
+  max-width: 24px;
+  max-height: 24px;
+}
+
+/* Ajusta el margen derecho específico a los íconos */
+a img {
+  margin-right: 0.75rem; /* Espacio entre el ícono y el texto */
+}
+
+/* Asegura que el texto y los íconos estén alineados correctamente */
+a span {
+  margin-left: 0; /* Elimina el margen izquierdo del texto cuando se pliega el menú */
+}
+
+/* Oculta el texto cuando el menú está plegado */
+.bg-gray-200.collapsed span {
   display: none;
 }
 
-/* Estilos para el botón de colapsar/desplegar */
-#toggle-menu {
-  cursor: pointer;
-  z-index: 1001; /* Asegúrate de que el botón esté por encima del menú */
-}
-
-/* Ajustar el contenido principal para que no se superponga con el menú */
-.main-content {
-  margin-left: 250px; /* Debe coincidir con el ancho del menú */
-  padding: 20px; /* Añadir un poco de espacio alrededor del contenido */
-}
-
-/* Ajustar el contenido principal cuando el menú esté colapsado */
-.layout-content-container.collapsed ~ .main-content {
-  margin-left: 60px; /* Debe coincidir con el ancho del menú colapsado */
-}
-
-/* Estilos para la barra lateral */
-.sidebar {
-  transition: transform 0.3s ease;
-}
-
-.sidebar.collapsed {
-  transform: translateX(-100%);
-}
-
-.sidebar-button {
-  position: absolute;
-  top: 20px;
-  right: -50px;
-  width: 40px;
-  height: 40px;
-  background: #293038;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 1000;
-}
-
-/* Estilos para las columnas de la tabla */
-@container(max-width:120px) {
-  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-120 {
-    display: none;
-  }
-}
-
-@container(max-width:240px) {
-  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-240 {
-    display: none;
-  }
-}
-
-@container(max-width:360px) {
-  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-360 {
-    display: none;
-  }
-}
-
-@container(max-width:480px) {
-  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-480 {
-    display: none;
-  }
-}
-
-@container(max-width:600px) {
-  .table-98265893-2262-4eb2-a8fe-283b5325ed64-column-600 {
-    display: none;
-  }
+/* Opcional: Estilo al pasar el cursor por encima */
+a:hover {
+  background-color: #e2e8f0; /* Color de fondo al pasar el cursor */
 }

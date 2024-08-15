@@ -1,6 +1,11 @@
-document.getElementById('toggle-menu').addEventListener('click', function () {
-  console.log('Botón clicado'); // Verificar si el evento de clic se registra
-  const container = document.querySelector('.layout-content-container');
-  container.classList.toggle('collapsed');
-  console.log('Clase "collapsed" aplicada:', container.classList.contains('collapsed')); // Verificar si la clase se aplica
+document.addEventListener('DOMContentLoaded', function() {
+  const menu = document.querySelector('.bg-gray-200');
+
+  menu.addEventListener('mouseover', function() {
+      this.classList.remove('collapsed');
+  });
+
+  menu.addEventListener('mouseout', function() {
+      this.classList.add('collapsed');
+  });
 });
