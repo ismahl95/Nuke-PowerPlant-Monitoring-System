@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* Contenedor del menú */
 .bg-gray-200 {
   position: relative;
@@ -11,7 +17,7 @@
 /* Estado del menú en pliegue */
 .bg-gray-200.collapsed {
   width: 60px; /* Ancho cuando está plegado */
-  padding-right: 3.7%; /* Espaciado a la derecha */
+  padding-right: 4%; /* Espaciado a la derecha */
   padding-left: 0%; /* Sin espaciado a la izquierda */
 }
 
@@ -40,13 +46,13 @@ a {
 
 /* Estilo específico para los íconos dentro del enlace */
 a img {
-  width: 24px; /* Tamaño fijo del ícono */
-  height: 24px; /* Tamaño fijo del ícono */
+  width: 32px; /* Tamaño aumentado del ícono */
+  height: 32px; /* Tamaño aumentado del ícono */
   object-fit: contain; /* Asegura que la imagen no se deforme */
   margin: 0; /* Elimina el margen adicional alrededor de los íconos */
   flex-shrink: 0; /* Evita que el ícono se reduzca */
-  max-width: 24px;
-  max-height: 24px;
+  max-width: 32px;
+  max-height: 32px;
 }
 
 /* Ajusta el margen derecho específico a los íconos */
