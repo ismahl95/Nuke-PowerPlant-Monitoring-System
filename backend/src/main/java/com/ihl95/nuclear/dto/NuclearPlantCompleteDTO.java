@@ -6,8 +6,9 @@ public record NuclearPlantCompleteDTO(
   Long id,
   String name,
   String location,
-  List<ReactorDTO> reactors
-/*   List<MaintenancePlanDTO> maintenancePlans,
+  List<ReactorDTO> reactors,
+  List<MaintenancePlanDTO> maintenancePlans
+/*   ,
   List<EmergencyPlanDTO> emergencyPlans,
   List<IncidentDTO> incidents,
   List<OperatorDTO> operators */

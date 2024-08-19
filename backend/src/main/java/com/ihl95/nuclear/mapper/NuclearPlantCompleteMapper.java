@@ -20,7 +20,8 @@ import com.ihl95.nuclear.model.Reactor;
 public interface NuclearPlantCompleteMapper {
 
     @Mapping(target = "reactors", source = "reactors")
-/*     @Mapping(target = "maintenancePlans", source = "maintenancePlans")
+    @Mapping(target = "maintenancePlans", source = "maintenancePlans")
+/*     
     @Mapping(target = "emergencyPlans", source = "emergencyPlans")
     @Mapping(target = "incidents", source = "incidents")
     @Mapping(target = "operators", source = "operators") */
@@ -28,8 +29,9 @@ public interface NuclearPlantCompleteMapper {
 
     @Mapping(source = "reactor.nuclearPlant.id", target = "nuclearPlantId")
     ReactorDTO toReactorDTO(Reactor reactor);
-/*     @Mapping(source = "maintenancePlan.nuclearPlant.id", target = "nuclearPlantId")
+    @Mapping(source = "maintenancePlan.nuclearPlant.id", target = "nuclearPlantId")
     MaintenancePlanDTO toMaintenancePlanDTO(MaintenancePlan maintenancePlan);
+/*     
     @Mapping(source = "emergencyPlan.nuclearPlant.id", target = "nuclearPlantId")
     EmergencyPlanDTO toEmergencyPlanDTO(EmergencyPlan emergencyPlan);
     @Mapping(source = "incident.nuclearPlant.id", target = "nuclearPlantId")
