@@ -2,6 +2,24 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* Quitar barra de scroll */
+  scrollbar-width: none;
+}
+
+body {
+  background-color: grey;
+}
+
+header {
+  background-image: url('https://d.newsweek.com/en/full/309014/french-nulcear-power-station.jpg');
+  background-position: bottom 10px right;
+}
+
+/* Estilo del título del encabezado */
+header h1 {
+  font-size: 2rem; /* Tamaño de fuente del título */
+  text-align: center;
+  margin: 0; /* Elimina el margen por defecto */
 }
 
 /* Contenedor del menú */
@@ -12,6 +30,7 @@
   overflow: hidden; /* Oculta el contenido desbordado */
   display: flex;
   flex-direction: column;
+  background-color: rgb(175, 175, 175);
 }
 
 /* Estado del menú en pliegue */
