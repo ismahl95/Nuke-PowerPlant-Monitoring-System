@@ -37,11 +37,13 @@ public class NuclearPlant {
     @JsonManagedReference
     private List<MaintenancePlan> maintenancePlans; // Relación con MaintenancePlan
 
-/*     
-
     @OneToMany(mappedBy = "nuclearPlant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<EmergencyPlan> emergencyPlans; // Relación con EmergencyPlan
+
+/*     
+
+    
 
     @OneToMany(mappedBy = "nuclearPlant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
