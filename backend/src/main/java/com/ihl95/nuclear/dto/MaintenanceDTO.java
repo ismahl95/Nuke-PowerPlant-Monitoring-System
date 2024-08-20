@@ -9,8 +9,5 @@ public record MaintenanceDTO(
     String description,
     LocalDateTime startDate,
     LocalDateTime endDate,
-    MaintenanceStatus status,
-    Long reactorId,  // Solo el ID, no el objeto completo
-    Long equipmentId, // Solo el ID, no el objeto completo
-    Long maintenancePlanId // Solo el ID, no el objeto completo
+    MaintenanceStatus status
 ) {}
