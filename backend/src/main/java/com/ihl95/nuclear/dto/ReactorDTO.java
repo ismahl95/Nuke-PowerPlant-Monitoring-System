@@ -12,7 +12,6 @@ public record ReactorDTO(
     ReactorType type,
     LocalDateTime installationDate,
     ReactorStatus status,
-    Long nuclearPlantId,
     List<AnomalyDTO> anomalies,
     List<MaintenanceDTO> maintenances
 ) {}

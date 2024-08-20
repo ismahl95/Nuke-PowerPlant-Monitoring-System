@@ -6,7 +6,6 @@ public record OperatorDTO(
     Long id,
     String name,
     String position,
-    String experience,
-    Long nuclearPlantId
+    String experience
     //List<TrainingDTO> trainings
 ) {}

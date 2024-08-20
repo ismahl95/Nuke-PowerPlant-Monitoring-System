@@ -11,10 +11,8 @@ import com.ihl95.nuclear.model.EmergencyPlan;
 public interface EmergencyPlanMapper {
     EmergencyPlanMapper INSTANCE = Mappers.getMapper(EmergencyPlanMapper.class);
 
-    @Mapping(source = "nuclearPlant.id", target = "nuclearPlantId")
     EmergencyPlanDTO toEmergencyPlanDTO(EmergencyPlan emergencyPlan);
 
-    @Mapping(source = "nuclearPlantId", target = "nuclearPlant.id")
     EmergencyPlan toEmergencyPlan(EmergencyPlanDTO emergencyPlanDTO);
 }
 

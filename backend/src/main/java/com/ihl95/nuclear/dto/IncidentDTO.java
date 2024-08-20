@@ -8,6 +8,5 @@ public record IncidentDTO(
     Long id,
     String description,
     LocalDateTime date,
-    IncidentSeverity severity,
-    Long nuclearPlantId // Solo el ID en lugar del objeto NuclearPlant
+    IncidentSeverity severity
 ) {}

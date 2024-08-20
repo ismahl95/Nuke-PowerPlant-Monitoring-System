@@ -23,20 +23,7 @@ public interface NuclearPlantCompleteMapper {
     @Mapping(target = "maintenancePlans", source = "maintenancePlans")
     @Mapping(target = "emergencyPlans", source = "emergencyPlans")
     @Mapping(target = "incidents", source = "incidents")
-/*     
-    
-    
-    @Mapping(target = "operators", source = "operators") */
+    @Mapping(target = "operators", source = "operators")
     NuclearPlantCompleteDTO toNuclearPlantCompleteDTO(NuclearPlant nuclearPlant);
 
-    @Mapping(source = "reactor.nuclearPlant.id", target = "nuclearPlantId")
-    ReactorDTO toReactorDTO(Reactor reactor);
-    @Mapping(source = "maintenancePlan.nuclearPlant.id", target = "nuclearPlantId")
-    MaintenancePlanDTO toMaintenancePlanDTO(MaintenancePlan maintenancePlan);
-    @Mapping(source = "emergencyPlan.nuclearPlant.id", target = "nuclearPlantId")
-    EmergencyPlanDTO toEmergencyPlanDTO(EmergencyPlan emergencyPlan);
-    @Mapping(source = "incident.nuclearPlant.id", target = "nuclearPlantId")
-    IncidentDTO toIncidentDTO(Incident incident);
-    @Mapping(source = "operator.nuclearPlant.id", target = "nuclearPlantId")
-    OperatorDTO toOperatorDTO(Operator operator);
 }

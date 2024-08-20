@@ -12,12 +12,8 @@ public interface OperatorMapper {
 
     OperatorMapper INSTANCE = Mappers.getMapper(OperatorMapper.class);
 
-    //@Mapping(source = "trainings", target = "trainings")
-    @Mapping(source = "nuclearPlant.id", target = "nuclearPlantId")
     OperatorDTO toOperatorDTO(Operator operator);
 
-    //@Mapping(source = "trainings", target = "trainings")
-    @Mapping(source = "nuclearPlantId", target = "nuclearPlant.id")
     Operator toOperator(OperatorDTO operatorDTO);
 }
 

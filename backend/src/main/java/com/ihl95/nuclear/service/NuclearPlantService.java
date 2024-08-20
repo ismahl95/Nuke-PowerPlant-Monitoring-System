@@ -4,15 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ihl95.nuclear.dto.NuclearPlantCompleteDTO;
-import com.ihl95.nuclear.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.exception.NuclearPlantException;
 import com.ihl95.nuclear.mapper.NuclearPlantCompleteMapper;
-import com.ihl95.nuclear.mapper.NuclearPlantMapper;
 import com.ihl95.nuclear.model.NuclearPlant;
 import com.ihl95.nuclear.repository.NuclearPlantRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
