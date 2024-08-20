@@ -37,9 +37,6 @@ public interface NuclearPlantCompleteMapper {
     EmergencyPlanDTO toEmergencyPlanDTO(EmergencyPlan emergencyPlan);
     @Mapping(source = "incident.nuclearPlant.id", target = "nuclearPlantId")
     IncidentDTO toIncidentDTO(Incident incident);
-/*     
-    
-    
     @Mapping(source = "operator.nuclearPlant.id", target = "nuclearPlantId")
-    OperatorDTO toOperatorDTO(Operator operator); */
+    OperatorDTO toOperatorDTO(Operator operator);
 }

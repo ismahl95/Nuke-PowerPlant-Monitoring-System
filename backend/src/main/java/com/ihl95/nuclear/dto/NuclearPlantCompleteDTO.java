@@ -9,9 +9,6 @@ public record NuclearPlantCompleteDTO(
   List<ReactorDTO> reactors,
   List<MaintenancePlanDTO> maintenancePlans,
   List<EmergencyPlanDTO> emergencyPlans,
-  List<IncidentDTO> incidents
-/*   ,
-  ,
-  ,
-  List<OperatorDTO> operators */
+  List<IncidentDTO> incidents,
+  List<OperatorDTO> operators
 ) {}
