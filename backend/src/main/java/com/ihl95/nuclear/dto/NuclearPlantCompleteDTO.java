@@ -8,9 +8,10 @@ public record NuclearPlantCompleteDTO(
   String location,
   List<ReactorDTO> reactors,
   List<MaintenancePlanDTO> maintenancePlans,
-  List<EmergencyPlanDTO> emergencyPlans
+  List<EmergencyPlanDTO> emergencyPlans,
+  List<IncidentDTO> incidents
 /*   ,
   ,
-  List<IncidentDTO> incidents,
+  ,
   List<OperatorDTO> operators */
 ) {}
