@@ -10,6 +10,8 @@ import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
 @Mapper(componentModel = "spring")
 public interface NuclearPlantCompleteMapper {
 
+    NuclearPlant toNuclearPlant(NuclearPlantDTO nuclearPlantDTO);
+
     @Mapping(target = "reactors", source = "reactors")
     @Mapping(target = "maintenancePlans", source = "maintenancePlans")
     @Mapping(target = "emergencyPlans", source = "emergencyPlans")

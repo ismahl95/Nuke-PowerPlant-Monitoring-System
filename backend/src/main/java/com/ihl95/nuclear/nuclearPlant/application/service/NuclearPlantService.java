@@ -44,33 +44,38 @@ public class NuclearPlantService {
         return nuclearPlantCompleteMapper.toNuclearPlantCompleteDTO(nuclearPlant);
     }
 
-    /*
-     * public NuclearPlantDTO createNuclearPlant(NuclearPlantDTO nuclearPlantDTO) {
-     * NuclearPlant nuclearPlant =
-     * nuclearPlantMapper.toNuclearPlant(nuclearPlantDTO);
-     * NuclearPlant savedNuclearPlant = nuclearPlantRepository.save(nuclearPlant);
-     * return nuclearPlantMapper.toNuclearPlantDTO(savedNuclearPlant);
-     * }
-     * 
-     * public NuclearPlantDTO updateNuclearPlant(Long id, NuclearPlantDTO
-     * nuclearPlantDTO) {
-     * if (!nuclearPlantRepository.existsById(id)) {
-     * throw NuclearPlantException.notFound("Nuclear Plant not found with id: " +
-     * id);
-     * }
-     * NuclearPlant nuclearPlant =
-     * nuclearPlantMapper.toNuclearPlant(nuclearPlantDTO);
-     * nuclearPlant.setId(id);
-     * NuclearPlant updatedNuclearPlant = nuclearPlantRepository.save(nuclearPlant);
-     * return nuclearPlantMapper.toNuclearPlantDTO(updatedNuclearPlant);
-     * }
-     * 
-     * public void deleteNuclearPlant(Long id) {
-     * if (!nuclearPlantRepository.existsById(id)) {
-     * throw NuclearPlantException.notFound("Nuclear Plant not found with id: " +
-     * id);
-     * }
-     * nuclearPlantRepository.deleteById(id);
-     * }
-     */
+    public NuclearPlantDTO createNuclearPlant(NuclearPlantDTO nuclearPlantDTO) {
+        NuclearPlant nuclearPlant = nuclearPlantCompleteMapper.toNuclearPlant(nuclearPlantDTO);
+        NuclearPlant savedNuclearPlant = nuclearPlantRepository.save(nuclearPlant);
+        return nuclearPlantCompleteMapper.toNuclearPlantDTO(savedNuclearPlant);
+    }
+
+    public NuclearPlantDTO updateNuclearPlant(Long id, NuclearPlantDTO nuclearPlantDTO) {
+        // Verificar si la planta existe en la base de datos
+        NuclearPlant existingPlant = nuclearPlantRepository.findById(id)
+                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
+
+        // Actualizar solo los campos simples que están presentes en el DTO
+        existingPlant.setName(nuclearPlantDTO.name());
+        existingPlant.setLocation(nuclearPlantDTO.location());
+
+        // Guardar la entidad actualizada
+        NuclearPlant updatedNuclearPlant = nuclearPlantRepository.save(existingPlant);
+
+        // Retornar el DTO actualizado
+        return nuclearPlantCompleteMapper.toNuclearPlantDTO(updatedNuclearPlant);
+    }
+
+    @Transactional
+    public void deleteNuclearPlant(Long id) {
+        // Verificar si la planta existe en la base de datos
+        NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
+                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
+    
+        // Si necesitas manipular o verificar algo antes de la eliminación, puedes hacerlo aquí
+    
+        // Eliminar la planta nuclear, lo que debería también eliminar las entidades relacionadas
+        nuclearPlantRepository.delete(nuclearPlant);
+    }
+    
 }

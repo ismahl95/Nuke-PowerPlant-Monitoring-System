@@ -2,6 +2,7 @@ package com.ihl95.nuclear.operator.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,7 +34,7 @@ public class Operator {
     @JsonBackReference // Evita recursión infinita al serializar la relación con NuclearPlant
     private NuclearPlant nuclearPlant; // Relación con PlantaNuclear
 
-    @OneToMany(mappedBy = "operator")
+    @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference // Maneja la serialización de la lista de entrenamientos
     private List<Training> trainings; // Relación con Training
 }
