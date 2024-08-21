@@ -26,15 +26,11 @@ public class NuclearPlantController {
         return ResponseEntity.ok(nuclearPlants);
     }
 
-    /*
-     * 
-     * @GetMapping("/{id}")
-     * public ResponseEntity<NuclearPlantDTO> getNuclearPlantById(@PathVariable Long
-     * id) {
-     * NuclearPlantDTO nuclearPlant = nuclearPlantService.getNuclearPlantById(id);
-     * return ResponseEntity.ok(nuclearPlant);
-     * }
-     */
+    @GetMapping("/{id}")
+    public ResponseEntity<NuclearPlantDTO> getNuclearPlantById(@PathVariable Long id) {
+        NuclearPlantDTO nuclearPlant = nuclearPlantService.getNuclearPlantById(id);
+        return ResponseEntity.ok(nuclearPlant);
+    }
 
     @GetMapping("/complete/{id}")
     public ResponseEntity<NuclearPlantCompleteDTO> getNuclearPlantCompleteById(@PathVariable Long id) {

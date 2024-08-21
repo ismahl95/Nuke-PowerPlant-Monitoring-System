@@ -32,15 +32,11 @@ public class NuclearPlantService {
                 .collect(Collectors.toList());
     }
 
-    /*
-     * 
-     * public NuclearPlantDTO getNuclearPlantById(Long id) {
-     * NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
-     * .orElseThrow(() ->
-     * NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
-     * return nuclearPlantMapper.toNuclearPlantDTO(nuclearPlant);
-     * }
-     */
+    public NuclearPlantDTO getNuclearPlantById(Long id) {
+        NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
+                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
+        return nuclearPlantCompleteMapper.toNuclearPlantDTO(nuclearPlant);
+    }
 
     public NuclearPlantCompleteDTO getNuclearPlantCompleteById(Long id) {
         NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
