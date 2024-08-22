@@ -1,0 +1,1 @@
+INSERT INTO nuclear_plant (name, location) VALUES ('Test Nuclear Plant', 'Prueba, Testlandia');
