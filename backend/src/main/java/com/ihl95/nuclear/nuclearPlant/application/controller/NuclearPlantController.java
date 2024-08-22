@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantCompleteDTO;
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.nuclearPlant.application.exception.NuclearPlantException;
 import com.ihl95.nuclear.nuclearPlant.application.service.NuclearPlantService;
 
 @RestController
@@ -34,6 +35,9 @@ public class NuclearPlantController {
     @GetMapping("/{id}")
     public ResponseEntity<NuclearPlantDTO> getNuclearPlantById(@PathVariable Long id) {
         NuclearPlantDTO nuclearPlant = nuclearPlantService.getNuclearPlantById(id);
+        if (nuclearPlant == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(nuclearPlant);
     }
 
