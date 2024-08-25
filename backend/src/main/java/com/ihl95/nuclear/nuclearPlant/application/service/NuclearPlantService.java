@@ -38,11 +38,11 @@ public class NuclearPlantService {
         return nuclearPlantCompleteMapper.toNuclearPlantDTO(nuclearPlant);
     }
 
-    public NuclearPlantCompleteDTO getNuclearPlantCompleteById(Long id) {
+/*     public NuclearPlantCompleteDTO getNuclearPlantCompleteById(Long id) {
         NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
                 .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
         return nuclearPlantCompleteMapper.toNuclearPlantCompleteDTO(nuclearPlant);
-    }
+    } */
 
     public NuclearPlantDTO createNuclearPlant(NuclearPlantDTO nuclearPlantDTO) {
         NuclearPlant nuclearPlant = nuclearPlantCompleteMapper.toNuclearPlant(nuclearPlantDTO);

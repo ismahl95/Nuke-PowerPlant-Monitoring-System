@@ -41,11 +41,11 @@ public class NuclearPlantController {
         return ResponseEntity.ok(nuclearPlant);
     }
 
-    @GetMapping("/complete/{id}")
+/*     @GetMapping("/complete/{id}")
     public ResponseEntity<NuclearPlantCompleteDTO> getNuclearPlantCompleteById(@PathVariable Long id) {
         NuclearPlantCompleteDTO nuclearPlantComplete = nuclearPlantService.getNuclearPlantCompleteById(id);
         return ResponseEntity.ok(nuclearPlantComplete);
-    }
+    } */
 
     @PostMapping
     public ResponseEntity<NuclearPlantDTO> createNuclearPlant(@RequestBody NuclearPlantDTO nuclearPlantDTO) {
