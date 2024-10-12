@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Quitar barra de scroll */
+  scrollbar-width: none;
+}
+
+body {
+  background-color: grey;
+}
+
+header {
+  background-image: url('https://d.newsweek.com/en/full/309014/french-nulcear-power-station.jpg');
+  background-position: bottom 10px right;
+}
+
+/* Estilo del título del encabezado */
+header h1 {
+  font-size: 2rem; /* Tamaño de fuente del título */
+  text-align: center;
+  margin: 0; /* Elimina el margen por defecto */
+}
+
+/* Contenedor del menú */
+.bg-gray-200 {
+  position: relative;
+  width: 170px; /* Ancho inicial del menú */
+  transition: width 0.3s ease;
+  overflow: hidden; /* Oculta el contenido desbordado */
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(175, 175, 175);
+}
+
+/* Estado del menú en pliegue */
+.bg-gray-200.collapsed {
+  width: 60px; /* Ancho cuando está plegado */
+  padding-right: 4%; /* Espaciado a la derecha */
+  padding-left: 0%; /* Sin espaciado a la izquierda */
+}
+
+/* Estilo de los enlaces dentro del menú */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Permite que la lista ocupe el espacio restante */
+}
+
+/* Estilo de cada elemento de lista */
+li {
+  padding: 0;
+  margin: 0;
+}
+
+/* Contenedor del contenido del enlace */
+a {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem; /* Espaciado interno */
+  transition: background-color 0.3s ease;
+  text-decoration: none; /* Elimina el subrayado del enlace */
+}
+
+/* Estilo específico para los íconos dentro del enlace */
+a img {
+  width: 32px; /* Tamaño aumentado del ícono */
+  height: 32px; /* Tamaño aumentado del ícono */
+  object-fit: contain; /* Asegura que la imagen no se deforme */
+  margin: 0; /* Elimina el margen adicional alrededor de los íconos */
+  flex-shrink: 0; /* Evita que el ícono se reduzca */
+  max-width: 32px;
+  max-height: 32px;
+}
+
+/* Ajusta el margen derecho específico a los íconos */
+a img {
+  margin-right: 0.75rem; /* Espacio entre el ícono y el texto */
+}
+
+/* Asegura que el texto y los íconos estén alineados correctamente */
+a span {
+  margin-left: 0; /* Elimina el margen izquierdo del texto cuando se pliega el menú */
+}
+
+/* Oculta el texto cuando el menú está plegado */
+.bg-gray-200.collapsed span {
+  display: none;
+}
+
+/* Opcional: Estilo al pasar el cursor por encima */
+a:hover {
+  background-color: #e2e8f0; /* Color de fondo al pasar el cursor */
+}
