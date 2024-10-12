@@ -1,81 +1,72 @@
 package com.ihl95.nuclear.nuclearPlant.application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantCompleteDTO;
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
-import com.ihl95.nuclear.nuclearPlant.application.exception.NuclearPlantException;
-import com.ihl95.nuclear.nuclearPlant.application.mapper.NuclearPlantCompleteMapper;
-import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
-import com.ihl95.nuclear.nuclearPlant.infraestructure.NuclearPlantRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
+public interface NuclearPlantService {
 
-import javax.transaction.Transactional;
+  /**
+   * This function returns a list of NuclearPlantDTO objects representing all nuclear plants.
+   * 
+   * @return A list of NuclearPlantDTO objects is being returned.
+   */
+  public List<NuclearPlantDTO> getAllNuclearPlants();
 
-@Service
-@Transactional
-public class NuclearPlantService {
+  /**
+   * This function retrieves a NuclearPlantDTO object by its unique identifier.
+   * 
+   * @param id The parameter "id" is a unique identifier used to retrieve a specific NuclearPlantDTO
+   * object from the system based on its ID.
+   * @return A `NuclearPlantDTO` object corresponding to the nuclear plant with the specified `id` is
+   * being returned.
+   */
+  public NuclearPlantDTO getNuclearPlantById(Long id);
 
-    @Autowired
-    private NuclearPlantRepository nuclearPlantRepository;
+  /**
+   * This Java function retrieves a complete DTO (Data Transfer Object) for a nuclear plant based on
+   * the provided ID.
+   * 
+   * @param id The method `getNuclearPlantCompleteById` is expected to take a `Long` parameter `id`
+   * which represents the unique identifier of a nuclear plant. This method is supposed to return a
+   * `NuclearPlantCompleteDTO` object that contains complete information about the nuclear plant
+   * identified by the given `
+   * @return A `NuclearPlantCompleteDTO` object corresponding to the nuclear plant with the specified
+   * `id` is being returned.
+   */
+  public NuclearPlantCompleteDTO getNuclearPlantCompleteById(Long id);
 
-    @Autowired
-    private NuclearPlantCompleteMapper nuclearPlantCompleteMapper;
+  /**
+   * This Java function creates a new NuclearPlantDTO object representing a nuclear plant.
+   * 
+   * @param nuclearPlantDTO The `createNuclearPlant` method takes a `NuclearPlantDTO` object as a
+   * parameter. This object likely contains information about a nuclear plant, such as its name,
+   * location, capacity, and other relevant details. The method is responsible for creating a new
+   * nuclear plant based on the provided DTO
+   * @return The method `createNuclearPlant` is returning a `NuclearPlantDTO` object.
+   */
+  public NuclearPlantDTO createNuclearPlant(NuclearPlantDTO nuclearPlantDTO);
 
-    public List<NuclearPlantDTO> getAllNuclearPlants() {
-        List<NuclearPlant> nuclearPlants = nuclearPlantRepository.findAll();
-        return nuclearPlants.stream()
-                .map(nuclearPlantCompleteMapper::toNuclearPlantDTO)
-                .collect(Collectors.toList());
-    }
+  /**
+   * This Java function updates a nuclear plant entity with the provided data in the NuclearPlantDTO
+   * object.
+   * 
+   * @param id The `id` parameter is of type `Long` and represents the unique identifier of the nuclear
+   * plant that you want to update.
+   * @param nuclearPlantDTO The `updateNuclearPlant` method takes in two parameters:
+   * @return The method signature indicates that a `NuclearPlantDTO` object will be returned after
+   * updating the nuclear plant with the specified ID.
+   */
+  public NuclearPlantDTO updateNuclearPlant(Long id, NuclearPlantDTO nuclearPlantDTO);
 
-    public NuclearPlantDTO getNuclearPlantById(Long id) {
-        NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
-        return nuclearPlantCompleteMapper.toNuclearPlantDTO(nuclearPlant);
-    }
-
-    public NuclearPlantCompleteDTO getNuclearPlantCompleteById(Long id) {
-        NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
-        return nuclearPlantCompleteMapper.toNuclearPlantCompleteDTO(nuclearPlant);
-    }
-
-    public NuclearPlantDTO createNuclearPlant(NuclearPlantDTO nuclearPlantDTO) {
-        NuclearPlant nuclearPlant = nuclearPlantCompleteMapper.toNuclearPlant(nuclearPlantDTO);
-        NuclearPlant savedNuclearPlant = nuclearPlantRepository.save(nuclearPlant);
-        return nuclearPlantCompleteMapper.toNuclearPlantDTO(savedNuclearPlant);
-    }
-
-    public NuclearPlantDTO updateNuclearPlant(Long id, NuclearPlantDTO nuclearPlantDTO) {
-        // Verificar si la planta existe en la base de datos
-        NuclearPlant existingPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
-
-        // Actualizar solo los campos simples que están presentes en el DTO
-        existingPlant.setName(nuclearPlantDTO.name());
-        existingPlant.setLocation(nuclearPlantDTO.location());
-
-        // Guardar la entidad actualizada
-        NuclearPlant updatedNuclearPlant = nuclearPlantRepository.save(existingPlant);
-
-        // Retornar el DTO actualizado
-        return nuclearPlantCompleteMapper.toNuclearPlantDTO(updatedNuclearPlant);
-    }
-
-    @Transactional
-    public void deleteNuclearPlant(Long id) {
-        // Verificar si la planta existe en la base de datos
-        NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
-    
-        // Si necesitas manipular o verificar algo antes de la eliminación, puedes hacerlo aquí
-    
-        // Eliminar la planta nuclear, lo que debería también eliminar las entidades relacionadas
-        nuclearPlantRepository.delete(nuclearPlant);
-    }
-    
+  /**
+   * The function `deleteNuclearPlant` in Java is used to delete a nuclear plant record based on its
+   * unique identifier (id).
+   * 
+   * @param id The `deleteNuclearPlant` method takes a single parameter `id`, which is of type `Long`.
+   * This `id` parameter is used to identify the specific nuclear plant that needs to be deleted.
+   */
+  public void deleteNuclearPlant(Long id);
+  
 }
