@@ -22,21 +22,24 @@
 
     <dependencies>
         <!-- Spring Boot Web Starter -->
-        <!-- Proporciona las dependencias necesarias para crear aplicaciones web con Spring, incluyendo MVC. -->
+        <!-- Proporciona las dependencias necesarias para crear aplicaciones web con Spring,
+        incluyendo MVC. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- Spring Boot Data JPA Starter -->
-        <!-- Proporciona las dependencias necesarias para trabajar con JPA y bases de datos relacionales usando Spring Data JPA. -->
+        <!-- Proporciona las dependencias necesarias para trabajar con JPA y bases de datos
+        relacionales usando Spring Data JPA. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <!-- Spring Boot Validation Starter -->
-        <!-- Proporciona soporte para la validación de beans usando Hibernate Validator y la especificación Bean Validation. -->
+        <!-- Proporciona soporte para la validación de beans usando Hibernate Validator y la
+        especificación Bean Validation. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -51,7 +54,8 @@
         </dependency>
 
         <!-- Lombok -->
-        <!-- Herramienta que reduce el boilerplate en el código, generando getters, setters, constructores, entre otros. -->
+        <!-- Herramienta que reduce el boilerplate en el código, generando getters, setters,
+        constructores, entre otros. -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -60,7 +64,8 @@
         </dependency>
 
         <!-- MapStruct -->
-        <!-- Herramienta para generar automáticamente mapeadores de objetos entre clases de diferentes tipos. -->
+        <!-- Herramienta para generar automáticamente mapeadores de objetos entre clases de
+        diferentes tipos. -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
@@ -68,7 +73,8 @@
         </dependency>
 
         <!-- MapStruct Processor -->
-        <!-- Dependencia del procesador de anotaciones de MapStruct necesaria para la generación de código. -->
+        <!-- Dependencia del procesador de anotaciones de MapStruct necesaria para la generación de
+        código. -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
@@ -85,7 +91,8 @@
         </dependency>
 
         <!-- Spring Boot DevTools -->
-        <!-- Herramienta que acelera el desarrollo al proporcionar recarga automática, entre otras funcionalidades útiles en tiempo de desarrollo. -->
+        <!-- Herramienta que acelera el desarrollo al proporcionar recarga automática, entre otras
+        funcionalidades útiles en tiempo de desarrollo. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -93,7 +100,8 @@
         </dependency>
 
         <!-- Spring Boot Test Starter -->
-        <!-- Proporciona las dependencias necesarias para realizar pruebas en aplicaciones Spring Boot, incluyendo JUnit, Mockito, y Hamcrest. -->
+        <!-- Proporciona las dependencias necesarias para realizar pruebas en aplicaciones Spring
+        Boot, incluyendo JUnit, Mockito, y Hamcrest. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -101,7 +109,8 @@
         </dependency>
 
         <!-- Mockito Core -->
-        <!-- Biblioteca de mocking para Java utilizada en pruebas unitarias para simular la interacción de objetos complejos. -->
+        <!-- Biblioteca de mocking para Java utilizada en pruebas unitarias para simular la
+        interacción de objetos complejos. -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -109,7 +118,8 @@
         </dependency>
 
         <!-- Mockito JUnit Jupiter -->
-        <!-- Proporciona integración de Mockito con JUnit 5, lo que permite usar anotaciones de Mockito con JUnit Jupiter. -->
+        <!-- Proporciona integración de Mockito con JUnit 5, lo que permite usar anotaciones de
+        Mockito con JUnit Jupiter. -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
@@ -117,7 +127,8 @@
         </dependency>
 
         <!-- Spring Test DBUnit -->
-        <!-- Integración de DBUnit con Spring Test, útil para pruebas de integración que involucran bases de datos. -->
+        <!-- Integración de DBUnit con Spring Test, útil para pruebas de integración que involucran
+        bases de datos. -->
         <dependency>
             <groupId>com.github.springtestdbunit</groupId>
             <artifactId>spring-test-dbunit</artifactId>
@@ -126,7 +137,8 @@
         </dependency>
 
         <!-- AssertJ Core -->
-        <!-- Biblioteca para realizar aserciones en pruebas, proporcionando una API fluida y fácil de leer. -->
+        <!-- Biblioteca para realizar aserciones en pruebas, proporcionando una API fluida y fácil
+        de leer. -->
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -134,19 +146,46 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Spring Security Starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- JWT Dependency -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
+        <!-- Spring Boot Starter for Security Configuration -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- Para encriptar contraseñas -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
             <!-- Plugin de Spring Boot -->
-            <!-- Facilita la creación y ejecución de aplicaciones Spring Boot empaquetadas como JAR o WAR. -->
+            <!-- Facilita la creación y ejecución de aplicaciones Spring Boot empaquetadas como JAR
+            o WAR. -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
             <!-- Plugin del Compilador de Maven -->
-            <!-- Configura el compilador de Maven para usar una versión específica de Java y configurar el procesador de anotaciones. -->
+            <!-- Configura el compilador de Maven para usar una versión específica de Java y
+            configurar el procesador de anotaciones. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

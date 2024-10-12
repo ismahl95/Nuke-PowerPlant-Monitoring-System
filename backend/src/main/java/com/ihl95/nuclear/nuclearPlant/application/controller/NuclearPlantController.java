@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantCompleteDTO;
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearPlant.application.service.NuclearPlantService;
 

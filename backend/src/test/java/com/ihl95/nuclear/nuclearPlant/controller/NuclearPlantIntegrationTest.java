@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.security.AuthenticationRequest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content; // Add this import statement
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get; // Add this import statement
@@ -37,13 +38,29 @@ class NuclearPlantIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    /**
-     * The function tests if all nuclear plants are returned when calling the endpoint to get all nuclear
-     * plants.
-     */
+    private String getJwtToken() throws Exception {
+        // Realiza la autenticación para obtener el token JWT
+        AuthenticationRequest authRequest = new AuthenticationRequest();
+        authRequest.setUsername("admin");
+        authRequest.setPassword("admin");
+
+        String tokenResponse = mockMvc.perform(post("/api/auth/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(authRequest)))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        return tokenResponse; // Devuelve el token JWT
+    }
+
     @Test
     void ifGetAllNuclearPlants_thenAllNuclearPlantsAreReturned() throws Exception {
-        mockMvc.perform(get("/api/nuclear-plants"))
+        String token = getJwtToken(); // Obtener el token
+
+        mockMvc.perform(get("/api/nuclear-plants")
+                .header("Authorization", "Bearer " + token)) // Agregar el token al encabezado
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$[0].id").value(1))
@@ -54,14 +71,12 @@ class NuclearPlantIntegrationTest {
                 .andExpect(jsonPath("$[3].location").value("Verificacion, Verifilandia"));
     }
 
-    /**
-     * This test function verifies that calling the endpoint to get a nuclear plant
-     * by ID 1 returns the
-     * expected plant details in JSON format.
-     */
     @Test
     void ifGetNuclearPlantById_thenNuclearPlantWithId1IsReturned() throws Exception {
-        mockMvc.perform(get("/api/nuclear-plants/1"))
+        String token = getJwtToken(); // Obtener el token
+
+        mockMvc.perform(get("/api/nuclear-plants/1")
+                .header("Authorization", "Bearer " + token)) // Agregar el token al encabezado
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value(1))
@@ -69,29 +84,25 @@ class NuclearPlantIntegrationTest {
                 .andExpect(jsonPath("$.location").value("Prueba, Testlandia"));
     }
 
-    /**
-     * This test verifies that a "Not Found" status is returned when trying to get a
-     * nuclear plant by an ID
-     * that does not exist.
-     */
     @Test
     void ifGetNuclearPlantById_whenIdNotFound_thenNotFoundStatusIsReturned() throws Exception {
-        mockMvc.perform(get("/api/nuclear-plants/999"))
+        String token = getJwtToken(); // Obtener el token
+
+        mockMvc.perform(get("/api/nuclear-plants/999")
+                .header("Authorization", "Bearer " + token)) // Agregar el token al encabezado
                 .andExpect(status().isNotFound());
     }
 
-    /**
-     * This test function verifies the creation of a new nuclear plant by sending a POST request with the
-     * plant details and checking the response.
-     */
     @Test
     @Transactional
     void whenCreateNuclearPlant_thenCreatedNuclearPlantIsReturned() throws Exception {
+        String token = getJwtToken(); // Obtener el token
 
         NuclearPlantDTO newNuclearPlant = new NuclearPlantDTO(null, "New Nuclear Plant", "New Location");
         String newNuclearPlantJson = objectMapper.writeValueAsString(newNuclearPlant);
 
         mockMvc.perform(post("/api/nuclear-plants")
+                .header("Authorization", "Bearer " + token) // Agregar el token al encabezado
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newNuclearPlantJson))
                 .andExpect(status().isCreated())
@@ -104,10 +115,13 @@ class NuclearPlantIntegrationTest {
     @Test
     @Transactional
     void whenUpdateNuclearPlant_thenUpdatedNuclearPlantIsReturned() throws Exception {
+        String token = getJwtToken(); // Obtener el token
+
         NuclearPlantDTO updatedNuclearPlant = new NuclearPlantDTO(null, "Updated Nuclear Plant", "Updated Location");
         String updatedNuclearPlantJson = objectMapper.writeValueAsString(updatedNuclearPlant);
 
         mockMvc.perform(put("/api/nuclear-plants/1")
+                .header("Authorization", "Bearer " + token) // Agregar el token al encabezado
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updatedNuclearPlantJson))
                 .andExpect(status().isOk())
@@ -120,8 +134,10 @@ class NuclearPlantIntegrationTest {
     @Test
     @Transactional
     void whenDeleteNuclearPlant_thenNuclearPlantIsDeleted() throws Exception {
-        mockMvc.perform(delete("/api/nuclear-plants/1"))
+        String token = getJwtToken(); // Obtener el token
+
+        mockMvc.perform(delete("/api/nuclear-plants/1")
+                .header("Authorization", "Bearer " + token)) // Agregar el token al encabezado
                 .andExpect(status().isNoContent());
     }
-
 }
