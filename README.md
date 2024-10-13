@@ -89,4 +89,4 @@ La aplicación gestiona las siguientes entidades principales:
 
 ## Contribuciones
 
-Si deseas contribuir al proyecto, puedes realizar un **fork** del repositorio, crear una nueva rama con tus cambios y abrir un **pull request**. Asegúrate de seguir las buenas prácticas de desarrollo y ejecutar las pruebas antes de enviar tus cambios.
+Si deseas contribuir al proyecto contacte primero con el administrador del mismo, puedes realizar un **fork** del repositorio, crear una nueva rama con tus cambios y abrir un **pull request**. Asegúrate de seguir las buenas prácticas de desarrollo y ejecutar las pruebas antes de enviar tus cambios.
