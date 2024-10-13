@@ -66,12 +66,12 @@ La aplicación gestiona las siguientes entidades principales:
 - **Java 17** instalado.
 - **Maven 3.6+** para la gestión del proyecto.
 
-### Pasos para ejecutar la aplicación:
+### Pasos para ejecutar el backend de la aplicación:
 
 1. Clonar el repositorio:
     ```bash
-    git clone https://github.com/tu_usuario/nuke-powerplant-back.git
-    cd nuke-powerplant-back
+    git clone https://github.com/ismahl95/NukePowerplant.git
+    cd NukePowerplant/backend
     ```
 
 2. Construir el proyecto:
