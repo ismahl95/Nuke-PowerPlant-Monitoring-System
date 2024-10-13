@@ -10,8 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import com.ihl95.nuclear.security.AuthenticationRequest;
 import com.ihl95.nuclear.security.JwtUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Autenticación", description = "Endpoints para autenticación de usuarios")
 public class AuthController {
 
   @Autowired
@@ -23,6 +31,12 @@ public class AuthController {
   @Autowired
   private UserDetailsService userDetailsService;
 
+  @Operation(summary = "Autenticación de usuario", description = "Autentica al usuario con sus credenciales (nombre de usuario y contraseña) y genera un token JWT")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Autenticación exitosa y token JWT generado", content = @Content(schema = @Schema(implementation = String.class))),
+      @ApiResponse(responseCode = "401", description = "Nombre de usuario o contraseña incorrectos", content = @Content(schema = @Schema(implementation = String.class))),
+      @ApiResponse(responseCode = "500", description = "Error en la autenticación", content = @Content(schema = @Schema(implementation = String.class)))
+  })
   @PostMapping("/authenticate")
   public String createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
     try {
