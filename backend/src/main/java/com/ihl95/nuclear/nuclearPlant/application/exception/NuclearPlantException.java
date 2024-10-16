@@ -6,6 +6,8 @@ public class NuclearPlantException extends RuntimeException {
 
   private final HttpStatus status;
 
+  public static final String NOT_FOUND_MESSAGE = "Nuclear Plant not found with id: ";
+
   public NuclearPlantException(String message, HttpStatus status) {
     super(message);
     this.status = status;
