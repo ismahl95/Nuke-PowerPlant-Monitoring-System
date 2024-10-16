@@ -34,13 +34,13 @@ public class NuclearPlantServiceImpl implements NuclearPlantService{
 
     public NuclearPlantDTO getNuclearPlantById(Long id) {
         NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
+                .orElseThrow(() -> NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id));
         return nuclearPlantCompleteMapper.toNuclearPlantDTO(nuclearPlant);
     }
 
     public NuclearPlantCompleteDTO getNuclearPlantCompleteById(Long id) {
         NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
+                .orElseThrow(() -> NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id));
         return nuclearPlantCompleteMapper.toNuclearPlantCompleteDTO(nuclearPlant);
     }
 
@@ -53,7 +53,7 @@ public class NuclearPlantServiceImpl implements NuclearPlantService{
     public NuclearPlantDTO updateNuclearPlant(Long id, NuclearPlantDTO nuclearPlantDTO) {
         // Verificar si la planta existe en la base de datos
         NuclearPlant existingPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
+                .orElseThrow(() -> NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id));
 
         // Actualizar solo los campos simples que están presentes en el DTO
         existingPlant.setName(nuclearPlantDTO.name());
@@ -70,7 +70,7 @@ public class NuclearPlantServiceImpl implements NuclearPlantService{
     public void deleteNuclearPlant(Long id) {
         // Verificar si la planta existe en la base de datos
         NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound("Nuclear Plant not found with id: " + id));
+                .orElseThrow(() -> NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id));
 
         // Si necesitas manipular o verificar algo antes de la eliminación, puedes
         // hacerlo aquí
