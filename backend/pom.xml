@@ -173,23 +173,19 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
         </dependency>
-        
+
 
     </dependencies>
 
     <build>
         <plugins>
             <!-- Plugin de Spring Boot -->
-            <!-- Facilita la creación y ejecución de aplicaciones Spring Boot empaquetadas como JAR
-            o WAR. -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
             <!-- Plugin del Compilador de Maven -->
-            <!-- Configura el compilador de Maven para usar una versión específica de Java y
-            configurar el procesador de anotaciones. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -198,17 +194,14 @@
                     <source>17</source>
                     <target>17</target>
                     <compilerArgs>
-                        <arg>-Amapstruct.verbose=true</arg> <!-- Habilitar el modo verbose para
-                        MapStruct -->
+                        <arg>-Amapstruct.verbose=true</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
-                        <!-- Lombok -->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>1.18.22</version>
                         </path>
-                        <!-- MapStruct Processor -->
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
@@ -216,6 +209,34 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+
+            <!-- Plugin de JaCoCo para cobertura de pruebas -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin de SonarCloud -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.0.2155</version>
             </plugin>
         </plugins>
     </build>
