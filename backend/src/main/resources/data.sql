@@ -1,5 +1,8 @@
 -- data.sql
 
+INSERT INTO users (username, password, role) VALUES
+('Admin', '$2a$12$3rDuLVZQrl62wEbhkg4QU.bJ5jC8mlyWmMwnkCrJjagQbm/QjnVRW', 'ADMIN');
+
 -- Insertar datos en la tabla de Supplier
 
 INSERT INTO supplier (name, contact, phone) VALUES

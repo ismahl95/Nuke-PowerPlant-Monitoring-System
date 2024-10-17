@@ -41,7 +41,7 @@ class NuclearPlantIntegrationTest {
     private String getJwtToken() throws Exception {
         // Realiza la autenticación para obtener el token JWT
         AuthenticationRequest authRequest = new AuthenticationRequest();
-        authRequest.setUsername("admin");
+        authRequest.setUsername("Admin");
         authRequest.setPassword("admin");
 
         String tokenResponse = mockMvc.perform(post("/api/auth/authenticate")
