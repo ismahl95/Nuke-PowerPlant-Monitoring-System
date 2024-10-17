@@ -6,21 +6,20 @@ import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.ihl95.nuclear.user.UserRepository;
+
 import com.ihl95.nuclear.user.CustomUserDetailsService;
 import com.ihl95.nuclear.user.User;
-import com.ihl95.nuclear.user.UserRepository;
 
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class CustomUserDetailsServiceTest {
+public class CustomUserDetailsServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -28,41 +27,43 @@ class CustomUserDetailsServiceTest {
     @InjectMocks
     private CustomUserDetailsService customUserDetailsService;
 
-    private User user;
-
     @BeforeEach
     void setUp() {
-        // Inicializar el usuario de prueba
-        user = new User();
-        user.setUsername("testUser");
-        user.setPassword("password"); // Puedes encriptar si es necesario
-        user.setRole("ROLE_USER");
+        MockitoAnnotations.openMocks(this); // Inicializa los mocks
     }
 
     @Test
-    void whenLoadUserByUsername_thenUserDetailsShouldBeReturned() {
-        // Configurar el mock del repositorio
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+    void loadUserByUsername_UserFound_ReturnsUserDetails() {
+        // Arrange
+        String username = "Admin";
+        User user = new User(); // Suponiendo que tienes un constructor por defecto
+        user.setUsername(username);
+        user.setPassword("hashed_password");
+        user.setRole("ROLE_ADMIN");
 
-        // Actuar
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername("testUser");
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
-        // Verificar
+        // Act
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+
+        // Assert
         assertNotNull(userDetails);
-        assertEquals("testUser", userDetails.getUsername());
-        assertEquals("password", userDetails.getPassword());
-        assertFalse(userDetails.getAuthorities().isEmpty());
-        assertEquals("ROLE_USER", userDetails.getAuthorities().iterator().next().getAuthority());
+        assertEquals(username, userDetails.getUsername());
+        assertEquals("hashed_password", userDetails.getPassword());
+        assertEquals(1, userDetails.getAuthorities().size());
+        assertEquals("ROLE_ADMIN", userDetails.getAuthorities().iterator().next().getAuthority());
     }
 
     @Test
-    void whenLoadUserByUsername_userNotFound_thenThrowUsernameNotFoundException() {
-        // Configurar el mock del repositorio para devolver vacío
+    void loadUserByUsername_UserNotFound_ThrowsUsernameNotFoundException() {
+        // Arrange
+        String username = "unknownUser";
+
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
-        // Actuar y verificar que se lanza la excepción
+        // Act & Assert
         assertThrows(UsernameNotFoundException.class, () -> {
-            customUserDetailsService.loadUserByUsername("nonExistentUser");
+            customUserDetailsService.loadUserByUsername(username);
         });
     }
 }
