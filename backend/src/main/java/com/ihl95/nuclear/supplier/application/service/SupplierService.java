@@ -7,5 +7,7 @@ import com.ihl95.nuclear.supplier.application.dto.SupplierDTO;
 public interface SupplierService {
 
   public List<SupplierDTO> getAllSuppliers();
+
+  public SupplierDTO getSupplierbyId(Long id);
   
 }
