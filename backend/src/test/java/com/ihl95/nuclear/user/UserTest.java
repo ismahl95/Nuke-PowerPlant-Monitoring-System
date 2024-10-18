@@ -56,5 +56,20 @@ class UserTest {
         String expectedString = "User(id=1, username=username, password=password, role=ROLE_USER)";
         assertEquals(expectedString, user.toString());
     }
+
+    @Test
+    void testUserEqualsAndHashCode() {
+        User user1 = new User(1L, "username", "password", "ROLE_USER");
+        User user2 = new User(1L, "username", "password", "ROLE_USER");
+        User user3 = new User(2L, "username2", "password2", "ROLE_ADMIN");
+
+        // Verificar que user1 es igual a user2 (mismo id)
+        assertEquals(user1, user2);
+        assertEquals(user1.hashCode(), user2.hashCode());
+
+        // Verificar que user1 no es igual a user3 (diferente id)
+        assertNotEquals(user1, user3);
+    }
 }
+
 
