@@ -63,9 +63,6 @@ public class SupplierController {
   @GetMapping("/{id}")
   public ResponseEntity<SupplierDTO> getSupplierById(@PathVariable Long id) {
     SupplierDTO supplier = supplierService.getSupplierbyId(id);
-    if (supplier == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
     return ResponseEntity.ok(supplier);
   }
 

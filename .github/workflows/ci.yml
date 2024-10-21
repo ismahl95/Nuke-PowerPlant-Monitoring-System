@@ -124,6 +124,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Necesario para obtener información de PR
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Token de SonarCloud almacenado en secrets
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ismahl95_NukePowerplantBackend
-
-      - name: Clean up JaCoCo report
-        run: rm -rf backend/target/site/jacoco/  # Elimina el informe de JaCoCo generado

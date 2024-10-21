@@ -8,6 +8,8 @@ public class SupplierException extends RuntimeException{
 
   public static final String NOT_FOUND_MESSAGE = "Supplier not found with id: ";
 
+  public static final String BAD_REQUEST_MESSAGE = "The provided ID is not valid or null: ";
+
   public SupplierException(String message, HttpStatus status) {
     super(message);
     this.status = status;
@@ -23,10 +25,6 @@ public class SupplierException extends RuntimeException{
 
   public static SupplierException badRequest(String message) {
     return new SupplierException(message, HttpStatus.BAD_REQUEST);
-  }
-
-  public static SupplierException conflict(String message) {
-    return new SupplierException(message, HttpStatus.CONFLICT);
   }
   
 }
