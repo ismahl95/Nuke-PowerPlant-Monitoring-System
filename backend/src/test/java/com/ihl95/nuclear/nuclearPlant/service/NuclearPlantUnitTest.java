@@ -6,7 +6,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearPlant.application.exception.NuclearPlantException;
-import com.ihl95.nuclear.nuclearPlant.application.service.NuclearPlantService;
 import com.ihl95.nuclear.nuclearPlant.application.service.NuclearPlantServiceImpl;
 import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
 
