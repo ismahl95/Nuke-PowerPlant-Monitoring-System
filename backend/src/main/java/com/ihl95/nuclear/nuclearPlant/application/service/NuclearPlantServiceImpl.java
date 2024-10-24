@@ -3,7 +3,6 @@ package com.ihl95.nuclear.nuclearPlant.application.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantCompleteDTO;
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearPlant.application.exception.NuclearPlantException;
 import com.ihl95.nuclear.nuclearPlant.application.mapper.NuclearPlantCompleteMapper;
@@ -36,12 +35,6 @@ public class NuclearPlantServiceImpl implements NuclearPlantService{
         NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
                 .orElseThrow(() -> NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id));
         return nuclearPlantCompleteMapper.toNuclearPlantDTO(nuclearPlant);
-    }
-
-    public NuclearPlantCompleteDTO getNuclearPlantCompleteById(Long id) {
-        NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
-                .orElseThrow(() -> NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id));
-        return nuclearPlantCompleteMapper.toNuclearPlantCompleteDTO(nuclearPlant);
     }
 
     public NuclearPlantDTO createNuclearPlant(NuclearPlantDTO nuclearPlantDTO) {

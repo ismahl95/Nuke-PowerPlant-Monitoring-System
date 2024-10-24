@@ -14,10 +14,8 @@ public interface SensorMapper {
     SensorMapper INSTANCE = Mappers.getMapper(SensorMapper.class);
 
     @Mapping(source = "reactor", target = "reactor")
-    @Mapping(source = "sensorReadings", target = "sensorReadings")
     SensorDTO toSensorDTO(Sensor sensor);
 
     @Mapping(source = "reactor", target = "reactor")
-    @Mapping(source = "sensorReadings", target = "sensorReadings")
     Sensor toSensor(SensorDTO sensorDTO);
 }
