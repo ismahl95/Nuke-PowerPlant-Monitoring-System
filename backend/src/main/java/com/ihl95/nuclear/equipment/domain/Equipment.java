@@ -1,20 +1,13 @@
 package com.ihl95.nuclear.equipment.domain;
 
 import java.time.LocalDate;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ihl95.nuclear.equipment.domain.enums.EquipmentType;
-import com.ihl95.nuclear.maintenance.domain.Maintenance;
-
 import lombok.Data;
 
 @Entity
@@ -31,9 +24,4 @@ public class Equipment {
     @Enumerated(EnumType.STRING)
     private EquipmentType type; // Tipo de equipo (bomba, válvula, etc.)
 
-    @OneToMany(mappedBy = "equipment")
-    @JsonManagedReference // Evitar recursión infinita
-    private List<Maintenance> maintenances; // Relación con Mantenimiento
-
-    // Getters and Setters
 }
