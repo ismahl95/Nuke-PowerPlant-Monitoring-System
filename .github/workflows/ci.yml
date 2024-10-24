@@ -2,8 +2,8 @@ name: CI and SonarCloud
 
 on:
   push:         # Este evento se activará en cualquier push
-    branches:   # Para todas las ramas
-      - '**'    # Este patrón incluye todas las ramas
+    branches:   # Para la rama main
+      - 'main'  # Este patrón incluye la rama main
   pull_request: # Este evento se activará en cualquier pull request
     branches:   # Para todas las ramas
       - '**'    # Este patrón incluye todas las ramas

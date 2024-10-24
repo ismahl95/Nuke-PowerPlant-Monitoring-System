@@ -2,7 +2,6 @@ package com.ihl95.nuclear.nuclearPlant.application.service;
 
 import java.util.List;
 
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantCompleteDTO;
 import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
 
 public interface NuclearPlantService {
@@ -23,19 +22,6 @@ public interface NuclearPlantService {
    * being returned.
    */
   public NuclearPlantDTO getNuclearPlantById(Long id);
-
-  /**
-   * This Java function retrieves a complete DTO (Data Transfer Object) for a nuclear plant based on
-   * the provided ID.
-   * 
-   * @param id The method `getNuclearPlantCompleteById` is expected to take a `Long` parameter `id`
-   * which represents the unique identifier of a nuclear plant. This method is supposed to return a
-   * `NuclearPlantCompleteDTO` object that contains complete information about the nuclear plant
-   * identified by the given `
-   * @return A `NuclearPlantCompleteDTO` object corresponding to the nuclear plant with the specified
-   * `id` is being returned.
-   */
-  public NuclearPlantCompleteDTO getNuclearPlantCompleteById(Long id);
 
   /**
    * This Java function creates a new NuclearPlantDTO object representing a nuclear plant.

@@ -1,9 +1,6 @@
 package com.ihl95.nuclear.reactor.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,18 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ihl95.nuclear.anomaly.domain.Anomaly;
-import com.ihl95.nuclear.controlSystem.domain.ControlSystem;
-import com.ihl95.nuclear.maintenance.domain.Maintenance;
 import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
 import com.ihl95.nuclear.reactor.domain.enums.ReactorStatus;
 import com.ihl95.nuclear.reactor.domain.enums.ReactorType;
-import com.ihl95.nuclear.sensor.domain.Sensor;
-
 import lombok.Data;
 
 @Entity
@@ -45,19 +34,4 @@ public class Reactor {
     @JsonBackReference // Evitar recursión infinita
     private NuclearPlant nuclearPlant; // Relación con NuclearPlant
 
-    @OneToMany(mappedBy = "reactor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // Evitar recursión infinita
-    private List<Anomaly> anomalies; // Relación con Anomaly
-
-    @OneToMany(mappedBy = "reactor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // Evitar recursión infinita
-    private List<Maintenance> maintenances; // Relación con Maintenance
-
-    @OneToMany(mappedBy = "reactor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<ControlSystem> controlSystems; // Relación con ControlSystem
-
-    @OneToMany(mappedBy = "reactor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Sensor> sensor; // Relación con Sensor
 }

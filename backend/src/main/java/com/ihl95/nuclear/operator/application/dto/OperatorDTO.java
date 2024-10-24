@@ -7,5 +7,4 @@ public record OperatorDTO(
     String name,
     String position,
     String experience
-    //List<TrainingDTO> trainings
 ) {}

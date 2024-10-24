@@ -12,11 +12,9 @@ import com.ihl95.nuclear.maintenancePlan.domain.MaintenancePlan;
 public interface MaintenancePlanMapper {
     MaintenancePlanMapper INSTANCE = Mappers.getMapper(MaintenancePlanMapper.class);
 
-    @Mapping(source = "maintenances", target = "maintenances")
     @Mapping(source = "completed", target = "isCompleted")
     MaintenancePlanDTO toMaintenancePlanDTO(MaintenancePlan maintenancePlan);
 
-    @Mapping(source = "maintenances", target = "maintenances")
     @Mapping(source = "isCompleted", target = "completed")
     MaintenancePlan toMaintenancePlan(MaintenancePlanDTO maintenancePlanDTO);
 }
