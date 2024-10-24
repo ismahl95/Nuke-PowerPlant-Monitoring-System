@@ -14,8 +14,6 @@ import com.ihl95.nuclear.security.AuthenticationRequest;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content; // Add this import statement
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get; // Add this import statement
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put; // Add this import statement
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete; // Add this import statement
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status; // Add this import statement
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -26,7 +24,7 @@ import org.junit.jupiter.api.Test;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SupplierIntegrationTest {
+class SupplierIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
