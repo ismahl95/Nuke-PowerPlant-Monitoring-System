@@ -4,11 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.ihl95.nuclear.maintenance.application.mapper.MaintenanceMapper;
 import com.ihl95.nuclear.maintenancePlan.application.dto.MaintenancePlanDTO;
 import com.ihl95.nuclear.maintenancePlan.domain.MaintenancePlan;
 
-@Mapper(componentModel = "spring", uses = {MaintenanceMapper.class})
+@Mapper(componentModel = "spring")
 public interface MaintenancePlanMapper {
     MaintenancePlanMapper INSTANCE = Mappers.getMapper(MaintenancePlanMapper.class);
 
