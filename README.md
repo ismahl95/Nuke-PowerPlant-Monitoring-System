@@ -93,6 +93,8 @@ Si deseas contribuir al proyecto contacte primero con el administrador del mismo
 
 ## Commits
 
+### Tabla de prefijos
+
 | Prefijo        | Descripción                                                                                          | Ejemplo                                         |
 |----------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------|
 | `feat`         | Añade una nueva funcionalidad o característica a la aplicación.                                       | `feat: add user login functionality`            |
