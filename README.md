@@ -90,3 +90,53 @@ La aplicación gestiona las siguientes entidades principales:
 ## Contribuciones
 
 Si deseas contribuir al proyecto contacte primero con el administrador del mismo, puedes realizar un **fork** del repositorio, crear una nueva rama con tus cambios y abrir un **pull request**. Asegúrate de seguir las buenas prácticas de desarrollo y ejecutar las pruebas antes de enviar tus cambios.
+
+## Commits
+
+| Prefijo        | Descripción                                                                                          | Ejemplo                                         |
+|----------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| `feat`         | Añade una nueva funcionalidad o característica a la aplicación.                                       | `feat: add user login functionality`            |
+| `fix`          | Corrige un error o bug en el sistema.                                                                | `fix: correct validation error on form`         |
+| `docs`         | Cambios que solo afectan la documentación.                                                           | `docs: update API usage guide`                  |
+| `style`        | Cambios de formato que no afectan la funcionalidad del código.                                       | `style: apply consistent indentation`           |
+| `refactor`     | Mejoras en la estructura del código sin cambiar su comportamiento.                                   | `refactor: simplify data processing`            |
+| `test`         | Cambios o adición de código de pruebas.                                                              | `test: add unit tests for login component`      |
+| `build`        | Cambios en el sistema de construcción o dependencias externas.                                       | `build: update webpack configuration`           |
+| `ci`           | Cambios en la configuración de Integración Continua (CI).                                            | `ci: add GitHub Actions for CI pipeline`        |
+| `perf`         | Cambios para mejorar el rendimiento.                                                                 | `perf: optimize image loading`                  |
+| `revert`       | Revertir un cambio anterior.                                                                         | `revert: revert "feat: add login feature"`      |
+| `chore`        | Tareas de mantenimiento que no afectan el código de aplicación.                                      | `chore: update dependencies`                    |
+| `ui`           | Cambios relacionados con la interfaz de usuario.                                                     | `ui: update button styles on homepage`          |
+| `ux`           | Mejoras de experiencia de usuario.                                                                   | `ux: improve form feedback messages`            |
+| `security`     | Cambios relacionados con la seguridad del sistema.                                                   | `security: fix vulnerability in auth module`    |
+| `config`       | Cambios de configuración que afectan la forma en que se ejecuta el entorno o aplicación.             | `config: update eslint rules`                   |
+| `localization` | Cambios en la localización o internacionalización del proyecto.                                      | `localization: add French language support`     |
+| `hotfix`       | Soluciones rápidas a problemas críticos en producción.                                               | `hotfix: fix broken login in production`        |
+| `merge`        | Commits específicos de una fusión de ramas.                                                          | `merge: merge feature branch into main`         |
+| `env`          | Cambios en las variables de entorno o en archivos de configuración del entorno.                      | `env: update .env.example with new variables`   |
+| `wip`          | "Work in Progress": cambios aún no terminados o incompletos.                                         | `wip: start implementing new dashboard`         |
+| `ci-test`      | Cambios en la configuración o scripts específicamente para probar el flujo de CI.                   | `ci-test: test CI pipeline changes`             |
+| `data`         | Cambios en datos o recursos estáticos.                                                               | `data: update list of countries`                |
+| `prototype`    | Cambios experimentales para probar una funcionalidad o diseño.                                       | `prototype: initial concept for dark mode`      |
+| `a11y`         | Mejoras de accesibilidad para cumplir con las pautas de accesibilidad.                               | `a11y: add aria-labels to icons`                |
+| `deps`         | Actualización o eliminación de dependencias del proyecto.                                            | `deps: remove unused library`                   |
+| `seo`          | Cambios orientados a mejorar el SEO (optimización para motores de búsqueda).                         | `seo: update meta tags for homepage`            |
+| `db`           | Cambios en la base de datos, como migraciones o ajustes en la estructura.                            | `db: add index to users table`                  |
+| `analytics`    | Añadir o modificar funciones de análisis y seguimiento.                                              | `analytics: add Google Analytics tracking`      |
+| `types`        | Cambios en tipos de datos o definiciones de tipos (útil en TypeScript o sistemas tipados).           | `types: add types for user API responses`       |
+| `mock`         | Adición o ajuste de datos de prueba o mocks para tests o desarrollo.                                | `mock: add mock data for product tests`         |
+| `validation`   | Cambios en la validación de datos o reglas de validación.                                            | `validation: add email format validation`       |
+| `rollback`     | Deshace un despliegue reciente o cambio que causó un problema en producción.                        | `rollback: undo recent changes in production`   |
+| `infra`        | Cambios en la infraestructura de la aplicación.                                                     | `infra: update server configurations`           |
+| `responsive`   | Cambios para mejorar el diseño responsivo en diferentes dispositivos.                               | `responsive: improve mobile layout`             |
+| `logging`      | Cambios en el sistema de registro de logs para mejorar el rastreo de errores o análisis.             | `logging: add debug logs for API calls`         |
+| `migration`    | Cambios específicos relacionados con migraciones de datos o estructuras.                            | `migration: migrate user data to new schema`    |
+| `deprecate`    | Marcar una función o componente como obsoleto.                                                      | `deprecate: mark old API endpoint as deprecated`|
+| `cache`        | Cambios en la estrategia de almacenamiento en caché.                                                | `cache: implement Redis caching for sessions`   |
+| `asset`        | Cambios en archivos de activos, como imágenes, íconos o fuentes.                                   | `asset: update logo for new branding`           |
+| `backup`       | Cambios relacionados con respaldos de datos o configuraciones.                                      | `backup: create backup script for database`     |
+| `tracking`     | Cambios o adición de mecanismos de seguimiento de eventos o acciones del usuario.                   | `tracking: add event tracking for signup`       |
+| `monitoring`   | Configuración o ajustes para sistemas de monitoreo de la aplicación o infraestructura.              | `monitoring: add alert for high CPU usage`      |
+| `script`       | Modificación o adición de scripts personalizados para el proyecto.                                 | `script: add deployment automation script`      |
+| `scheduler`    | Cambios en el manejo de tareas programadas o cron jobs.                                             | `scheduler: update daily report schedule`       |
+| `init`         | Inicialización de un proyecto o módulo.                                                            | `init: initialize new module for payments`      |
