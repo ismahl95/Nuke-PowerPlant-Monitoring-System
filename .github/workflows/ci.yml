@@ -1,22 +1,22 @@
 name: CI and SonarCloud
 
 on:
-  push:         # Este evento se activará en cualquier push
-    branches:   # Para la rama main
-      - 'main'  # Este patrón incluye la rama main
-  pull_request: # Este evento se activará en cualquier pull request
-    branches:   # Para todas las ramas
-      - '**'    # Este patrón incluye todas las ramas
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
-  test: # Ejecución de los tests del backend
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Desactivar clones superficiales para análisis relevantes
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -28,16 +28,16 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}
+          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}-v2  # Añadimos "-v2" para forzar una nueva caché
           restore-keys: ${{ runner.os }}-m2
 
       - name: Run tests
         run: mvn test
         working-directory: backend
 
-  build: # Ejecución de la build del backend
+  build:
     runs-on: ubuntu-latest
-    needs: test  # Este job se ejecuta solo después de que 'test' finalice con éxito
+    needs: test
 
     steps:
       - name: Check out code
@@ -55,9 +55,9 @@ jobs:
         run: mvn clean install
         working-directory: backend
 
-  jacoco: # Job para generar el reporte de cobertura de código con JaCoCo
+  jacoco:
     runs-on: ubuntu-latest
-    needs: build  # Este job se ejecuta solo después de que 'build' finalice con éxito
+    needs: build
 
     steps:
       - name: Check out code
@@ -75,7 +75,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}
+          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}-v2
           restore-keys: ${{ runner.os }}-m2
 
       - name: Generate JaCoCo coverage report
@@ -83,20 +83,20 @@ jobs:
         working-directory: backend
 
       - name: Upload JaCoCo report
-        uses: actions/upload-artifact@v4  # Actualizado a la versión v4
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
-          path: backend/target/site/jacoco/  # Ruta del reporte JaCoCo generado
+          path: backend/target/site/jacoco/
 
-  sonarcloud: # Análisis de SonarCloud
+  sonarcloud:
     runs-on: ubuntu-latest
-    needs: jacoco  # Este job se ejecuta solo después de que 'jacoco' finalice con éxito
+    needs: jacoco
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Desactivar clones superficiales para análisis relevantes
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -108,19 +108,19 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
+          key: ${{ runner.os }}-sonar-${{ github.run_id }}  # Genera una nueva clave de caché para Sonar en cada ejecución
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}
+          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}-v2
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build and analyze with SonarCloud
         working-directory: backend
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Necesario para obtener información de PR
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Token de SonarCloud almacenado en secrets
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ismahl95_Nuke-PowerPlant-Monitoring-System
