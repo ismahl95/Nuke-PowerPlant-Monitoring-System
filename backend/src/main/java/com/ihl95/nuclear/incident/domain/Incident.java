@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ihl95.nuclear.incident.domain.enums.IncidentSeverity;
-import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
+import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.sensorReading.application.dto;
+package com.ihl95.nuclear.sensorreading.application.dto;
 
 import java.time.LocalDateTime;
 

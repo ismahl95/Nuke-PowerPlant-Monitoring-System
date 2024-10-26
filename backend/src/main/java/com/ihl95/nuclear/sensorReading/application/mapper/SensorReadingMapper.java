@@ -1,12 +1,12 @@
-package com.ihl95.nuclear.sensorReading.application.mapper;
+package com.ihl95.nuclear.sensorreading.application.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.ihl95.nuclear.sensor.application.mapper.SensorMapper;
-import com.ihl95.nuclear.sensorReading.application.dto.SensorReadingDTO;
-import com.ihl95.nuclear.sensorReading.domain.SensorReading;
+import com.ihl95.nuclear.sensorreading.application.dto.SensorReadingDTO;
+import com.ihl95.nuclear.sensorreading.domain.SensorReading;
 
 @Mapper(uses = SensorMapper.class)
 public interface SensorReadingMapper {

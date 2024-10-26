@@ -38,16 +38,14 @@ class SupplierIntegrationTest {
     authRequest.setUsername("Admin");
     authRequest.setPassword("admin");
 
-    String tokenResponse = mockMvc.perform(post("/api/auth/authenticate")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(authRequest)))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
-
-    return tokenResponse; // Devuelve el token JWT
-  }
+    return mockMvc.perform(post("/api/auth/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(authRequest)))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+}
 
       @Test
     void ifGetAllSuppliers_thenAllSuppliersAreReturned() throws Exception {

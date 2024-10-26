@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.security.AuthenticationRequest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content; // Add this import statement
@@ -45,16 +45,14 @@ class NuclearPlantIntegrationTest {
         AuthenticationRequest authRequest = new AuthenticationRequest();
         authRequest.setUsername("Admin");
         authRequest.setPassword("admin");
-
-        String tokenResponse = mockMvc.perform(post("/api/auth/authenticate")
+    
+        return mockMvc.perform(post("/api/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(authRequest)))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        return tokenResponse; // Devuelve el token JWT
     }
 
     @Test

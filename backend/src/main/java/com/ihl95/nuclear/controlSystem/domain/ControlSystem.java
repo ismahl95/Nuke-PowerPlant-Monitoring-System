@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.controlSystem.domain;
+package com.ihl95.nuclear.controlsystem.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.ihl95.nuclear.controlSystem.domain.enums.ControlSystemType;
+import com.ihl95.nuclear.controlsystem.domain.enums.ControlSystemType;
 import com.ihl95.nuclear.reactor.domain.Reactor;
 
 import lombok.Data;

@@ -1,11 +1,10 @@
-package com.ihl95.nuclear.emergencyPlan.application.mapper;
+package com.ihl95.nuclear.emergencyplan.application.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.ihl95.nuclear.emergencyPlan.application.dto.EmergencyPlanDTO;
-import com.ihl95.nuclear.emergencyPlan.domain.EmergencyPlan;
+import com.ihl95.nuclear.emergencyplan.application.dto.EmergencyPlanDTO;
+import com.ihl95.nuclear.emergencyplan.domain.EmergencyPlan;
 
 @Mapper(componentModel = "spring")
 public interface EmergencyPlanMapper {

@@ -1,13 +1,13 @@
-package com.ihl95.nuclear.nuclearPlant.application.service;
+package com.ihl95.nuclear.nuclearplant.application.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
-import com.ihl95.nuclear.nuclearPlant.application.exception.NuclearPlantException;
-import com.ihl95.nuclear.nuclearPlant.application.mapper.NuclearPlantCompleteMapper;
-import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
-import com.ihl95.nuclear.nuclearPlant.infraestructure.NuclearPlantRepository;
+import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantException;
+import com.ihl95.nuclear.nuclearplant.application.mapper.NuclearPlantCompleteMapper;
+import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
+import com.ihl95.nuclear.nuclearplant.infraestructure.NuclearPlantRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

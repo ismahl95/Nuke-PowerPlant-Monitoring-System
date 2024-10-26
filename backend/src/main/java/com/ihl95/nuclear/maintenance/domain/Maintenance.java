@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ihl95.nuclear.equipment.domain.Equipment;
 import com.ihl95.nuclear.maintenance.domain.enums.MaintenanceStatus;
-import com.ihl95.nuclear.maintenancePlan.domain.MaintenancePlan;
+import com.ihl95.nuclear.maintenanceplan.domain.MaintenancePlan;
 import com.ihl95.nuclear.reactor.domain.Reactor;
 
 import lombok.Data;

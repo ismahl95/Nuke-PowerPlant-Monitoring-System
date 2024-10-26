@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.ihl95.nuclear.nuclearPlant.application.exception.NuclearPlantException;
+import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantException;
 import com.ihl95.nuclear.supplier.application.exception.SupplierException;
 
 @RestControllerAdvice

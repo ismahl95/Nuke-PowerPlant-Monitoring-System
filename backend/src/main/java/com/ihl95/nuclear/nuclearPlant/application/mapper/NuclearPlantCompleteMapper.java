@@ -1,8 +1,9 @@
-package com.ihl95.nuclear.nuclearPlant.application.mapper;
+package com.ihl95.nuclear.nuclearplant.application.mapper;
 
 import org.mapstruct.Mapper;
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
-import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
+
+import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
 
 @Mapper(componentModel = "spring")
 public interface NuclearPlantCompleteMapper {
