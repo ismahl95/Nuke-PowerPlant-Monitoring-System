@@ -1,11 +1,11 @@
-package com.ihl95.nuclear.maintenancePlan.application.mapper;
+package com.ihl95.nuclear.maintenanceplan.application.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.ihl95.nuclear.maintenancePlan.application.dto.MaintenancePlanDTO;
-import com.ihl95.nuclear.maintenancePlan.domain.MaintenancePlan;
+import com.ihl95.nuclear.maintenanceplan.application.dto.MaintenancePlanDTO;
+import com.ihl95.nuclear.maintenanceplan.domain.MaintenancePlan;
 
 @Mapper(componentModel = "spring")
 public interface MaintenancePlanMapper {

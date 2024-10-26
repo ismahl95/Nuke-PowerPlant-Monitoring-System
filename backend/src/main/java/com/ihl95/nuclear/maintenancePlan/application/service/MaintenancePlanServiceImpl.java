@@ -1,8 +1,8 @@
-package com.ihl95.nuclear.maintenancePlan.application.service;
+package com.ihl95.nuclear.maintenanceplan.application.service;
 
 import org.springframework.stereotype.Service;
 
-import com.ihl95.nuclear.maintenancePlan.domain.MaintenancePlan;
+import com.ihl95.nuclear.maintenanceplan.domain.MaintenancePlan;
 
 @Service
 public class MaintenancePlanServiceImpl implements MaintenancePlanService {

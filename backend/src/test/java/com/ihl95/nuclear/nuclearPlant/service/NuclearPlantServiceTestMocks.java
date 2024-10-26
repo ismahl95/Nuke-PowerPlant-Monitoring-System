@@ -3,10 +3,10 @@ package com.ihl95.nuclear.nuclearPlant.service;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
-import com.ihl95.nuclear.nuclearPlant.application.mapper.NuclearPlantCompleteMapper;
-import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
-import com.ihl95.nuclear.nuclearPlant.infraestructure.NuclearPlantRepository;
+import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.nuclearplant.application.mapper.NuclearPlantCompleteMapper;
+import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
+import com.ihl95.nuclear.nuclearplant.infraestructure.NuclearPlantRepository;
 
 public class NuclearPlantServiceTestMocks {
 

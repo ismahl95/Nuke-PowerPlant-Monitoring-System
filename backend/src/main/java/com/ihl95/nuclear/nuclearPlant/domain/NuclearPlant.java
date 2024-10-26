@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.nuclearPlant.domain;
+package com.ihl95.nuclear.nuclearplant.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

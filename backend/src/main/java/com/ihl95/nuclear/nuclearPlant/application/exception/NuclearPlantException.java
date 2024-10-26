@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.nuclearPlant.application.exception;
+package com.ihl95.nuclear.nuclearplant.application.exception;
 
 import org.springframework.http.HttpStatus;
 

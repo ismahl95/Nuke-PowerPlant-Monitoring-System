@@ -1,6 +1,6 @@
-package com.ihl95.nuclear.controlSystem.application.dto;
+package com.ihl95.nuclear.controlsystem.application.dto;
 
-import com.ihl95.nuclear.controlSystem.domain.enums.ControlSystemType;
+import com.ihl95.nuclear.controlsystem.domain.enums.ControlSystemType;
 import com.ihl95.nuclear.reactor.application.dto.ReactorDTO;
 
 public record ControlSystemDTO(

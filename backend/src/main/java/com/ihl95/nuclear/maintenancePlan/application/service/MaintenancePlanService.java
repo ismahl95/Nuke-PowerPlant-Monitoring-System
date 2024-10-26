@@ -1,6 +1,6 @@
-package com.ihl95.nuclear.maintenancePlan.application.service;
+package com.ihl95.nuclear.maintenanceplan.application.service;
 
-import com.ihl95.nuclear.maintenancePlan.domain.MaintenancePlan;
+import com.ihl95.nuclear.maintenanceplan.domain.MaintenancePlan;
 
 public interface MaintenancePlanService {
   MaintenancePlan getMaintenancePlanById(Long id);

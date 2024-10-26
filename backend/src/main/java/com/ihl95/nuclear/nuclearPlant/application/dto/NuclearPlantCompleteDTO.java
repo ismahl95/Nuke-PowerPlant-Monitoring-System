@@ -1,10 +1,10 @@
-package com.ihl95.nuclear.nuclearPlant.application.dto;
+package com.ihl95.nuclear.nuclearplant.application.dto;
 
 import java.util.List;
 
-import com.ihl95.nuclear.emergencyPlan.application.dto.EmergencyPlanDTO;
+import com.ihl95.nuclear.emergencyplan.application.dto.EmergencyPlanDTO;
 import com.ihl95.nuclear.incident.application.dto.IncidentDTO;
-import com.ihl95.nuclear.maintenancePlan.application.dto.MaintenancePlanDTO;
+import com.ihl95.nuclear.maintenanceplan.application.dto.MaintenancePlanDTO;
 import com.ihl95.nuclear.operator.application.dto.OperatorDTO;
 import com.ihl95.nuclear.reactor.application.dto.ReactorDTO;
 

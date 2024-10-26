@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.controlSystem.domain.enums;
+package com.ihl95.nuclear.controlsystem.domain.enums;
 
 public enum ControlSystemType {
   DISTRIBUTED_CONTROL_SYSTEM,  // Sistema de Control Distribuido

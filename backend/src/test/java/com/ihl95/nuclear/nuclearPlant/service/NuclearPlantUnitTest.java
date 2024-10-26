@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
-import com.ihl95.nuclear.nuclearPlant.application.exception.NuclearPlantException;
-import com.ihl95.nuclear.nuclearPlant.application.service.NuclearPlantServiceImpl;
-import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
+import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantException;
+import com.ihl95.nuclear.nuclearplant.application.service.NuclearPlantServiceImpl;
+import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 

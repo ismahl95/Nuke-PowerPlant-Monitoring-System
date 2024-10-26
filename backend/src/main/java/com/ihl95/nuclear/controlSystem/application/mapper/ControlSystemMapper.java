@@ -1,11 +1,11 @@
-package com.ihl95.nuclear.controlSystem.application.mapper;
+package com.ihl95.nuclear.controlsystem.application.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.ihl95.nuclear.controlSystem.application.dto.ControlSystemDTO;
-import com.ihl95.nuclear.controlSystem.domain.ControlSystem;
+import com.ihl95.nuclear.controlsystem.application.dto.ControlSystemDTO;
+import com.ihl95.nuclear.controlsystem.domain.ControlSystem;
 
 @Mapper(componentModel = "spring")
 public interface ControlSystemMapper {

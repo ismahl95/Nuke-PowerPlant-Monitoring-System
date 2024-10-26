@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.sensorReading.domain;
+package com.ihl95.nuclear.sensorreading.domain;
 
 import java.time.LocalDateTime;
 

@@ -1,8 +1,8 @@
-package com.ihl95.nuclear.nuclearPlant.application.service;
+package com.ihl95.nuclear.nuclearplant.application.service;
 
 import java.util.List;
 
-import com.ihl95.nuclear.nuclearPlant.application.dto.NuclearPlantDTO;
+import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 
 public interface NuclearPlantService {
 

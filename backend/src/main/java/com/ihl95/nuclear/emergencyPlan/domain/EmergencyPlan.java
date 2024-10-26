@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.emergencyPlan.domain;
+package com.ihl95.nuclear.emergencyplan.domain;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.ihl95.nuclear.nuclearPlant.domain.NuclearPlant;
+import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
 
 import lombok.Data;
 

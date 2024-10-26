@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.nuclearPlant.application.dto;
+package com.ihl95.nuclear.nuclearplant.application.dto;
 
 public record NuclearPlantDTO(
     Long id,

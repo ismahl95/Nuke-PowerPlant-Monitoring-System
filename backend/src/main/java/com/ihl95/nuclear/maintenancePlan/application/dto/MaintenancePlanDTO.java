@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.maintenancePlan.application.dto;
+package com.ihl95.nuclear.maintenanceplan.application.dto;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.emergencyPlan.application.dto;
+package com.ihl95.nuclear.emergencyplan.application.dto;
 
 import java.time.LocalDateTime;
 
