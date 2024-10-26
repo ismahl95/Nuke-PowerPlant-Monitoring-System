@@ -1,8 +1,6 @@
 package com.ihl95.nuclear.incident.application.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
 import com.ihl95.nuclear.incident.application.dto.IncidentDTO;
 import com.ihl95.nuclear.incident.domain.Incident;
 
