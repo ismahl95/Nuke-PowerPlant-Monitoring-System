@@ -123,4 +123,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Necesario para obtener información de PR
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Token de SonarCloud almacenado en secrets
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ismahl95_NukePowerplantBackend
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ismahl95_Nuke-PowerPlant-Monitoring-System
