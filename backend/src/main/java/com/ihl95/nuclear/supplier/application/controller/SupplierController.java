@@ -2,7 +2,6 @@ package com.ihl95.nuclear.supplier.application.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +22,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/api/suppliers")
 public class SupplierController {
 
-  @Autowired
   SupplierServiceImpl supplierService;
+
+  public SupplierController(SupplierServiceImpl supplierService) {
+    this.supplierService = supplierService;
+  }
 
 /**
  * This function retrieves all suppliers and returns them as a list of SupplierDTO objects.

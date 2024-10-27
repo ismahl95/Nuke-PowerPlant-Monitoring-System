@@ -11,10 +11,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class AuthenticationProviderTest {
+class AuthenticationProviderTest {
 
   @Test
-  public void testAuthenticationProviderConfiguration() {
+  void testAuthenticationProviderConfiguration() {
       // Mock del UserDetailsService
       UserDetailsService userDetailsService = mock(UserDetailsService.class);
 

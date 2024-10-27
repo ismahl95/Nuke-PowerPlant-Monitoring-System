@@ -1,6 +1,5 @@
 package com.ihl95.nuclear.security.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,14 +21,21 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Autenticación", description = "Endpoints para autenticación de usuarios")
 public class AuthController {
 
-  @Autowired
   private AuthenticationManager authenticationManager;
 
-  @Autowired
   private JwtUtil jwtUtil;
 
-  @Autowired
   private UserDetailsService userDetailsService;
+
+  public AuthController(
+    AuthenticationManager authenticationManager,
+    JwtUtil jwtUtil,
+    UserDetailsService userDetailsService
+    ) {
+      this.authenticationManager = authenticationManager;
+      this.jwtUtil = jwtUtil;
+      this.userDetailsService = userDetailsService;
+    }
 
   @Operation(summary = "Autenticación de usuario", description = "Autentica al usuario con sus credenciales (nombre de usuario y contraseña) y genera un token JWT")
   @ApiResponses(value = {

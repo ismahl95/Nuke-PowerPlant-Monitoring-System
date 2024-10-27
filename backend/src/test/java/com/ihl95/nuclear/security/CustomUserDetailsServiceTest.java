@@ -19,7 +19,7 @@ import com.ihl95.nuclear.user.User;
 
 import java.util.Optional;
 
-public class CustomUserDetailsServiceTest {
+class CustomUserDetailsServiceTest {
 
     @Mock
     private UserRepository userRepository;
