@@ -1,11 +1,8 @@
 package com.ihl95.nuclear.supplier.application.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ihl95.nuclear.supplier.application.dto.SupplierDTO;
@@ -18,18 +15,23 @@ import com.ihl95.nuclear.supplier.infraestructure.SupplierRepository;
 @Transactional
 public class SupplierServiceImpl implements SupplierService {
 
-  @Autowired
   SupplierRepository supplierRepository;
 
-  @Autowired
   SupplierMapper supplierMapper;
+
+  public SupplierServiceImpl(
+    SupplierRepository supplierRepository,
+    SupplierMapper supplierMapper ) {
+        this.supplierRepository = supplierRepository;
+        this.supplierMapper = supplierMapper;
+    }
 
   public List<SupplierDTO> getAllSuppliers() {
 
     List<Supplier> suppliers = supplierRepository.findAll();
     return suppliers.stream()
         .map(supplierMapper::toSupplierDTO)
-        .collect(Collectors.toList());
+        .toList();
 
   }
 

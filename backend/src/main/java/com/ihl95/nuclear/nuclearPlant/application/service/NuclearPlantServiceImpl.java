@@ -1,6 +1,5 @@
 package com.ihl95.nuclear.nuclearplant.application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
@@ -10,25 +9,28 @@ import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
 import com.ihl95.nuclear.nuclearplant.infraestructure.NuclearPlantRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.transaction.Transactional;
 
 @Service
 @Transactional
 public class NuclearPlantServiceImpl implements NuclearPlantService{
 
-    @Autowired
     private NuclearPlantRepository nuclearPlantRepository;
 
-    @Autowired
     private NuclearPlantCompleteMapper nuclearPlantCompleteMapper;
+
+    public NuclearPlantServiceImpl(
+        NuclearPlantRepository nuclearPlantRepository, 
+        NuclearPlantCompleteMapper nuclearPlantCompleteMapper) {
+            this.nuclearPlantRepository = nuclearPlantRepository;
+            this.nuclearPlantCompleteMapper = nuclearPlantCompleteMapper;
+        }
 
     public List<NuclearPlantDTO> getAllNuclearPlants() {
         List<NuclearPlant> nuclearPlants = nuclearPlantRepository.findAll();
         return nuclearPlants.stream()
                 .map(nuclearPlantCompleteMapper::toNuclearPlantDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public NuclearPlantDTO getNuclearPlantById(Long id) {

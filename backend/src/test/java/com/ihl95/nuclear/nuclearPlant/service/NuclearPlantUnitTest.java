@@ -49,8 +49,9 @@ class NuclearPlantUnitTest extends NuclearPlantServiceTestMocks {
 
     NuclearPlantDTO result = nuclearPlantService.getNuclearPlantById(1L);
 
-    assertThat(result).isNotNull();
-    assertThat(result).isEqualTo(nuclearPlantDTO);
+    assertThat(result)
+    .isNotNull()
+    .isEqualTo(nuclearPlantDTO);
 
     verify(nuclearPlantRepository, times(1)).findById(1L);
     verify(nuclearPlantCompleteMapper, times(1)).toNuclearPlantDTO(nuclearPlant);
@@ -75,8 +76,9 @@ class NuclearPlantUnitTest extends NuclearPlantServiceTestMocks {
 
     NuclearPlantDTO result = nuclearPlantService.createNuclearPlant(nuclearPlantDTO);
 
-    assertThat(result).isNotNull();
-    assertThat(result).isEqualTo(nuclearPlantDTO);
+    assertThat(result)
+    .isNotNull()
+    .isEqualTo(nuclearPlantDTO);
 
     verify(nuclearPlantCompleteMapper, times(1)).toNuclearPlant(nuclearPlantDTO);
     verify(nuclearPlantRepository, times(1)).save(nuclearPlant);

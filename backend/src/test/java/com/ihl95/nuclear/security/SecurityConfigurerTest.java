@@ -16,13 +16,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SecurityConfigurerTest {
+class SecurityConfigurerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void testPublicEndpointAuthenticate() throws Exception {
+    void testPublicEndpointAuthenticate() throws Exception {
         // Este endpoint debe estar permitido sin autenticación
         mockMvc.perform(post("/api/auth/authenticate")
                 .contentType("application/json")
@@ -31,21 +31,21 @@ public class SecurityConfigurerTest {
     }
 
     @Test
-    public void testPublicSwaggerEndpoint() throws Exception {
+    void testPublicSwaggerEndpoint() throws Exception {
         // Swagger debe ser accesible sin autenticación
         mockMvc.perform(get("/swagger-ui/index.html"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testPublicApiDocsEndpoint() throws Exception {
+    void testPublicApiDocsEndpoint() throws Exception {
         // Documentación de API (v3/api-docs) debe ser accesible sin autenticación
         mockMvc.perform(get("/v3/api-docs"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testPrivateEndpointRequiresAuthentication() throws Exception {
+    void testPrivateEndpointRequiresAuthentication() throws Exception {
         // Cualquier otro endpoint debe requerir autenticación
         mockMvc.perform(get("/api/nuclear-plants"))
                 .andExpect(status().isForbidden()); // Se espera un 401 si no hay autenticación

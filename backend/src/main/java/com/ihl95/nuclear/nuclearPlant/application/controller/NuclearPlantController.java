@@ -2,7 +2,6 @@ package com.ihl95.nuclear.nuclearplant.application.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,8 +29,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Nuclear Plants", description = "Gestión de plantas nucleares")
 public class NuclearPlantController {
 
-    @Autowired
     private NuclearPlantService nuclearPlantService;
+
+    public NuclearPlantController(NuclearPlantService nuclearPlantService){
+        this.nuclearPlantService = nuclearPlantService;
+    }
 
 /**
  * This Java function retrieves all registered nuclear plants and returns them as a list of
