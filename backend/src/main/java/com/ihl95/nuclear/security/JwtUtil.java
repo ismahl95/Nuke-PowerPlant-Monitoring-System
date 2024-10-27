@@ -16,7 +16,7 @@ import java.util.Map;
 public class JwtUtil {
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    String secretKey;
 
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
@@ -27,19 +27,24 @@ public class JwtUtil {
     }
 
     public String generateToken(UserDetails userDetails) {
-      Map<String, Object> claims = new HashMap<>();
-      return Jwts.builder()
-              .setClaims(claims)
-              .setSubject(userDetails.getUsername())
-              .setIssuedAt(new Date(System.currentTimeMillis()))
-              .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Establece la validez del token
-              .signWith(SignatureAlgorithm.HS512, secretKey)
-              .compact();
-  }
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Establece la validez del
+                                                                                           // token
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
+    }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        try {
+            String username = extractUsername(token);
+            return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        } catch (Exception e) {
+            return false; // Otras excepciones pueden ser manejadas de la misma manera si es necesario
+        }
     }
 
     private boolean isTokenExpired(String token) {
