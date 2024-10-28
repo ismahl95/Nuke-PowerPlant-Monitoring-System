@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get; // Add this import statement
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status; // Add this import statement
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,6 +29,16 @@ class SecurityConfigurerTest {
                 .contentType("application/json")
                 .content("{\"username\": \"Admin\", \"password\": \"admin\"}"))
                 .andExpect(status().isOk()); // Ajusta según el código esperado
+    }
+
+    @Test
+    void testPublicEndpointAuthenticateFailure() throws Exception {
+        // Prueba con credenciales incorrectas para esperar un 401 y mensaje específico
+        mockMvc.perform(post("/api/auth/authenticate")
+                .contentType("application/json")
+                .content("{\"username\": \"wrongUser\", \"password\": \"wrongPassword\"}"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Incorrect username or password")); // Verifica el mensaje de error
     }
 
     @Test
