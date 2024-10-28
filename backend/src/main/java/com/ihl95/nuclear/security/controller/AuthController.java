@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ihl95.nuclear.security.AuthenticationRequest;
 import com.ihl95.nuclear.security.JwtUtil;
+import com.ihl95.nuclear.security.exception.SecurityException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,7 +52,7 @@ public class AuthController {
           new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
               authenticationRequest.getPassword()));
     } catch (Exception e) {
-      throw new Exception("Incorrect username or password", e);
+      throw SecurityException.notAcceptable(SecurityException.UNAUTHORIZED_MESSAGE);
     }
 
     // Carga los detalles del usuario y genera el token
