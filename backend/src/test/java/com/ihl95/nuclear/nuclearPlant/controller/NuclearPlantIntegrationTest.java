@@ -64,11 +64,11 @@ class NuclearPlantIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("Test Nuclear Plant MK1"))
-                .andExpect(jsonPath("$[0].location").value("Prueba, Testlandia"))
+                .andExpect(jsonPath("$[0].name").value("Nuclear Plant 1"))
+                .andExpect(jsonPath("$[0].location").value("Location 1"))
                 .andExpect(jsonPath("$[3].id").value(4))
-                .andExpect(jsonPath("$[3].name").value("Test Nuclear Plant MK4"))
-                .andExpect(jsonPath("$[3].location").value("Verificacion, Verifilandia"));
+                .andExpect(jsonPath("$[3].name").value("Nuclear Plant 4"))
+                .andExpect(jsonPath("$[3].location").value("Location 4"));
     }
 
     @Test
@@ -80,8 +80,8 @@ class NuclearPlantIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Test Nuclear Plant MK1"))
-                .andExpect(jsonPath("$.location").value("Prueba, Testlandia"));
+                .andExpect(jsonPath("$.name").value("Nuclear Plant 1"))
+                .andExpect(jsonPath("$.location").value("Location 1"));
     }
 
     @Test
@@ -98,7 +98,7 @@ class NuclearPlantIntegrationTest {
     void whenCreateNuclearPlant_thenCreatedNuclearPlantIsReturned() throws Exception {
         String token = getJwtToken(); // Obtener el token
 
-        NuclearPlantDTO newNuclearPlant = new NuclearPlantDTO(null, "New Nuclear Plant", "New Location");
+        NuclearPlantDTO newNuclearPlant = new NuclearPlantDTO(null, "Nuclear Plant 5", "Location 5");
         String newNuclearPlantJson = objectMapper.writeValueAsString(newNuclearPlant);
 
         mockMvc.perform(post("/api/nuclear-plants")
@@ -108,8 +108,8 @@ class NuclearPlantIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.name").value("New Nuclear Plant"))
-                .andExpect(jsonPath("$.location").value("New Location"));
+                .andExpect(jsonPath("$.name").value("Nuclear Plant 5"))
+                .andExpect(jsonPath("$.location").value("Location 5"));
     }
 
     @Test
