@@ -29,9 +29,9 @@ public class NuclearPlantServiceTestMocks {
     private void setUpTestEntities() {
         nuclearPlant = new NuclearPlant();
         nuclearPlant.setId(1L);
-        nuclearPlant.setName("Test Nuclear Plant MK1");
-        nuclearPlant.setLocation("Prueba, Testlandia");
+        nuclearPlant.setName("Nuclear Plant 1");
+        nuclearPlant.setLocation("Location 1");
 
-        nuclearPlantDTO = new NuclearPlantDTO(1L, "Test Nuclear Plant MK1", "Prueba, Testlandia");
+        nuclearPlantDTO = new NuclearPlantDTO(1L, "Nuclear Plant 1", "Location 1");
     }
 }
