@@ -20,12 +20,4 @@ public class NuclearPlantException extends RuntimeException {
   public static NuclearPlantException notFound(String message) {
     return new NuclearPlantException(message, HttpStatus.NOT_FOUND);
   }
-
-  public static NuclearPlantException badRequest(String message) {
-    return new NuclearPlantException(message, HttpStatus.BAD_REQUEST);
-  }
-
-  public static NuclearPlantException conflict(String message) {
-    return new NuclearPlantException(message, HttpStatus.CONFLICT);
-  }
 }
