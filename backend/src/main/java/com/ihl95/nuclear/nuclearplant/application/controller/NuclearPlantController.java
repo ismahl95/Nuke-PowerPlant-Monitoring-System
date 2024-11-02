@@ -73,9 +73,6 @@ public class NuclearPlantController {
     @GetMapping("/{id}")
     public ResponseEntity<NuclearPlantDTO> getNuclearPlantById(@PathVariable Long id) {
         NuclearPlantDTO nuclearPlant = nuclearPlantService.getNuclearPlantById(id);
-        if (nuclearPlant == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         return ResponseEntity.ok(nuclearPlant);
     }
 
