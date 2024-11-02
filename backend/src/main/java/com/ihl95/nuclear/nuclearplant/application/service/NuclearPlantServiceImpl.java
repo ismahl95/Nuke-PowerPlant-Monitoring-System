@@ -34,6 +34,8 @@ public class NuclearPlantServiceImpl implements NuclearPlantService{
     }
 
     public NuclearPlantDTO getNuclearPlantById(Long id) {
+        if (id == null) throw NuclearPlantException.badRequest(NuclearPlantException.BAD_REQUEST + id);
+        
         NuclearPlant nuclearPlant = nuclearPlantRepository.findById(id)
                 .orElseThrow(() -> NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id));
         return nuclearPlantCompleteMapper.toNuclearPlantDTO(nuclearPlant);

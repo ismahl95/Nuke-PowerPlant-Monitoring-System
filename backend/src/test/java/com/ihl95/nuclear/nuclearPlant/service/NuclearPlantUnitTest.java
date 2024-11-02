@@ -8,6 +8,7 @@ import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantException;
 import com.ihl95.nuclear.nuclearplant.application.service.NuclearPlantServiceImpl;
 import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
+import com.ihl95.nuclear.supplier.application.exception.SupplierException;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy; // Add this im
 
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -50,8 +52,8 @@ class NuclearPlantUnitTest extends NuclearPlantServiceTestMocks {
     NuclearPlantDTO result = nuclearPlantService.getNuclearPlantById(1L);
 
     assertThat(result)
-    .isNotNull()
-    .isEqualTo(nuclearPlantDTO);
+        .isNotNull()
+        .isEqualTo(nuclearPlantDTO);
 
     verify(nuclearPlantRepository, times(1)).findById(1L);
     verify(nuclearPlantCompleteMapper, times(1)).toNuclearPlantDTO(nuclearPlant);
@@ -69,6 +71,15 @@ class NuclearPlantUnitTest extends NuclearPlantServiceTestMocks {
   }
 
   @Test
+  void getNuclearPlantbyId_shouldThrowException_whenIdIsNull() {
+    assertThatThrownBy(() -> nuclearPlantService.getNuclearPlantById(null))
+        .isInstanceOf(NuclearPlantException.class)
+        .hasMessageContaining("The provided ID is not valid or null: null");
+
+    verify(nuclearPlantRepository, never()).findById(any());
+  }
+
+  @Test
   void createNuclearPlant_shouldReturnCreatedNuclearPlantDTO() {
     when(nuclearPlantCompleteMapper.toNuclearPlant(nuclearPlantDTO)).thenReturn(nuclearPlant);
     when(nuclearPlantRepository.save(nuclearPlant)).thenReturn(nuclearPlant);
@@ -77,8 +88,8 @@ class NuclearPlantUnitTest extends NuclearPlantServiceTestMocks {
     NuclearPlantDTO result = nuclearPlantService.createNuclearPlant(nuclearPlantDTO);
 
     assertThat(result)
-    .isNotNull()
-    .isEqualTo(nuclearPlantDTO);
+        .isNotNull()
+        .isEqualTo(nuclearPlantDTO);
 
     verify(nuclearPlantCompleteMapper, times(1)).toNuclearPlant(nuclearPlantDTO);
     verify(nuclearPlantRepository, times(1)).save(nuclearPlant);
