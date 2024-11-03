@@ -8,8 +8,6 @@ import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantException;
 import com.ihl95.nuclear.nuclearplant.application.service.NuclearPlantServiceImpl;
 import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
-import com.ihl95.nuclear.supplier.application.exception.SupplierException;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
