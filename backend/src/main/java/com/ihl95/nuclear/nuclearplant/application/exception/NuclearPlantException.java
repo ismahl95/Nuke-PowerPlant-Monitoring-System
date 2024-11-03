@@ -2,8 +2,6 @@ package com.ihl95.nuclear.nuclearplant.application.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.ihl95.nuclear.supplier.application.exception.SupplierException;
-
 public class NuclearPlantException extends RuntimeException {
 
   private final HttpStatus status;
