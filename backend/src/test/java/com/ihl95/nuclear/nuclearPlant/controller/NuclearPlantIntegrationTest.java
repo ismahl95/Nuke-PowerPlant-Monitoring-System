@@ -114,6 +114,24 @@ class NuclearPlantIntegrationTest {
 
     @Test
     @Transactional
+    void whenCreateNuclearPlantWithoutAttributes_thenValidationExceptionIsReturned() throws Exception {
+        String token = getJwtToken(); // Obtener el token
+
+        NuclearPlantDTO newNuclearPlant = new NuclearPlantDTO(null, " ", " ");
+        String newNuclearPlantJson = objectMapper.writeValueAsString(newNuclearPlant);
+
+        mockMvc.perform(post("/api/nuclear-plants")
+                .header("Authorization", "Bearer " + token) // Agregar el token al encabezado
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newNuclearPlantJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value("El nombre es obligatorio"))
+                .andExpect(jsonPath("$.location").value("La localización es obligatoria"));
+    }
+
+    @Test
+    @Transactional
     void whenUpdateNuclearPlant_thenUpdatedNuclearPlantIsReturned() throws Exception {
         String token = getJwtToken(); // Obtener el token
 
