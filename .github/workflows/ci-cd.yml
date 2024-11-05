@@ -108,6 +108,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
         working-directory: backend
+      - name: List files in target directory
+        run: ls -l backend/target
 
   jacoco:
     runs-on: ubuntu-latest
