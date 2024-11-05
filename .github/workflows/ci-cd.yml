@@ -108,8 +108,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
         working-directory: backend
-      - name: List files in target directory
-        run: ls -l backend/target
+      - name: Move JAR to root for Docker
+        run: mv backend/target/*.jar backend/target/app.jar
 
   jacoco:
     runs-on: ubuntu-latest
