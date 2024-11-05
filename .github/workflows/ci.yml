@@ -1,4 +1,4 @@
-name: CI and SonarCloud
+name: CI Workflow
 
 on:
   push:
@@ -8,11 +8,15 @@ on:
     branches:
       - '**'
 
+env:
+  JAVA_VERSION: '17'
+  MAVEN_CACHE_KEY: ubuntu-latest-m2-cache-v1
+  SONAR_CACHE_KEY: ubuntu-latest-sonar-cache-v1
+
 jobs:
   commit-lint:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -30,18 +34,14 @@ jobs:
           regex="^(feat|fix|docs|style|refactor|test|build|ci|perf|revert|chore|ui|ux|security|config|localization|hotfix|merge|env|wip|ci-test|data|prototype|a11y|deps|seo|db|analytics|types|mock|validation|rollback|infra|responsive|logging|migration|deprecate|cache|asset|backup|tracking|monitoring|script|scheduler|init)(\\([a-zA-Z0-9_-]+\\))?!?: [A-Za-z].{0,49}$"
           error=false
           
-          # Divide los mensajes en un array y verifica cada uno
-          # Usa una variable para contar los mensajes procesados
           count=0
           while IFS= read -r msg; do
-            # Ignora el primer mensaje
             if [ $count -eq 0 ]; then
               echo "ℹ️  Ignoring first commit message: '$msg'"
               count=$((count + 1))
               continue
             fi
 
-            # Valida el commit message contra el regex
             if [[ ! $msg =~ $regex ]]; then
               echo "❌ Commit message does not follow Conventional Commits: '$msg'"
               error=true
@@ -50,46 +50,65 @@ jobs:
             count=$((count + 1))
           done <<< "${MESSAGES}"
 
-          # Falla el trabajo si algún mensaje no cumple
           if [ "$error" = true ]; then
             exit 1
           fi
 
-  test:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}-v2
-          restore-keys: ${{ runner.os }}-m2
+          key: ${{ env.MAVEN_CACHE_KEY }}
+          restore-keys: ubuntu-latest-m2-cache
+
+  test:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'zulu'
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ env.MAVEN_CACHE_KEY }}
+          restore-keys: ubuntu-latest-m2-cache
       - name: Run tests
         run: mvn test
         working-directory: backend
 
   build:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [setup, test]
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ env.MAVEN_CACHE_KEY }}
+          restore-keys: ubuntu-latest-m2-cache
       - name: Build with Maven
         run: mvn clean install
         working-directory: backend
@@ -100,19 +119,17 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}-v2
-          restore-keys: ${{ runner.os }}-m2
+          key: ${{ env.MAVEN_CACHE_KEY }}
+          restore-keys: ubuntu-latest-m2-cache
       - name: Generate JaCoCo coverage report
         run: mvn clean test jacoco:report
         working-directory: backend
@@ -128,25 +145,23 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar-${{ github.run_id }}
-          restore-keys: ${{ runner.os }}-sonar
+          key: ${{ env.SONAR_CACHE_KEY }}
+          restore-keys: ubuntu-latest-sonar-cache
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('backend/pom.xml') }}-v2
-          restore-keys: ${{ runner.os }}-m2
+          key: ${{ env.MAVEN_CACHE_KEY }}
+          restore-keys: ubuntu-latest-m2-cache
       - name: Build and analyze with SonarCloud
         working-directory: backend
         env:
