@@ -15,7 +15,7 @@ env:
   SONAR_CACHE_KEY: ubuntu-latest-sonar-cache-v1
 
 jobs:
-  # Job de CI para realizar pruebas, build, Jacoco y SonarCloud
+  # Job para validar los mensajes de commit
   commit-lint:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
@@ -50,6 +50,7 @@ jobs:
             exit 1
           fi
 
+  # Configuración de entorno
   setup:
     runs-on: ubuntu-latest
     steps:
@@ -67,6 +68,7 @@ jobs:
           key: ${{ env.MAVEN_CACHE_KEY }}
           restore-keys: ubuntu-latest-m2-cache
 
+  # Job de pruebas
   test:
     runs-on: ubuntu-latest
     needs: setup
@@ -88,6 +90,7 @@ jobs:
         run: mvn test
         working-directory: backend
 
+  # Job de build
   build:
     runs-on: ubuntu-latest
     needs: [setup, test]
@@ -108,7 +111,14 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
         working-directory: backend
+      # Listar archivos después de la construcción
+      - name: Listar archivos en backend/target
+        run: ls -l backend/target
+      # Renombrar JAR a app.jar
+      - name: Renombrar JAR a app.jar
+        run: cp backend/target/nuke-powerplant-back-*.jar backend/target/app.jar
 
+  # Job de cobertura de pruebas
   jacoco:
     runs-on: ubuntu-latest
     needs: build
@@ -135,6 +145,7 @@ jobs:
           name: jacoco-report
           path: backend/target/site/jacoco/
 
+  # Job de análisis en SonarCloud
   sonarcloud:
     runs-on: ubuntu-latest
     needs: jacoco
@@ -165,6 +176,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ismahl95_Nuke-PowerPlant-Monitoring-System
 
+  # Job de despliegue
   deploy:
     runs-on: ubuntu-latest
     needs: sonarcloud
@@ -172,16 +184,35 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'zulu'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ env.MAVEN_CACHE_KEY }}
+          restore-keys: ubuntu-latest-m2-cache
+
+      # Ejecutar mvn clean install en el job de deploy
+      - name: Build with Maven (in deploy)
+        run: mvn clean install
+        working-directory: backend
+
+      # Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-        
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
