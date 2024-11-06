@@ -114,6 +114,7 @@ jobs:
       # Listar archivos después de la construcción
       - name: Listar archivos en backend/target
         run: ls -l backend/target
+      # Renombrar JAR a app.jar
       - name: Renombrar JAR a app.jar
         run: cp backend/target/nuke-powerplant-back-*.jar backend/target/app.jar
 
