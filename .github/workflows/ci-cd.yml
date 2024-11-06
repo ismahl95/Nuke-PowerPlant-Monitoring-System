@@ -111,6 +111,11 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
         working-directory: backend
+      # Listar archivos después de la construcción
+      - name: Listar archivos en backend/target
+        run: ls -l backend/target
+      - name: Renombrar JAR a app.jar
+        run: cp backend/target/nuke-powerplant-back-*.jar backend/target/app.jar
 
   # Job de cobertura de pruebas
   jacoco:
@@ -187,13 +192,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
-      # Listar archivos en backend/target para verificar si el JAR está presente
-      - name: Listar archivos en backend/target
-        run: ls -l backend/target
-
-      - name: Renombrar JAR a app.jar
-        run: cp backend/target/nuke-powerplant-back-*.jar backend/target/app.jar
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
