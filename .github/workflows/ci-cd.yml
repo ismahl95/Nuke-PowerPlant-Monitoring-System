@@ -108,8 +108,10 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
         working-directory: backend
-      - name: Move JAR to root for Docker
-        run: mv backend/target/*.jar backend/target/app.jar
+      - name: List target directory
+        run: ls backend/target
+      - name: Rename JAR to app.jar
+        run: cp backend/target/nuke-powerplant-back-*.jar backend/target/app.jar
 
   jacoco:
     runs-on: ubuntu-latest
@@ -174,16 +176,13 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-        
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
