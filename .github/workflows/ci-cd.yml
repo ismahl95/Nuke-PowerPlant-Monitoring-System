@@ -221,4 +221,3 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/npms-backend:testing
-            ${{ secrets.DOCKERHUB_USERNAME }}/npms-backend:${{ github.sha }}
