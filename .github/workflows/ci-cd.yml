@@ -185,6 +185,25 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'zulu'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ env.MAVEN_CACHE_KEY }}
+          restore-keys: ubuntu-latest-m2-cache
+
+      # Ejecutar mvn clean install en el job de deploy
+      - name: Build with Maven (in deploy)
+        run: mvn clean install
+        working-directory: backend
+
+      # Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
