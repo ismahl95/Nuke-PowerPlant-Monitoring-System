@@ -189,7 +189,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Renombrar JAR a app.jar
-        run: cp backend/target/nuke-powerplant-back-*.jar backend/target/app.jar
+        run: cp target/nuke-powerplant-back-*.jar target/app.jar
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
