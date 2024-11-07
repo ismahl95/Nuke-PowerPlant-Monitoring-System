@@ -1,15 +1,11 @@
 package com.ihl95.nuclear.nuclearplant.application.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearplant.application.service.NuclearPlantService;
+import com.ihl95.nuclear.utils.Utils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -112,22 +109,13 @@ public class NuclearPlantController {
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso")
     })
     @PostMapping
-    public ResponseEntity<?> createNuclearPlant(@Valid @RequestBody NuclearPlantDTO nuclearPlantDTO,
+    public ResponseEntity<Object> createNuclearPlant(@Valid @RequestBody NuclearPlantDTO nuclearPlantDTO,
             BindingResult result) {
-        // Verifica si hay errores de validación
-        if (result.hasErrors()) {
-            // Mapea los errores de validación en un formato legible para la respuesta
-            Map<String, String> errores = result.getFieldErrors().stream()
-                    .collect(Collectors.toMap(
-                            FieldError::getField,
-                            FieldError::getDefaultMessage));
-            // Retorna un 400 Bad Request con los errores de validación
-            return ResponseEntity.badRequest().body(errores);
-        }
-
-        // Si no hay errores, procede con la creación de la planta nuclear
-        NuclearPlantDTO createdNuclearPlant = nuclearPlantService.createNuclearPlant(nuclearPlantDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdNuclearPlant);
+        ResponseEntity<Object> errorResponse = Utils.validateFields(result);
+        return errorResponse != null
+                ? errorResponse
+                : ResponseEntity.status(HttpStatus.CREATED)
+                        .body(nuclearPlantService.createNuclearPlant(nuclearPlantDTO));
     }
 
     /**
