@@ -78,4 +78,21 @@ class SupplierUnitTest extends SupplierServiceTestMocks {
     verify(supplierRepository, never()).findById(any());
   }
 
+  @Test
+  void createSupplier_shouldReturnCreatedSupplierDTO(){
+    when(supplierMapper.toSupplier(supplierDTO)).thenReturn(supplier);
+    when(supplierRepository.save(supplier)).thenReturn(supplier);
+    when(supplierMapper.toSupplierDTO(supplier)).thenReturn(supplierDTO);
+
+    SupplierDTO result = supplierService.createSupplier(supplierDTO);
+
+    assertThat(result)
+        .isNotNull()
+        .isEqualTo(supplierDTO);
+
+    verify(supplierMapper, times(1)).toSupplier(supplierDTO);
+    verify(supplierRepository, times(1)).save(supplier);
+    verify(supplierMapper, times(1)).toSupplierDTO(supplier);
+  }
+
 }

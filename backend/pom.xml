@@ -21,6 +21,9 @@
 
         <sonar.organization>ismahl95</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
+        <version>1.0.0</version>
+        <name>npms-api</name>
     </properties>
 
     <dependencies>
