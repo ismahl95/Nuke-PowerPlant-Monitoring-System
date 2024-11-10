@@ -9,6 +9,8 @@ import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
 import com.ihl95.nuclear.nuclearplant.infraestructure.NuclearPlantRepository;
 
 import java.util.List;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 @Service
@@ -42,9 +44,11 @@ public class NuclearPlantServiceImpl implements NuclearPlantService{
     }
 
     public NuclearPlantDTO createNuclearPlant(NuclearPlantDTO nuclearPlantDTO) {
-        NuclearPlant nuclearPlant = nuclearPlantCompleteMapper.toNuclearPlant(nuclearPlantDTO);
-        NuclearPlant savedNuclearPlant = nuclearPlantRepository.save(nuclearPlant);
-        return nuclearPlantCompleteMapper.toNuclearPlantDTO(savedNuclearPlant);
+        return Optional.ofNullable(nuclearPlantDTO)
+        .map(nuclearPlantCompleteMapper::toNuclearPlant)
+        .map(nuclearPlantRepository::save)
+        .map(nuclearPlantCompleteMapper::toNuclearPlantDTO)
+        .orElseThrow(() -> NuclearPlantException.internalError(NuclearPlantException.UNEXPECTING_ERROR_WHILE_SAVING));
     }
 
     public NuclearPlantDTO updateNuclearPlant(Long id, NuclearPlantDTO nuclearPlantDTO) {

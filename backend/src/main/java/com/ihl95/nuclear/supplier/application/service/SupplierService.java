@@ -9,5 +9,7 @@ public interface SupplierService {
   public List<SupplierDTO> getAllSuppliers();
 
   public SupplierDTO getSupplierbyId(Long id);
+
+  public SupplierDTO createSupplier(SupplierDTO supplierDTO);
   
 }

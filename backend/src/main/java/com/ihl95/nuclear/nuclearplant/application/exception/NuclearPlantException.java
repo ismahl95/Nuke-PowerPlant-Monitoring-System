@@ -10,6 +10,8 @@ public class NuclearPlantException extends RuntimeException {
 
   public static final String BAD_REQUEST = "The provided ID is not valid or null: ";
 
+  public static final String UNEXPECTING_ERROR_WHILE_SAVING = "An unexpected error occurred while saving Nuclear Plant";
+
   public NuclearPlantException(String message, HttpStatus status) {
     super(message);
     this.status = status;
@@ -25,5 +27,9 @@ public class NuclearPlantException extends RuntimeException {
 
     public static NuclearPlantException badRequest(String message) {
     return new NuclearPlantException(message, HttpStatus.BAD_REQUEST);
+  }
+
+  public static NuclearPlantException internalError(String message) {
+    return new NuclearPlantException(message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
