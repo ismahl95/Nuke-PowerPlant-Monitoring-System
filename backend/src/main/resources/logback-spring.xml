@@ -1,20 +1,27 @@
 <configuration>
 
-  <!-- Define el appender para escribir logs en un archivo -->
-  <appender name="AUDIT_FILE" class="ch.qos.logback.core.FileAppender">
-      <file>./audit.log</file> <!-- Ruta del archivo de log -->
-      <append>true</append>
-      <encoder>
-          <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
-      </encoder>
-  </appender>
+    <!-- Appender de consola -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-  <!-- Logger para auditoría -->
-  <logger name="AuditLogger" level="INFO" additivity="false">
-      <appender-ref ref="AUDIT_FILE" />
-  </logger>
+    <!-- Appender de fichero -->
+    <appender name="AUDIT_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>./audit.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-  <root level="INFO">
-      <appender-ref ref="AUDIT_FILE" />
-  </root>
+    <!-- Logger SOLO para tu aplicación -->
+    <logger name="com.ihl95.nuclear" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="AUDIT_FILE"/>
+    </logger>
+
+    <!-- Root logger desactivado -->
+    <root level="OFF"/>
 </configuration>

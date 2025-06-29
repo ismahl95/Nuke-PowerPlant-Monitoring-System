@@ -2,6 +2,9 @@ package com.ihl95.nuclear.nuclearplant.application.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import lombok.Builder;
+
+@Builder
 public record NuclearPlantDTO(
     Long id,
 
