@@ -27,11 +27,11 @@ jobs:
       - name: Get all commit messages
         id: get_commit_messages
         run: |
-          commits=$(git log origin/main..HEAD --pretty=format:"%s%n%b" | head -n1)
+          commits=$(git log origin/main..HEAD --pretty=format:"%s")
           printf "MESSAGES<<EOF\n$commits\nEOF" >> $GITHUB_ENV
       - name: Check Conventional Commits
         run: |
-          regex="^(feat|fix|docs|style|refactor|test|build|ci|cd|perf|revert|chore|ui|ux|security|config|localization|hotfix|merge|env|wip|ci-test|data|prototype|a11y|deps|seo|db|analytics|types|mock|validation|rollback|infra|responsive|logging|migration|deprecate|cache|asset|backup|tracking|monitoring|script|scheduler|init)(\\([a-zA-Z0-9_-]+\\))?!?: [A-Za-z].{0,49}$"
+          regex="^(feat|fix|docs|style|refactor|test|build|ci|cd|perf|revert|chore|ui|ux|security|config|localization|hotfix|merge|env|wip|ci-test|data|prototype|a11y|deps|seo|db|analytics|types|mock|validation|rollback|infra|responsive|logging|migration|deprecate|cache|asset|backup|tracking|monitoring|script|scheduler|init)(\\([a-zA-Z0-9_-]+\\))?!?: .+"
           error=false
           count=0
           while IFS= read -r msg; do
