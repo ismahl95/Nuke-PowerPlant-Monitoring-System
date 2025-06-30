@@ -18,6 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doThrow;
 
 import java.util.*;
 
@@ -129,6 +130,65 @@ class NuclearPlantUnitTest extends NuclearPlantServiceTestMocks {
 
     nuclearPlantService.deleteNuclearPlant(1L);
 
+    verify(nuclearPlantRepository, times(1)).delete(nuclearPlant);
+  }
+
+  // --- TESTS PARA CONTROLAR POSIBLES 500 ---
+
+  @Test
+  void createNuclearPlant_shouldThrowInternalError_whenDtoIsNull() {
+    assertThatThrownBy(() -> nuclearPlantService.createNuclearPlant(null))
+        .isInstanceOf(NuclearPlantException.class)
+        .hasMessageContaining("An unexpected error occurred while saving Nuclear Plant");
+    verify(nuclearPlantCompleteMapper, never()).toNuclearPlant(any());
+    verify(nuclearPlantRepository, never()).save(any());
+  }
+
+  @Test
+  void createNuclearPlant_shouldThrowInternalError_whenMapperReturnsNull() {
+    when(nuclearPlantCompleteMapper.toNuclearPlant(nuclearPlantDTO)).thenReturn(null);
+
+    assertThatThrownBy(() -> nuclearPlantService.createNuclearPlant(nuclearPlantDTO))
+        .isInstanceOf(NuclearPlantException.class)
+        .hasMessageContaining("An unexpected error occurred while saving Nuclear Plant");
+    verify(nuclearPlantCompleteMapper, times(1)).toNuclearPlant(nuclearPlantDTO);
+    verify(nuclearPlantRepository, never()).save(any());
+  }
+
+  @Test
+  void createNuclearPlant_shouldThrowRuntimeException_whenRepositoryThrows() {
+    when(nuclearPlantCompleteMapper.toNuclearPlant(nuclearPlantDTO)).thenReturn(nuclearPlant);
+    when(nuclearPlantRepository.save(nuclearPlant)).thenThrow(new RuntimeException("DB error"));
+
+    assertThatThrownBy(() -> nuclearPlantService.createNuclearPlant(nuclearPlantDTO))
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("DB error");
+    verify(nuclearPlantCompleteMapper, times(1)).toNuclearPlant(nuclearPlantDTO);
+    verify(nuclearPlantRepository, times(1)).save(nuclearPlant);
+  }
+
+  @Test
+  void updateNuclearPlant_shouldThrowRuntimeException_whenRepositoryThrows() {
+    when(nuclearPlantRepository.findById(1L)).thenReturn(Optional.of(nuclearPlant));
+    when(nuclearPlantRepository.save(any(NuclearPlant.class))).thenThrow(new RuntimeException("DB error"));
+
+    NuclearPlantDTO updateDto = new NuclearPlantDTO(null, "Updated", "Updated");
+    assertThatThrownBy(() -> nuclearPlantService.updateNuclearPlant(1L, updateDto))
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("DB error");
+    verify(nuclearPlantRepository, times(1)).findById(1L);
+    verify(nuclearPlantRepository, times(1)).save(any(NuclearPlant.class));
+  }
+
+  @Test
+  void deleteNuclearPlant_shouldThrowRuntimeException_whenRepositoryThrows() {
+    when(nuclearPlantRepository.findById(1L)).thenReturn(Optional.of(nuclearPlant));
+    doThrow(new RuntimeException("DB error")).when(nuclearPlantRepository).delete(nuclearPlant);
+
+    assertThatThrownBy(() -> nuclearPlantService.deleteNuclearPlant(1L))
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("DB error");
+    verify(nuclearPlantRepository, times(1)).findById(1L);
     verify(nuclearPlantRepository, times(1)).delete(nuclearPlant);
   }
 }
