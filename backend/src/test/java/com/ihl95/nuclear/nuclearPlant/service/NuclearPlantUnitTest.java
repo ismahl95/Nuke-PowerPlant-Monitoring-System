@@ -191,4 +191,39 @@ class NuclearPlantUnitTest extends NuclearPlantServiceTestMocks {
     verify(nuclearPlantRepository, times(1)).findById(1L);
     verify(nuclearPlantRepository, times(1)).delete(nuclearPlant);
   }
+
+  @Test
+  void updateNuclearPlant_shouldThrowException_whenPlantNotFound() {
+    when(nuclearPlantRepository.findById(999L)).thenReturn(Optional.empty());
+
+    NuclearPlantDTO updateDto = new NuclearPlantDTO(null, "Updated", "Updated");
+    assertThatThrownBy(() -> nuclearPlantService.updateNuclearPlant(999L, updateDto))
+        .isInstanceOf(NuclearPlantException.class)
+        .hasMessageContaining("Nuclear Plant not found with id: 999");
+
+    verify(nuclearPlantRepository, times(1)).findById(999L);
+    verify(nuclearPlantRepository, never()).save(any());
+  }
+
+  @Test
+  void deleteNuclearPlant_shouldThrowException_whenPlantNotFound() {
+    when(nuclearPlantRepository.findById(999L)).thenReturn(Optional.empty());
+
+    assertThatThrownBy(() -> nuclearPlantService.deleteNuclearPlant(999L))
+        .isInstanceOf(NuclearPlantException.class)
+        .hasMessageContaining("Nuclear Plant not found with id: 999");
+
+    verify(nuclearPlantRepository, times(1)).findById(999L);
+    verify(nuclearPlantRepository, never()).delete(any());
+  }
+
+  @Test
+  void getAllNuclearPlants_shouldReturnEmptyList_whenNoPlantsExist() {
+    when(nuclearPlantRepository.findAll()).thenReturn(Collections.emptyList());
+
+    List<NuclearPlantDTO> result = nuclearPlantService.getAllNuclearPlants();
+
+    assertThat(result).isNotNull().isEmpty();
+    verify(nuclearPlantRepository, times(1)).findAll();
+  }
 }
