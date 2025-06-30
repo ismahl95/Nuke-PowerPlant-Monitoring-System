@@ -27,7 +27,7 @@ jobs:
       - name: Get all commit messages
         id: get_commit_messages
         run: |
-          commits=$(git log origin/main..HEAD --pretty=format:"%s%n%b" | head -n1)
+          commits=$(git log origin/main..HEAD --pretty=format:"%s")
           printf "MESSAGES<<EOF\n$commits\nEOF" >> $GITHUB_ENV
       - name: Check Conventional Commits
         run: |

@@ -142,5 +142,3 @@ Si deseas contribuir al proyecto contacte primero con el administrador del mismo
 | `script`       | Modificación o adición de scripts personalizados para el proyecto.                                 | `script: add deployment automation script`      |
 | `scheduler`    | Cambios en el manejo de tareas programadas o cron jobs.                                             | `scheduler: update daily report schedule`       |
 | `init`         | Inicialización de un proyecto o módulo.                                                            | `init: initialize new module for payments`      |
-
-prueba
