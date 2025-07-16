@@ -10,7 +10,7 @@ public class SupplierException extends RuntimeException{
 
   public static final String BAD_REQUEST_MESSAGE = "The provided ID is not valid or null: ";
 
-  public static final String UNEXPECTING_ERROR_WHILE_SAVING = "An unexpected error occurred while saving Nuclear Plant";
+  public static final String UNEXPECTING_ERROR_WHILE_SAVING = "An unexpected error occurred while saving Supplier";
 
   public SupplierException(String message, HttpStatus status) {
     super(message);
