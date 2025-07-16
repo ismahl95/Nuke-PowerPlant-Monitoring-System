@@ -92,4 +92,29 @@ public class SupplierController {
             .body(supplierService.createSupplier(supplierDTO));
   }
 
+  @Operation(summary = "Actualizar proveedor", description = "Actualiza un proveedor existente por su ID")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Proveedor actualizado con éxito", content = @Content(schema = @Schema(implementation = SupplierDTO.class))),
+    @ApiResponse(responseCode = "404", description = "Proveedor no encontrado"),
+    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
+  })
+  @PostMapping("/{id}")
+  public ResponseEntity<Object> updateSupplier(@PathVariable Long id, @Valid @RequestBody SupplierDTO supplierDTO, BindingResult result) {
+    ResponseEntity<Object> errorResponse = Utils.validateFields(result);
+    return errorResponse != null
+      ? errorResponse
+      : ResponseEntity.ok(supplierService.updateSupplier(id, supplierDTO));
+  }
+
+  @Operation(summary = "Eliminar proveedor", description = "Elimina un proveedor por su ID")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "204", description = "Proveedor eliminado con éxito"),
+    @ApiResponse(responseCode = "404", description = "Proveedor no encontrado")
+  })
+  @PostMapping("/{id}/delete")
+  public ResponseEntity<Void> deleteSupplier(@PathVariable Long id) {
+    supplierService.deleteSupplier(id);
+    return ResponseEntity.noContent().build();
+  }
+
 }

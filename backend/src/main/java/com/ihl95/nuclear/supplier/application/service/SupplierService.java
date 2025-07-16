@@ -11,5 +11,9 @@ public interface SupplierService {
   public SupplierDTO getSupplierbyId(Long id);
 
   public SupplierDTO createSupplier(SupplierDTO supplierDTO);
+
+  public SupplierDTO updateSupplier(Long id, SupplierDTO supplierDTO);
+
+  public void deleteSupplier(Long id);
   
 }
