@@ -24,7 +24,7 @@ public class SupplierServiceTestMocks {
     setUpTestEntities();
   }
 
-  private void setUpTestEntities() {
+  protected void setUpTestEntities() {
     supplier = Supplier.builder()
       .id(1L)
       .name("Supplier 1")

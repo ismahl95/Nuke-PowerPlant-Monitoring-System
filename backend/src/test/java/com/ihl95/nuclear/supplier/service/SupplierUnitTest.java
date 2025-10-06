@@ -15,6 +15,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ihl95.nuclear.supplier.application.dto.SupplierDTO;
@@ -27,6 +28,12 @@ class SupplierUnitTest extends SupplierServiceTestMocks {
 
   @InjectMocks
   private SupplierServiceImpl supplierService;
+
+  @Override
+  protected void setUpTestEntities() {
+    super.setUpTestEntities();
+    MockitoAnnotations.openMocks(this);
+  }
 
   @Test
   void getAllSuppliers_shouldReturnListOfSupplierDTOs() {

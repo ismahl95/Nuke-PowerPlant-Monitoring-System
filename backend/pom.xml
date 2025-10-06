@@ -165,11 +165,6 @@
             <version>0.9.1</version>
         </dependency>
 
-        <!-- Spring Boot Starter for Security Configuration -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
 
         <!-- Para encriptar contraseñas -->
         <dependency>
@@ -218,7 +213,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>0.8.11</version>
                 <executions>
                     <execution>
                         <goals>
