@@ -15,6 +15,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ihl95.nuclear.supplier.application.dto.SupplierDTO;
@@ -27,6 +28,12 @@ class SupplierUnitTest extends SupplierServiceTestMocks {
 
   @InjectMocks
   private SupplierServiceImpl supplierService;
+
+  @Override
+  protected void setUpTestEntities() {
+    super.setUpTestEntities();
+    MockitoAnnotations.openMocks(this);
+  }
 
   @Test
   void getAllSuppliers_shouldReturnListOfSupplierDTOs() {
@@ -93,6 +100,51 @@ class SupplierUnitTest extends SupplierServiceTestMocks {
     verify(supplierMapper, times(1)).toSupplier(supplierDTO);
     verify(supplierRepository, times(1)).save(supplier);
     verify(supplierMapper, times(1)).toSupplierDTO(supplier);
+  }
+
+  @Test
+  void createSupplier_shouldThrowException_whenDTOIsNull() {
+    assertThatThrownBy(() -> supplierService.createSupplier(null))
+        .isInstanceOf(SupplierException.class)
+        .hasMessageContaining("An unexpected error occurred while saving Supplier");
+
+    verify(supplierMapper, never()).toSupplier(any());
+    verify(supplierRepository, never()).save(any());
+  }
+
+  @Test
+  void createSupplier_shouldThrowException_whenRepositoryThrowsException() {
+    when(supplierMapper.toSupplier(supplierDTO)).thenReturn(supplier);
+    when(supplierRepository.save(supplier)).thenThrow(SupplierException.internalError(SupplierException.UNEXPECTING_ERROR_WHILE_SAVING));
+
+    assertThatThrownBy(() -> supplierService.createSupplier(supplierDTO))
+        .isInstanceOf(SupplierException.class)
+        .hasMessageContaining("An unexpected error occurred while saving Supplier");
+
+    verify(supplierMapper, times(1)).toSupplier(supplierDTO);
+    verify(supplierRepository, times(1)).save(supplier);
+  }
+
+  @Test
+  void getAllSuppliers_shouldReturnEmptyList_whenNoSuppliersExist() {
+    when(supplierRepository.findAll()).thenReturn(Collections.emptyList());
+
+    List<SupplierDTO> result = supplierService.getAllSuppliers();
+
+    assertThat(result).isEmpty();
+    verify(supplierRepository, times(1)).findAll();
+    verify(supplierMapper, never()).toSupplierDTO(any());
+  }
+
+  @Test
+  void getSupplierById_shouldThrowException_whenRepositoryThrowsException() {
+    when(supplierRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
+
+    assertThatThrownBy(() -> supplierService.getSupplierbyId(1L))
+        .isInstanceOf(SupplierException.class)
+        .hasMessageContaining("Error retrieving supplier");
+
+    verify(supplierRepository, times(1)).findById(1L);
   }
 
 }
