@@ -85,7 +85,8 @@ INSERT INTO nuclear_plant (name, location) VALUES
 ('Jose Cabrera Nuclear Plant', 'Jose Cabrera, Madrid'),
 ('Zorita Nuclear Plant', 'Zorita, Guadalajara'),
 ('Castellon Nuclear Plant', 'Castellon de la Plana, Castellon'),
-('Navarra Nuclear Plant', 'Navarra, Navarra');
+('Navarra Nuclear Plant', 'Navarra, Navarra'),
+('Central Prueba', 'Test Location');
 
 -- Insertar datos en la tabla Reactor
 
