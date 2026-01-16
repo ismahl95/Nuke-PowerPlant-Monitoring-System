@@ -145,4 +145,333 @@ class SupplierIntegrationTest {
 
     }
 
+  @Test
+  @Transactional
+  void whenUpdateSupplier_thenUpdatedSupplierIsReturned() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO updatedSupplierDTO = new SupplierDTO(null, "Updated Supplier 1", "Updated Contact 1", "+1-000-000-0000");
+
+    String updatedSupplierJson = objectMapper.writeValueAsString(updatedSupplierDTO);
+
+    mockMvc.perform(post("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(updatedSupplierJson))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.name").value("Updated Supplier 1"))
+        .andExpect(jsonPath("$.contact").value("Updated Contact 1"))
+        .andExpect(jsonPath("$.phone").value("+1-000-000-0000"));
+  }
+
+  @Test
+  void whenUpdateSupplier_whenIdNotFound_thenNotFoundStatusIsReturned() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO updatedSupplierDTO = new SupplierDTO(null, "Updated Supplier", "Updated Contact", "+0-000-000-0000");
+
+    String updatedSupplierJson = objectMapper.writeValueAsString(updatedSupplierDTO);
+
+    mockMvc.perform(post("/api/suppliers/999")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(updatedSupplierJson))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void whenUpdateSupplier_withInvalidData_thenBadRequestStatusIsReturned() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO invalidDTO = new SupplierDTO(null, "", "", "");
+
+    String invalidJson = objectMapper.writeValueAsString(invalidDTO);
+
+    mockMvc.perform(post("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(invalidJson))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Transactional
+  void whenDeleteSupplier_thenSupplierIsDeleted() throws Exception {
+    String token = getJwtToken();
+
+    // Primero verificar que el proveedor existe
+    mockMvc.perform(get("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk());
+
+    // Ahora eliminar
+    mockMvc.perform(post("/api/suppliers/1/delete")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isNoContent());
+
+    // Verificar que ya no existe
+    mockMvc.perform(get("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void whenDeleteSupplier_whenIdNotFound_thenNotFoundStatusIsReturned() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(post("/api/suppliers/999/delete")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void whenGetAllSuppliers_withoutToken_thenUnauthorizedStatusIsReturned() throws Exception {
+    mockMvc.perform(get("/api/suppliers"))
+        .andExpect(status().isForbidden());
+  }
+
+  @Test
+  void whenGetSupplierById_withoutToken_thenUnauthorizedStatusIsReturned() throws Exception {
+    mockMvc.perform(get("/api/suppliers/1"))
+        .andExpect(status().isForbidden());
+  }
+
+  @Test
+  @Transactional
+  void whenCreateSupplier_withoutToken_thenUnauthorizedStatusIsReturned() throws Exception {
+    SupplierDTO supplierDTO = new SupplierDTO(null, "Test Supplier", "Test Contact", "+1-111-111-1111");
+
+    String supplierJson = objectMapper.writeValueAsString(supplierDTO);
+
+    mockMvc.perform(post("/api/suppliers")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(supplierJson))
+        .andExpect(status().isForbidden());
+  }
+
+  @Test
+  void whenGetSupplierById_withValidId_thenCorrectDataIsReturned() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(get("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.name").isNotEmpty())
+        .andExpect(jsonPath("$.contact").isNotEmpty())
+        .andExpect(jsonPath("$.phone").isNotEmpty());
+  }
+
+  @Test
+  @Transactional
+  void whenCreateSupplier_withValidData_thenSupplierIsCreatedSuccessfully() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO newSupplierDTO = new SupplierDTO(null, "New Supplier", "New Contact", "+1-999-999-9999");
+
+    String supplierJson = objectMapper.writeValueAsString(newSupplierDTO);
+
+    mockMvc.perform(post("/api/suppliers")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(supplierJson))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id").isNotEmpty())
+        .andExpect(jsonPath("$.name").value("New Supplier"))
+        .andExpect(jsonPath("$.contact").value("New Contact"))
+        .andExpect(jsonPath("$.phone").value("+1-999-999-9999"));
+  }
+
+  @Test
+  void whenGetAllSuppliers_thenResponseHasCorrectContentType() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(get("/api/suppliers")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"));
+  }
+
+  @Test
+  void whenGetSupplierById_thenResponseHasCorrectContentType() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(get("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"));
+  }
+
+  @Test
+  @Transactional
+  void whenCreateSupplier_thenResponseHasCorrectContentType() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO supplierDTO = new SupplierDTO(null, "Content Type Test", "Contact", "+1-111-111-1111");
+
+    String supplierJson = objectMapper.writeValueAsString(supplierDTO);
+
+    mockMvc.perform(post("/api/suppliers")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(supplierJson))
+        .andExpect(status().isCreated())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+  }
+
+  @Test
+  void whenGetAllSuppliers_thenReturnAllSuppliers() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(get("/api/suppliers")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$.length()").value(4));
+  }
+
+  @Test
+  void whenGetSupplierById_withMultipleIds_thenReturnCorrectSupplier() throws Exception {
+    String token = getJwtToken();
+
+    // Test get supplier 1
+    mockMvc.perform(get("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.name").value("Supplier 1"));
+
+    // Test get supplier 3
+    mockMvc.perform(get("/api/suppliers/3")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(3))
+        .andExpect(jsonPath("$.name").value("Supplier 3"));
+  }
+
+  @Test
+  @Transactional
+  void whenCreateSupplier_thenReturnCreatedSupplier() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO supplierDTO = new SupplierDTO(null, "New Supplier", "New Contact", "+1-555-555-5555");
+
+    String supplierJson = objectMapper.writeValueAsString(supplierDTO);
+
+    mockMvc.perform(post("/api/suppliers")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(supplierJson))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.name").value("New Supplier"))
+        .andExpect(jsonPath("$.contact").value("New Contact"))
+        .andExpect(jsonPath("$.phone").value("+1-555-555-5555"));
+  }
+
+  @Test
+  @Transactional
+  void whenCreateSupplier_withInvalidData_thenReturnBadRequest() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO supplierDTO = new SupplierDTO(null, "", "Contact", "+1-555-555-5555");
+
+    String supplierJson = objectMapper.writeValueAsString(supplierDTO);
+
+    mockMvc.perform(post("/api/suppliers")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(supplierJson))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Transactional
+  void whenUpdateSupplier_thenReturnUpdatedSupplier() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO updatedDTO = new SupplierDTO(1L, "Updated Supplier", "Updated Contact", "+1-999-999-9999");
+
+    String supplierJson = objectMapper.writeValueAsString(updatedDTO);
+
+    mockMvc.perform(post("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(supplierJson))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.name").value("Updated Supplier"))
+        .andExpect(jsonPath("$.contact").value("Updated Contact"))
+        .andExpect(jsonPath("$.phone").value("+1-999-999-9999"));
+  }
+
+  @Test
+  @Transactional
+  void whenUpdateSupplier_withNonexistentId_thenReturnNotFound() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO updatedDTO = new SupplierDTO(999L, "Updated Supplier", "Updated Contact", "+1-999-999-9999");
+
+    String supplierJson = objectMapper.writeValueAsString(updatedDTO);
+
+    mockMvc.perform(post("/api/suppliers/999")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(supplierJson))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Transactional
+  void whenUpdateSupplier_withInvalidData_thenReturnBadRequest() throws Exception {
+    String token = getJwtToken();
+    SupplierDTO updatedDTO = new SupplierDTO(1L, "", "Contact", "+1-999-999-9999");
+
+    String supplierJson = objectMapper.writeValueAsString(updatedDTO);
+
+    mockMvc.perform(post("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(supplierJson))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Transactional
+  void whenDeleteSupplier_thenReturnNoContent() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(post("/api/suppliers/1/delete")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isNoContent());
+  }
+
+  @Test
+  @Transactional
+  void whenDeleteSupplier_withNonexistentId_thenReturnNotFound() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(post("/api/suppliers/999/delete")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void whenGetAllSuppliers_thenResponseStatusIsOk() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(get("/api/suppliers")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void whenGetSupplierById_thenResponseStatusIsOk() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(get("/api/suppliers/1")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void whenGetSupplierById_withInvalidId_thenReturnNotFound() throws Exception {
+    String token = getJwtToken();
+
+    mockMvc.perform(get("/api/suppliers/999")
+        .header("Authorization", "Bearer " + token))
+        .andExpect(status().isNotFound());
+  }
+
 }
