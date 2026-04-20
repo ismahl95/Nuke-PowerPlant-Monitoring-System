@@ -8,9 +8,9 @@ import lombok.Builder;
 public record NuclearPlantDTO(
     Long id,
 
-    @NotBlank(message = "El nombre es obligatorio")
+    @NotBlank(message = "Plant name is required")
     String name,
     
-    @NotBlank(message = "La localización es obligatoria")
+    @NotBlank(message = "Plant location is required")
     String location
 ) {}
