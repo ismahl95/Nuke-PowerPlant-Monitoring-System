@@ -1,7 +1,17 @@
 package com.ihl95.nuclear.incident.application.service;
 
-import com.ihl95.nuclear.incident.domain.Incident;
+import java.util.List;
+
+import com.ihl95.nuclear.incident.application.dto.IncidentDTO;
 
 public interface IncidentService {
-  Incident getIncidentById(Long id);
+  List<IncidentDTO> getAllIncidents();
+
+  IncidentDTO getIncidentById(Long id);
+
+  IncidentDTO createIncident(IncidentDTO incidentDTO);
+
+  IncidentDTO updateIncident(Long id, IncidentDTO incidentDTO);
+
+  void deleteIncident(Long id);
 }
