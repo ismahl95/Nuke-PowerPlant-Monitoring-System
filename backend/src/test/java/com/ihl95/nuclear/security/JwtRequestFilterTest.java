@@ -55,79 +55,67 @@ class JwtRequestFilterTest {
   }
 
   @Test
-  void doFilterInternal_NoTokenInRequest() throws ServletException, IOException {
+  void doFilterInternal_WithNoTokenInRequest_SkipsAuthentication() throws ServletException, IOException {
       jwtRequestFilter.doFilterInternal(request, response, filterChain);
 
-      // Verificar que no se establezca autenticación en el contexto
       assertNull(SecurityContextHolder.getContext().getAuthentication());
-      // Verificar que el filtro sigue con la cadena
       verify(filterChain, times(1)).doFilter(request, response);
   }
 
   @Test
-  void doFilterInternal_InvalidTokenFormat() throws ServletException, IOException {
-      // Configurar un token con formato incorrecto
+  void doFilterInternal_WithInvalidTokenFormat_SkipsAuthentication() throws ServletException, IOException {
       request.addHeader("Authorization", "InvalidToken");
 
       jwtRequestFilter.doFilterInternal(request, response, filterChain);
 
-      // Verificar que no se establezca autenticación en el contexto
       assertNull(SecurityContextHolder.getContext().getAuthentication());
       verify(filterChain, times(1)).doFilter(request, response);
   }
 
   @Test
-  void doFilterInternal_ExpiredToken() throws ServletException, IOException {
-      // Configurar un token con el prefijo correcto
+  void doFilterInternal_WithExpiredToken_SkipsAuthentication() throws ServletException, IOException {
       request.addHeader("Authorization", "Bearer expiredToken");
 
-      // Simular excepción de token expirado
       when(jwtUtil.extractUsername("expiredToken")).thenThrow(new ExpiredJwtException(null, null, "Token expirado"));
 
       jwtRequestFilter.doFilterInternal(request, response, filterChain);
 
-      // Verificar que no se establezca autenticación en el contexto
       assertNull(SecurityContextHolder.getContext().getAuthentication());
       verify(filterChain, times(1)).doFilter(request, response);
   }
 
   @Test
-  void doFilterInternal_ValidTokenAndUserNotAuthenticated() throws ServletException, IOException {
+  void doFilterInternal_WithValidTokenAndUserNotAuthenticated_SetsAuthentication() throws ServletException, IOException {
       String token = "validToken";
       String username = "testUser";
 
       request.addHeader("Authorization", "Bearer " + token);
 
-      // Configurar JwtUtil para devolver un nombre de usuario válido
       when(jwtUtil.extractUsername(token)).thenReturn(username);
       when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
       when(jwtUtil.validateToken(token, userDetails)).thenReturn(true);
 
       jwtRequestFilter.doFilterInternal(request, response, filterChain);
 
-      // Verificar que se ha configurado la autenticación en el contexto de seguridad
       assertNotNull(SecurityContextHolder.getContext().getAuthentication());
       verify(filterChain, times(1)).doFilter(request, response);
   }
 
   @Test
-  void doFilterInternal_ValidTokenAndUserAlreadyAuthenticated() throws ServletException, IOException {
+  void doFilterInternal_WithValidTokenAndUserAlreadyAuthenticated_DoesNotReloadUser() throws ServletException, IOException {
       String token = "validToken";
       String username = "testUser";
 
       request.addHeader("Authorization", "Bearer " + token);
 
-      // Configurar JwtUtil para devolver un nombre de usuario válido
       when(jwtUtil.extractUsername(token)).thenReturn(username);
       when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
       when(jwtUtil.validateToken(token, userDetails)).thenReturn(true);
 
-      // Configurar una autenticación previa en el contexto de seguridad
       SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
 
       jwtRequestFilter.doFilterInternal(request, response, filterChain);
 
-      // Verificar que no se establece una nueva autenticación
       verify(userDetailsService, never()).loadUserByUsername(username);
       verify(filterChain, times(1)).doFilter(request, response);
   }

@@ -14,18 +14,34 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class AuthenticationProviderTest {
 
   @Test
-  void testAuthenticationProviderConfiguration() {
-      // Mock del UserDetailsService
+  void authenticationProvider_WithProperConfiguration_SupportsUsernamePasswordTokens() {
       UserDetailsService userDetailsService = mock(UserDetailsService.class);
 
-      // Crear el DaoAuthenticationProvider
       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
       authProvider.setUserDetailsService(userDetailsService);
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
       authProvider.setPasswordEncoder(passwordEncoder);
 
-      // Asegurar que el provider tiene un PasswordEncoder configurado
       assertNotNull(authProvider);
-      assertTrue(authProvider.supports(UsernamePasswordAuthenticationToken.class)); // Verifica que el provider soporta el servicio de usuarios
+      assertTrue(authProvider.supports(UsernamePasswordAuthenticationToken.class));
+  }
+
+  @Test
+  void authenticationProvider_WithBCryptEncoder_IsConfiguredCorrectly() {
+      UserDetailsService userDetailsService = mock(UserDetailsService.class);
+      BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+      authProvider.setUserDetailsService(userDetailsService);
+      authProvider.setPasswordEncoder(passwordEncoder);
+
+      assertNotNull(authProvider);
+      assertTrue(authProvider.supports(UsernamePasswordAuthenticationToken.class));
+  }
+
+  @Test
+  void authenticationProvider_WithoutConfiguration_IsNotNull() {
+      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+      assertNotNull(authProvider);
   }
 }
