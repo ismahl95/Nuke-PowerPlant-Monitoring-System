@@ -49,6 +49,11 @@ Controller (@RestController) → Service → Repository (Spring Data JPA)
 - Centralized `@RestControllerAdvice` catches domain-specific exceptions
 - Returns appropriate HTTP status from exception class
 - Add new handlers here when creating new exception types
+- **Validation error handling**: 
+  - `@ExceptionHandler(MethodArgumentNotValidException.class)` catches Spring validation errors
+  - Returns HTTP 400 with validation errors as JSON: `{"fieldName": "error message"}`
+  - Uses `Utils.validateFields()` utility to extract and format validation errors
+  - **Multiple validation errors per field**: Keeps first error only (via merge function in Utils)
 
 ## Critical Workflows
 
@@ -87,6 +92,12 @@ mvn test                   # Unit/integration tests
 - Use **records** where possible (Java 16+): `record ControlSystemDTO(Long id, String name, ControlSystemType type) {}`
 - Include only necessary fields (not full entity graphs)
 - Separate DTOs for create/update/response if different validation/fields needed
+- **Bean Validation annotations** (JSR-380) for input validation:
+  - `@NotBlank(message = "...")` for required strings
+  - `@Email(message = "...")` for email fields
+  - `@Pattern(regexp = "...", message = "...")` for format validation
+  - **All validation messages in English** for consistency across project
+- Spring automatically validates DTOs via `BindingResult` in controller methods
 
 ### Repository Methods
 - Extend `JpaRepository<Entity, Long>` (auto-provides CRUD + pagination)
@@ -98,11 +109,33 @@ mvn test                   # Unit/integration tests
 - Handle business logic, validation, exception throwing
 - Throw domain-specific exceptions (e.g., `NuclearPlantException`, `SupplierException`)
 
+### Utility Classes
+- **`Utils.validateFields(BindingResult)`** (`utils/Utils.java`):
+  - Extracts validation errors from Spring's BindingResult
+  - Returns `ResponseEntity.badRequest()` with error map if validation fails
+  - Returns `null` if no validation errors
+  - **Handles multiple errors per field**: Keeps first error only
+  - Error response format: `{"fieldName": "error message"}`
+
 ### Controller Endpoints
 - RESTful naming: `/api/{resource}` (e.g., `/api/reactors`, `/api/sensors`)
 - Use proper HTTP verbs: `GET` (read), `POST` (create), `PUT` (update), `DELETE` (delete)
 - Include `@Authenticated` (via JWT filter) on protected endpoints
 - Return DTOs, not entities
+- **Input validation pattern**:
+  ```java
+  @PostMapping
+  public ResponseEntity<DTO> create(@Valid @RequestBody DTO dto, BindingResult result) {
+      ResponseEntity<Object> validationError = Utils.validateFields(result);
+      if (validationError != null) return validationError;
+      // Process valid DTO
+      return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
+  }
+  ```
+  - Spring validates `@Valid` DTO automatically
+  - `BindingResult` captures validation errors
+  - `Utils.validateFields()` returns 400 error if validation fails
+  - **All validation messages are in English**
 
 ## Commit Message Convention
 Use semantic prefixes (from README):
