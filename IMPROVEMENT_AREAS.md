@@ -252,25 +252,47 @@ Page<SupplierDTO> getAllSuppliers(Pageable pageable);
 
 ## Priority Roadmap
 
-### **Phase 1 (Critical - Week 1)**
-- [ ] Add mapper unit tests for all modules
-- [ ] Complete IncidentServiceImpl and other stubs
-- [ ] Add validation annotations to all DTOs
-- [ ] Complete GlobalExceptionHandler with all exception types
+### **Phase 1 (Critical - Week 1)** ✅ COMPLETED
+- [x] Add mapper unit tests for all modules
+- [x] Complete IncidentServiceImpl and other stubs
+- [x] Add validation annotations to all DTOs
+- [x] Complete GlobalExceptionHandler with all exception types
 
-### **Phase 2 (High - Week 2-3)**
+### **Phase 2 (High - Refactor Test Performance)**
+**Problem Analysis:**
+- Current tests use `@SpringBootTest` + `@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)`
+- **Impact**: Loads entire Spring context (~10+ seconds per test method)
+- **Result**: SupplierIntegrationTest (30 tests) takes 50+ seconds
+- **Root cause**: Tests mix integration tests (HTTP layer) with unit tests (service layer)
+
+**Solution Pattern** (from IncidentServiceImplTest):
+- Separate concerns: Unit tests (fast, with mocks) vs Integration tests (slow, with real context)
+- Unit tests: `@ExtendWith(MockitoExtension.class)` - NO Spring context
+- Integration tests: Only test HTTP/Security/DTO validation - minimize @SpringBootTest usage
+
+**Phase 2 Tasks:**
+- [ ] Refactor SupplierIntegrationTest to focus on controller HTTP behavior only
+- [ ] Create SupplierServiceUnitTest with mocks (fast tests for business logic)
+- [ ] Refactor NuclearPlantIntegrationTest similarly
+- [ ] Create unit tests for Reactor, Sensor, Maintenance services
+- [ ] Separate mapper tests from integration tests
+- [ ] Remove @DirtiesContext where possible (use test profiles instead)
+
+**Expected improvement:** 50+ seconds → ~10 seconds per test class
+
+### **Phase 3 (High - Week 2-3)**
 - [ ] Add unit tests for Reactor, Sensor, Maintenance modules
 - [ ] Add integration tests for all controllers
-- [ ] Fix repository package naming (infrastructure typo)
+- [ ] Fix repository package naming (infraestructure → infrastructure)
 - [ ] Implement pagination in list endpoints
 
-### **Phase 3 (Medium - Week 4)**
+### **Phase 4 (Medium - Week 4)**
 - [ ] Add repository query tests (@DataJpaTest)
 - [ ] Implement readOnly = true for read operations
 - [ ] Add structured logging with correlation IDs
 - [ ] Review and optimize N+1 queries
 
-### **Phase 4 (Nice-to-have)**
+### **Phase 5 (Nice-to-have)**
 - [ ] Add refresh token mechanism
 - [ ] Configure CORS
 - [ ] Implement rate limiting
@@ -281,22 +303,67 @@ Page<SupplierDTO> getAllSuppliers(Pageable pageable);
 ## Testing Metrics to Track
 
 ```
-✅ Current: ~50 unit tests (Supplier + NuclearPlant)
-📊 Target: 
+✅ Current: 123 tests total
+  - Integration tests: ~37 tests (@SpringBootTest - SLOW)
+  - Unit tests: ~86 tests (with mocks - FAST)
+
+⏱️ Performance:
+  - SupplierIntegrationTest: 30 tests in 50+ seconds ❌
+  - IncidentServiceImplTest: 13 tests in <1 second ✅
+  
+📊 Phase 2 Goals:
+  - Reduce test execution time by 60%+
+  - Maintain integration test coverage (HTTP layer only)
+  - Maximize unit test coverage (service/mapper layer with mocks)
   - Code coverage: 80%+ for service layer
   - Unit test ratio: 1 test per service method
-  - Integration test ratio: 1 test per controller endpoint
+  - Integration test ratio: 1 test per controller endpoint (not per database state)
+```
+
+---
+
+## Test Architecture Comparison
+
+### ❌ SLOW Pattern (Current)
+```java
+@SpringBootTest  // Loads entire Spring context
+@AutoConfigureMockMvc
+@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)  // Recreates context every test
+class SupplierIntegrationTest {
+    @Autowired private MockMvc mockMvc;  // Real Spring beans
+    @Autowired private SupplierRepository repo;  // Real database calls
+    // Tests: 30 methods × 1.5 seconds = 50+ seconds
+}
+```
+
+### ✅ FAST Pattern (Target)
+```java
+// Unit Tests (Fast - no Spring)
+@ExtendWith(MockitoExtension.class)  // Only Mockito, NO Spring
+class SupplierServiceUnitTest {
+    @Mock private SupplierRepository repo;  // Mocked
+    @InjectMocks private SupplierServiceImpl service;
+    // Tests: 20 methods × 0.05 seconds = 1 second
+}
+
+// Integration Tests (Slow - only HTTP validation)
+@SpringBootTest  // Load Spring ONCE
+@AutoConfigureMockMvc
+class SupplierControllerIntegrationTest {
+    @Autowired private MockMvc mockMvc;
+    // Tests: 10 critical HTTP scenarios = 5 seconds
+}
 ```
 
 ---
 
 ## Quick Win Checklist
 
+- [ ] Review SupplierIntegrationTest - identify redundant tests vs unit tests
+- [ ] Create SupplierServiceUnitTest following IncidentServiceImplTest pattern
+- [ ] Move business logic tests to unit tests (with mocks)
+- [ ] Keep only critical integration tests (HTTP, security, validation)
 - [ ] Rename `infraestructure` → `infrastructure` (package & code)
-- [ ] Add `@NotBlank`, `@Email`, `@Pattern` to DTOs
-- [ ] Complete all service implementations (remove stubs)
-- [ ] Add 10 exception handler types to GlobalExceptionHandler
 - [ ] Add `readOnly = true` to read operation services
 
-These changes will take ~3-5 hours and significantly improve code robustness.
 
