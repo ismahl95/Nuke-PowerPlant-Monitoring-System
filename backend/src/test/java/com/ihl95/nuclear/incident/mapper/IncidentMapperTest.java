@@ -4,18 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mapstruct.factory.Mappers;
 
 import com.ihl95.nuclear.incident.application.dto.IncidentDTO;
 import com.ihl95.nuclear.incident.application.mapper.IncidentMapper;
 import com.ihl95.nuclear.incident.domain.Incident;
 import com.ihl95.nuclear.incident.domain.enums.IncidentSeverity;
 
-@SpringBootTest
 class IncidentMapperTest {
 
-    @Autowired
     private IncidentMapper incidentMapper;
 
     private Incident incident;
@@ -23,6 +20,8 @@ class IncidentMapperTest {
 
     @BeforeEach
     void setUp() {
+        incidentMapper = Mappers.getMapper(IncidentMapper.class);
+
         incident = new Incident();
         incident.setId(1L);
         incident.setDescription("Test Incident");
