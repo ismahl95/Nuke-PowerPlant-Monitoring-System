@@ -126,8 +126,8 @@ class NuclearPlantIntegrationTest {
                 .content(newNuclearPlantJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("El nombre es obligatorio"))
-                .andExpect(jsonPath("$.location").value("La localización es obligatoria"));
+                .andExpect(jsonPath("$.name").value("Plant name is required"))
+                .andExpect(jsonPath("$.location").value("Plant location is required"));
     }
 
     @Test
