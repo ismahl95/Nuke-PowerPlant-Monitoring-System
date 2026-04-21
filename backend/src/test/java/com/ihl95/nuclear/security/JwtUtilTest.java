@@ -27,7 +27,7 @@ class JwtUtilTest {
     @Mock
     private UserDetails userDetails;
 
-    private String secretKey = "mySecretKey"; // Usa un valor real o de prueba en lugar de un valor fijo en producción
+    private String secretKey = "mySecretKey";
 
     @BeforeEach
     public void setUp() {
@@ -36,6 +36,13 @@ class JwtUtilTest {
         jwtUtil.secretKey = secretKey;
     }
 
+    /**
+     * Creates a test JWT token with the specified username and expiration offset.
+     *
+     * @param username the subject (username) of the token
+     * @param expirationOffsetMillis the milliseconds until token expiration (negative for expired tokens)
+     * @return a valid JWT token string
+     */
     private String createTestToken(String username, long expirationOffsetMillis) {
         return Jwts.builder()
                 .setSubject(username)
@@ -45,51 +52,56 @@ class JwtUtilTest {
                 .compact();
     }
 
+    /**
+     * Validates that a token with correct username and valid expiration returns true.
+     */
     @Test
     void testValidateToken_ValidToken() {
         String username = "testUser";
         when(userDetails.getUsername()).thenReturn(username);
 
-        String token = createTestToken(username, 1000 * 60 * 60); // Token válido por 1 hora
+        String token = createTestToken(username, 1000 * 60 * 60);
 
         assertTrue(jwtUtil.validateToken(token, userDetails));
     }
 
+    /**
+     * Validates that a token with mismatched username returns false.
+     */
     @Test
     void testValidateToken_InvalidUsername() {
         when(userDetails.getUsername()).thenReturn("anotherUser");
 
-        String token = createTestToken("testUser", 1000 * 60 * 60); // Token válido por 1 hora
+        String token = createTestToken("testUser", 1000 * 60 * 60);
 
         assertFalse(jwtUtil.validateToken(token, userDetails));
     }
 
+    /**
+     * Validates that an expired token returns false.
+     */
     @Test
     void testValidateToken_ExpiredToken() {
         String username = "testUser";
         when(userDetails.getUsername()).thenReturn(username);
 
-        // Crear un token que haya expirado hace 1 hora
         String token = createTestToken(username, -1000 * 60 * 60);
 
-        // Verificar que validateToken devuelve false para el token expirado
         assertFalse(jwtUtil.validateToken(token, userDetails));
     }
 
+    /**
+     * Validates that a malformed token with invalid format returns false.
+     */
     @Test
     void validateToken_GenericException_ReturnsFalse() {
         String token = "invalidToken";
 
-        // Configurar UserDetails para evitar errores de null
         when(userDetails.getUsername()).thenReturn("testUser");
 
-        // Simular una excepción genérica (por ejemplo, MalformedJwtException) en
-        // extractUsername
         JwtUtil jwtUtilSpy = spy(jwtUtil);
         doThrow(new MalformedJwtException("Token mal formado")).when(jwtUtilSpy).extractUsername(token);
 
-        // Verificar que validateToken devuelve false cuando ocurre una excepción
-        // genérica
         assertFalse(jwtUtilSpy.validateToken(token, userDetails));
     }
 }
