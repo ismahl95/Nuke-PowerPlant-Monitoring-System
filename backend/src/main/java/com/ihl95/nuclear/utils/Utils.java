@@ -18,7 +18,8 @@ public class Utils {
       Map<String, String> errores = result.getFieldErrors().stream()
           .collect(Collectors.toMap(
               FieldError::getField,
-              FieldError::getDefaultMessage));
+              FieldError::getDefaultMessage,
+              (existing, replacement) -> existing)); // Keep first error for each field
       return ResponseEntity.badRequest().body(errores);
     }
     return null; // No errors
