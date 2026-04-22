@@ -5,7 +5,10 @@ import com.ihl95.nuclear.nuclearplant.application.controller.NuclearPlantControl
 import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearplant.application.service.NuclearPlantService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -29,8 +32,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Integration tests for NuclearPlantController.
- * Uses @SpringBootTest with @AutoConfigureMockMvc to test the full web layer with security.
- * Services are mocked with @MockBean to avoid database dependency.
+ *
+ * Tests the HTTP endpoints of the NuclearPlantController with:
+ * - Full Spring Boot context (@SpringBootTest)
+ * - Mocked NuclearPlantService to isolate controller behavior
+ * - Security testing with @WithMockUser and unauthorized requests
+ * - All CRUD operations with success and error scenarios
+ *
+ * This test class uses the "test" profile which configures an H2 in-memory database.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -51,26 +60,31 @@ class NuclearPlantControllerTest {
 
     @BeforeEach
     void setUp() {
-        plantDTO = NuclearPlantDTO.builder()
-                .id(1L)
-                .name("Planta Nuclear Central")
-                .location("Madrid")
-                .build();
+        plantDTO = createPlantDTO(1L, "Planta Nuclear Central", "Madrid");
+        plantDTO2 = createPlantDTO(2L, "Planta Nuclear Norte", "Barcelona");
+    }
 
-        plantDTO2 = NuclearPlantDTO.builder()
-                .id(2L)
-                .name("Planta Nuclear Norte")
-                .location("Barcelona")
+    /**
+     * Helper method to create a NuclearPlantDTO with specified values.
+     *
+     * @param id       the plant ID
+     * @param name     the plant name
+     * @param location the plant location
+     * @return a configured NuclearPlantDTO
+     */
+    private NuclearPlantDTO createPlantDTO(Long id, String name, String location) {
+        return NuclearPlantDTO.builder()
+                .id(id)
+                .name(name)
+                .location(location)
                 .build();
     }
 
     // ==================== GET /api/nuclear-plants ====================
 
-    /**
-     * Test: GET /api/nuclear-plants returns all nuclear plants when authenticated.
-     */
     @Test
     @WithMockUser
+    @DisplayName("GET /api/nuclear-plants - Should return all plants when authenticated")
     void getAllNuclearPlants_WithAuth_ReturnsOk() throws Exception {
         List<NuclearPlantDTO> plants = Arrays.asList(plantDTO, plantDTO2);
         when(nuclearPlantService.getAllNuclearPlants()).thenReturn(plants);
@@ -84,21 +98,10 @@ class NuclearPlantControllerTest {
                 .andExpect(jsonPath("$[1].name").value("Planta Nuclear Norte"));
     }
 
-    /**
-     * Test: GET /api/nuclear-plants returns 403 Forbidden when not authenticated.
-     */
-    @Test
-    void getAllNuclearPlants_WithoutAuth_ReturnsForbidden() throws Exception {
-        mockMvc.perform(get("/api/nuclear-plants")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isForbidden());
-    }
 
-    /**
-     * Test: GET /api/nuclear-plants returns empty list when no plants exist.
-     */
     @Test
     @WithMockUser
+    @DisplayName("GET /api/nuclear-plants - Should return empty list when no plants exist")
     void getAllNuclearPlants_EmptyList_ReturnsOk() throws Exception {
         when(nuclearPlantService.getAllNuclearPlants()).thenReturn(Arrays.asList());
 
@@ -111,11 +114,9 @@ class NuclearPlantControllerTest {
 
     // ==================== GET /api/nuclear-plants/{id} ====================
 
-    /**
-     * Test: GET /api/nuclear-plants/{id} returns nuclear plant when authenticated and plant exists.
-     */
     @Test
     @WithMockUser
+    @DisplayName("GET /api/nuclear-plants/{id} - Should return plant when it exists")
     void getNuclearPlantById_ExistingId_ReturnsOk() throws Exception {
         when(nuclearPlantService.getNuclearPlantById(1L)).thenReturn(plantDTO);
 
@@ -126,47 +127,27 @@ class NuclearPlantControllerTest {
                 .andExpect(jsonPath("$.name").value("Planta Nuclear Central"));
     }
 
-    /**
-     * Test: GET /api/nuclear-plants/{id} returns 404 when plant does not exist.
-     */
     @Test
     @WithMockUser
-    void getNuclearPlantById_NonExistingId_ReturnsNotFound() throws Exception {
-        when(nuclearPlantService.getNuclearPlantById(999L)).thenThrow(new RuntimeException("Nuclear plant not found"));
+    @DisplayName("GET /api/nuclear-plants/{id} - Should return 500 when plant not found")
+    void getNuclearPlantById_NonExistingId_ReturnsInternalServerError() throws Exception {
+        when(nuclearPlantService.getNuclearPlantById(999L))
+                .thenThrow(new RuntimeException("Nuclear plant not found"));
 
         mockMvc.perform(get("/api/nuclear-plants/999")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isInternalServerError());
     }
 
-    /**
-     * Test: GET /api/nuclear-plants/{id} returns 403 Forbidden when not authenticated.
-     */
-    @Test
-    void getNuclearPlantById_WithoutAuth_ReturnsForbidden() throws Exception {
-        mockMvc.perform(get("/api/nuclear-plants/1")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isForbidden());
-    }
 
     // ==================== POST /api/nuclear-plants ====================
 
-    /**
-     * Test: POST /api/nuclear-plants creates new nuclear plant when authenticated with valid data.
-     */
     @Test
     @WithMockUser
+    @DisplayName("POST /api/nuclear-plants - Should create plant with valid data")
     void createNuclearPlant_ValidData_ReturnsCreated() throws Exception {
-        NuclearPlantDTO newPlant = NuclearPlantDTO.builder()
-                .name("Nueva Planta")
-                .location("Valencia")
-                .build();
-
-        NuclearPlantDTO createdPlant = NuclearPlantDTO.builder()
-                .id(3L)
-                .name("Nueva Planta")
-                .location("Valencia")
-                .build();
+        NuclearPlantDTO newPlant = createPlantDTO(null, "Nueva Planta", "Valencia");
+        NuclearPlantDTO createdPlant = createPlantDTO(3L, "Nueva Planta", "Valencia");
 
         when(nuclearPlantService.createNuclearPlant(any(NuclearPlantDTO.class)))
                 .thenReturn(createdPlant);
@@ -179,11 +160,9 @@ class NuclearPlantControllerTest {
                 .andExpect(jsonPath("$.name").value("Nueva Planta"));
     }
 
-    /**
-     * Test: POST /api/nuclear-plants returns 400 when required field is missing (name).
-     */
     @Test
     @WithMockUser
+    @DisplayName("POST /api/nuclear-plants - Should reject when name is missing")
     void createNuclearPlant_MissingName_ReturnsBadRequest() throws Exception {
         String invalidPlantJson = "{\"location\":\"Valencia\"}";
 
@@ -193,11 +172,9 @@ class NuclearPlantControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    /**
-     * Test: POST /api/nuclear-plants returns 400 when required field is empty (blank name).
-     */
     @Test
     @WithMockUser
+    @DisplayName("POST /api/nuclear-plants - Should reject when name is blank")
     void createNuclearPlant_BlankName_ReturnsBadRequest() throws Exception {
         String invalidPlantJson = "{\"name\":\"\",\"location\":\"Valencia\"}";
 
@@ -207,30 +184,38 @@ class NuclearPlantControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    /**
-     * Test: POST /api/nuclear-plants returns 403 Forbidden when not authenticated.
-     */
     @Test
-    void createNuclearPlant_WithoutAuth_ReturnsForbidden() throws Exception {
+    @WithMockUser
+    @DisplayName("POST /api/nuclear-plants - Should reject when location is missing")
+    void createNuclearPlant_MissingLocation_ReturnsBadRequest() throws Exception {
+        String invalidPlantJson = "{\"name\":\"Nueva Planta\"}";
+
         mockMvc.perform(post("/api/nuclear-plants")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(plantDTO)))
-                .andExpect(status().isForbidden());
+                .content(invalidPlantJson))
+                .andExpect(status().isBadRequest());
     }
+
+    @Test
+    @WithMockUser
+    @DisplayName("POST /api/nuclear-plants - Should reject when location is blank")
+    void createNuclearPlant_BlankLocation_ReturnsBadRequest() throws Exception {
+        String invalidPlantJson = "{\"name\":\"Nueva Planta\",\"location\":\"\"}";
+
+        mockMvc.perform(post("/api/nuclear-plants")
+                .contentType(APPLICATION_JSON)
+                .content(invalidPlantJson))
+                .andExpect(status().isBadRequest());
+    }
+
 
     // ==================== PUT /api/nuclear-plants/{id} ====================
 
-    /**
-     * Test: PUT /api/nuclear-plants/{id} updates nuclear plant when authenticated with valid data.
-     */
     @Test
     @WithMockUser
+    @DisplayName("PUT /api/nuclear-plants/{id} - Should update plant with valid data")
     void updateNuclearPlant_ValidData_ReturnsOk() throws Exception {
-        NuclearPlantDTO updateDTO = NuclearPlantDTO.builder()
-                .id(1L)
-                .name("Planta Actualizada")
-                .location("Madrid")
-                .build();
+        NuclearPlantDTO updateDTO = createPlantDTO(1L, "Planta Actualizada", "Madrid");
 
         when(nuclearPlantService.updateNuclearPlant(eq(1L), any(NuclearPlantDTO.class)))
                 .thenReturn(updateDTO);
@@ -243,12 +228,10 @@ class NuclearPlantControllerTest {
                 .andExpect(jsonPath("$.name").value("Planta Actualizada"));
     }
 
-    /**
-     * Test: PUT /api/nuclear-plants/{id} returns 404 when plant does not exist.
-     */
     @Test
     @WithMockUser
-    void updateNuclearPlant_NonExistingId_ReturnsNotFound() throws Exception {
+    @DisplayName("PUT /api/nuclear-plants/{id} - Should return 500 when plant not found")
+    void updateNuclearPlant_NonExistingId_ReturnsInternalServerError() throws Exception {
         when(nuclearPlantService.updateNuclearPlant(eq(999L), any(NuclearPlantDTO.class)))
                 .thenThrow(new RuntimeException("Nuclear plant not found"));
 
@@ -258,38 +241,24 @@ class NuclearPlantControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
-    /**
-     * Test: PUT /api/nuclear-plants/{id} returns 400 when data is invalid.
-     */
     @Test
     @WithMockUser
-    void updateNuclearPlant_InvalidData_ReturnsBadRequest() throws Exception {
-        String invalidPlantJson = "{\"id\":1,\"location\":\"Madrid\"}";
+    @DisplayName("PUT /api/nuclear-plants/{id} - Should handle partial data")
+    void updateNuclearPlant_PartialData_ReturnsOk() throws Exception {
+        String partialJson = "{\"location\":\"Madrid\"}";
 
         mockMvc.perform(put("/api/nuclear-plants/1")
                 .contentType(APPLICATION_JSON)
-                .content(invalidPlantJson))
+                .content(partialJson))
                 .andExpect(status().isOk());
     }
 
-    /**
-     * Test: PUT /api/nuclear-plants/{id} returns 403 Forbidden when not authenticated.
-     */
-    @Test
-    void updateNuclearPlant_WithoutAuth_ReturnsForbidden() throws Exception {
-        mockMvc.perform(put("/api/nuclear-plants/1")
-                .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(plantDTO)))
-                .andExpect(status().isForbidden());
-    }
 
     // ==================== DELETE /api/nuclear-plants/{id} ====================
 
-    /**
-     * Test: DELETE /api/nuclear-plants/{id} deletes nuclear plant when authenticated and plant exists.
-     */
     @Test
     @WithMockUser
+    @DisplayName("DELETE /api/nuclear-plants/{id} - Should delete plant successfully")
     void deleteNuclearPlant_ExistingId_ReturnsNoContent() throws Exception {
         doNothing().when(nuclearPlantService).deleteNuclearPlant(1L);
 
@@ -298,26 +267,47 @@ class NuclearPlantControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    /**
-     * Test: DELETE /api/nuclear-plants/{id} returns 404 when plant does not exist.
-     */
     @Test
     @WithMockUser
-    void deleteNuclearPlant_NonExistingId_ReturnsNotFound() throws Exception {
-        doThrow(new RuntimeException("Nuclear plant not found")).when(nuclearPlantService).deleteNuclearPlant(999L);
+    @DisplayName("DELETE /api/nuclear-plants/{id} - Should return 500 when plant not found")
+    void deleteNuclearPlant_NonExistingId_ReturnsInternalServerError() throws Exception {
+        doThrow(new RuntimeException("Nuclear plant not found"))
+                .when(nuclearPlantService).deleteNuclearPlant(999L);
 
         mockMvc.perform(delete("/api/nuclear-plants/999")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isInternalServerError());
     }
 
+    // ==================== Tests for unauthenticated requests ====================
+
     /**
-     * Test: DELETE /api/nuclear-plants/{id} returns 403 Forbidden when not authenticated.
+     * Provides endpoint information for parameterized authentication tests.
+     * Each test verifies that unauthenticated requests return 403 Forbidden.
      */
-    @Test
-    void deleteNuclearPlant_WithoutAuth_ReturnsForbidden() throws Exception {
-        mockMvc.perform(delete("/api/nuclear-plants/1")
-                .contentType(APPLICATION_JSON))
+    static Stream<Object[]> provideUnauthenticatedEndpoints() {
+        return Stream.of(
+                new Object[]{"GET", "/api/nuclear-plants"},
+                new Object[]{"GET", "/api/nuclear-plants/1"},
+                new Object[]{"POST", "/api/nuclear-plants"},
+                new Object[]{"PUT", "/api/nuclear-plants/1"},
+                new Object[]{"DELETE", "/api/nuclear-plants/1"}
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideUnauthenticatedEndpoints")
+    @DisplayName("All endpoints - Should return 403 Forbidden when not authenticated")
+    void allEndpoints_WithoutAuth_ReturnsForbidden(String method, String endpoint) throws Exception {
+        var request = switch (method) {
+            case "GET" -> get(endpoint);
+            case "POST" -> post(endpoint).content(objectMapper.writeValueAsString(plantDTO));
+            case "PUT" -> put(endpoint).content(objectMapper.writeValueAsString(plantDTO));
+            case "DELETE" -> delete(endpoint);
+            default -> throw new IllegalArgumentException("Unsupported HTTP method: " + method);
+        };
+
+        mockMvc.perform(request.contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 }
