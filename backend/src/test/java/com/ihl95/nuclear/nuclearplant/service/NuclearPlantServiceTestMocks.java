@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.nuclearPlant.service;
+package com.ihl95.nuclear.nuclearplant.service;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
