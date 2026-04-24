@@ -100,22 +100,29 @@ exactamente como lo haría un usuario o cliente real de la API.
 src/
 └── test/
     ├── java/com/ihl95/nuclear/
-    │   ├── e2e/
-    │   │   ├── NuclearPlantE2ETestSuite.java      ← Runner de Cucumber
-    │   │   ├── steps/
-    │   │   │   └── NuclearPlantSteps.java         ← Pasos del dominio (6 escenarios)
-    │   │   └── README.md                          ← Documentación de E2E
+    │   ├── nuclearplant/
+    │   │   ├── e2e/
+    │   │   │   ├── NuclearPlantE2ETest.java              ← Runner de Cucumber (Maven auto-detect)
+    │   │   │   ├── steps/
+    │   │   │   │   └── NuclearPlantSteps.java            ← Pasos y configuración Spring (6 escenarios)
+    │   │   │   └── README.md                             ← Documentación de E2E
+    │   │   ├── service/ (11 unit tests)
+    │   │   ├── mapper/ (7 mapper tests)
+    │   │   └── controller/ (11 integration tests)
     │   ├── common/mocks/
-    │   │   └── NuclearPlantTestData.java          ← Factories compartidas
-    │   └── reactor/ (similar)
+    │   │   └── NuclearPlantTestData.java                 ← Factories compartidas
+    │   └── reactor/ (similar estructura)
     └── resources/
         └── features/
-            ├── nuclearplant.feature               ← 6 escenarios CRUD
+            ├── nuclearplant.feature                      ← 6 escenarios CRUD (Gherkin)
             └── reactor.feature
 ```
 
-**Nota**: El patrón es un archivo `.feature` por agregado de dominio con todos sus escenarios.
-Cada step definition comparte estado a través de `@CucumberContextConfiguration` + `@ScenarioScope`.
+**Nota**: 
+- Cada módulo tiene su propia carpeta `/e2e` con Steps y Resource
+- Una carpeta `/common/mocks` compartida con TestData factories
+- El Runner DEBE terminar en `Test` para auto-detección Maven
+- Los `.feature` files van en `src/test/resources/features/`
 
 ---
 
@@ -124,11 +131,10 @@ Cada step definition comparte estado a través de `@CucumberContextConfiguration
 ```java
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features")
-@ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME, value = "com.ihl95.nuclear.e2e.steps")
-@ConfigurationParameter(key = Constants.FEATURES_PROPERTY_NAME, value = "src/test/resources/features")
+@ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME, value = "com.ihl95.nuclear.nuclearplant.e2e.steps")
+@ConfigurationParameter(key = Constants.FEATURES_PROPERTY_NAME, value = "classpath:features/nuclearplant.feature")
 @ConfigurationParameter(key = Constants.PLUGIN_PROPERTY_NAME, value = "progress,html:target/cucumber-report.html")
-public class NuclearPlantE2ETestSuite {
+public class NuclearPlantE2ETest {
     // Suite configuration for running Cucumber features with Gherkin syntax
 }
 ```
@@ -136,18 +142,20 @@ public class NuclearPlantE2ETestSuite {
 **Cómo ejecutar:**
 ```bash
 # Todos los tests E2E de NuclearPlant
-mvn test -Dtest=NuclearPlantE2ETestSuite
+mvn test -Dtest=NuclearPlantE2ETest
 
 # Solo tests unitarios + integration + E2E de NuclearPlant
 mvn test -Dtest=NuclearPlant*
 ```
+
+**Importante: El nombre de la clase DEBE terminar en "Test"** para que Maven Surefire la detecte automáticamente.
 
 ---
 
 ## Configuración Spring + Cucumber
 
 ```java
-// En NuclearPlantSteps.java — mismo archivo que los pasos
+// En NuclearPlantSteps.java — MISMO ARCHIVO que los pasos (tanto @CucumberContextConfiguration como @Given/@When/@Then)
 @CucumberContextConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -162,33 +170,44 @@ public class NuclearPlantSteps {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Response lastResponse;  // io.restassured.response.Response
-    private Long lastCreatedId;
+    private Response response;  // io.restassured.response.Response
+    private NuclearPlant existingPlant;
     
-    @Before
+    @Before  // Cucumber hook - ejecuta antes de CADA scenario
     public void setUp() {
         RestAssured.baseURI = "http://localhost:" + port;
         RestAssured.basePath = "";
     }
     
-    // ... pasos (Given/When/Then) aquí
+    // ── GIVEN/WHEN/THEN steps aquí ──
+    @Given("there are nuclear plants in the system")
+    public void thereAreNuclearPlantsInSystem() { ... }
+    
+    @When("I send a POST request with plant name {string} and location {string}")
+    public void sendPostWithPlantData(String name, String location) { ... }
+    
+    @Then("the response status should be {int}")
+    public void checkResponseStatus(int expectedStatus) { ... }
 }
 ```
 
-**Ventajas de este patrón:**
-- ✅ Levanta el servidor en un puerto real (no simulado)
-- ✅ Toda clase Spring injectable (@Autowired)
-- ✅ Estado compartido eficiente con `@LocalServerPort` + `@Before`
+**Ventajas de este patrón (Todo en UNA clase):**
+- ✅ Levanta el servidor en un puerto real (`RANDOM_PORT`)
+- ✅ Toda clase Spring injectable (`@Autowired`)
+- ✅ Estado compartido eficiente entre steps con variables de instancia
+- ✅ `@LocalServerPort` inyecta el puerto aleatorio
 - ✅ RestAssured hace HTTP real contra servidor de test
+- ✅ `@Before` hook se ejecuta automáticamente antes de cada scenario
 
-**Nota sobre autenticación:**
-En `application-test.properties`, la seguridad está desactivada para tests (Spring detecta perfil "test"):
+**Configuración de seguridad en tests:**
+En `application-test.properties`, Spring Boot detecta perfil "test" → `SecurityConfigurer` desactiva JWT
+(ver `isTestProfile()` en SecurityConfigurer.java)
 
 ---
 
 ## Feature files (Gherkin)
 
-### `nuclearplant.feature`
+### `nuclearplant.feature` — 6 Escenarios
 
 ```gherkin
 Feature: NuclearPlant CRUD Operations
@@ -205,6 +224,7 @@ Feature: NuclearPlant CRUD Operations
     When I send a POST request with plant name "Planta Zaragoza" and location "Zaragoza"
     Then the response status should be 201
     And the response should contain the plant name "Planta Zaragoza"
+    And the response should contain the plant location "Zaragoza"
     And the new plant should be persisted in the database
 
   Scenario: Retrieve all nuclear plants
@@ -212,6 +232,7 @@ Feature: NuclearPlant CRUD Operations
     When I send a GET request to retrieve all plants
     Then the response status should be 200
     And the response should contain a list of plants
+    And each plant should have a name and location
 
   Scenario: Retrieve a specific nuclear plant by ID
     Given a nuclear plant exists with name "Planta Sevilla"
@@ -224,6 +245,7 @@ Feature: NuclearPlant CRUD Operations
     When I update the plant name to "Planta Bilbao Updated" and location to "Bilbao Updated"
     Then the response status should be 200
     And the response should contain the updated plant name "Planta Bilbao Updated"
+    And the updated plant should be persisted in the database
 
   Scenario: Delete a nuclear plant
     Given a nuclear plant exists with name "Planta Temporal"
@@ -238,18 +260,26 @@ Feature: NuclearPlant CRUD Operations
     And the response should contain validation error for name field
 ```
 
+**Cada escenario:**
+- ✅ Usa `Background:` para setup común (autenticación, servidor disponible)
+- ✅ Prueba un flujo de negocio completo (no detalles de implementación)
+- ✅ Es entendible por no-técnicos (product owners, QA)
+- ✅ Vinculado con steps en `NuclearPlantSteps.java`
+
 ---
 
 ## Step Definitions
 
-### Patrón general en `NuclearPlantSteps.java`
+### Patrón en `NuclearPlantSteps.java` (Ejemplo real del proyecto)
 
+**Estructura de la clase:**
 ```java
 @CucumberContextConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class NuclearPlantSteps {
-
+    
+    // ── AUTOWIRED BEANS ──────────────────────────────────────
     @LocalServerPort
     private int port;
 
@@ -259,23 +289,36 @@ public class NuclearPlantSteps {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Response lastResponse;
+    // ── INSTANCE STATE (compartido entre steps) ─────────────
+    private Response response;
     private NuclearPlantDTO plantDTO;
     private NuclearPlant existingPlant;
 
-    private String baseUrl() {
-        return "http://localhost:" + port;
-    }
-
-    // ── SETUP ────────────────────────────────────────────────────
-
-    @Before
+    // ── LIFECYCLE HOOKS ──────────────────────────────────────
+    @Before  // Cucumber hook: ejecuta antes de cada scenario
     public void setUp() {
-        RestAssured.baseURI = baseUrl();
+        RestAssured.baseURI = "http://localhost:" + port;
         RestAssured.basePath = "";
     }
 
-    // ── GIVEN ────────────────────────────────────────────────────
+    // ── GIVEN STEPS (Setup) ──────────────────────────────────
+    @Given("the authentication server is available")
+    public void authenticationServerAvailable() {
+        // Verificar que el servidor está corriendo
+        Response healthResponse = given()
+            .when()
+            .get("/")
+            .then()
+            .extract()
+            .response();
+        assertThat(healthResponse.getStatusCode())
+            .satisfiesAnyOf(status -> assertThat(status).isIn(200, 302, 403, 404));
+    }
+
+    @Given("I have a valid JWT token")
+    public void haveValidJwtToken() {
+        // En test profile, JWT está desactivado: este paso es un no-op
+    }
 
     @Given("there are nuclear plants in the system")
     public void thereAreNuclearPlantsInSystem() {
@@ -293,13 +336,12 @@ public class NuclearPlantSteps {
         );
     }
 
-    // ── WHEN ─────────────────────────────────────────────────────
-
+    // ── WHEN STEPS (Action) ──────────────────────────────────
     @When("I send a POST request with plant name {string} and location {string}")
     public void sendPostWithPlantData(String name, String location) {
         plantDTO = NuclearPlantTestData.createNuclearPlantDTO(null, name, location);
 
-        lastResponse = given()
+        response = given()
             .contentType("application/json")
             .body(plantDTO)
             .when()
@@ -308,41 +350,37 @@ public class NuclearPlantSteps {
 
     @When("I send a GET request to retrieve all plants")
     public void sendGetAll() {
-        lastResponse = given()
+        response = given()
             .contentType("application/json")
             .when()
             .get("/api/nuclear-plants");
     }
 
-    // ── THEN ─────────────────────────────────────────────────────
-
+    // ── THEN STEPS (Assertion) ───────────────────────────────
     @Then("the response status should be {int}")
     public void checkResponseStatus(int expectedStatus) {
-        assertThat(lastResponse.getStatusCode()).isEqualTo(expectedStatus);
+        assertThat(response.getStatusCode()).isEqualTo(expectedStatus);
     }
 
     @Then("the response should contain the plant name {string}")
     public void checkPlantNameInResponse(String expectedName) {
-        assertThat(lastResponse.jsonPath().getString("name")).isEqualTo(expectedName);
+        assertThat(response.jsonPath().getString("name")).isEqualTo(expectedName);
     }
 
     @Then("the new plant should be persisted in the database")
     public void checkPlantPersisted() {
-        Long plantId = lastResponse.jsonPath().getLong("id");
+        Long plantId = response.jsonPath().getLong("id");
         assertThat(nuclearPlantRepository.findById(plantId)).isPresent();
-    }
-
-    @Then("the response should contain a list of plants")
-    public void checkResponseIsList() {
-        assertThat(lastResponse.jsonPath().getList("$.")) .isNotEmpty();
     }
 }
 ```
 
-**Patrón key-value per step:**
-- `@Given` — prepara el estado del sistema (datos en BD)
-- `@When` — ejecuta acciones HTTP (GET, POST, PUT, DELETE)
-- `@Then` — aserta sobre respuestas y persistencia
+**Patrones clave:**
+- `@Given` — Prepara el estado del sistema (datos en BD)
+- `@When` — Ejecuta acciones HTTP reales (GET, POST, PUT, DELETE)
+- `@Then` — Aserta sobre respuestas y verifica persistencia
+- **Estado compartido** — Variables de instancia (`response`, `existingPlant`) accesibles entre todos los steps
+- **Reflection de pasos** — El nombre del método y los parámetros {string} mapean automáticamente con Gherkin
 
 ---
 
