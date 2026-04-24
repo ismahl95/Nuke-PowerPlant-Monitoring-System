@@ -180,6 +180,50 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Cucumber Java -->
+        <!-- Framework BDD para escribir tests E2E en lenguaje natural Gherkin -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>7.15.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cucumber Spring Integration -->
+        <!-- Integración de Cucumber con Spring Boot para inyectar beans en steps -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>7.15.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cucumber JUnit Platform Engine -->
+        <!-- Engine de Cucumber para ejecutar tests con JUnit Platform -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>7.15.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit Platform Suite -->
+        <!-- Suite runner para ejecutar tests de Cucumber -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- RestAssured -->
+        <!-- Cliente HTTP para tests E2E de API REST -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.4.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
