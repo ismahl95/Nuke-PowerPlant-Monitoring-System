@@ -1,4 +1,4 @@
-package com.ihl95.nuclear.e2e.steps;
+package com.ihl95.nuclear.nuclearplant.e2e.steps;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
