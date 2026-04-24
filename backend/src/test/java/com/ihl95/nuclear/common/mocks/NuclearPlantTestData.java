@@ -12,6 +12,13 @@ public class NuclearPlantTestData {
     // ── ENTIDADES ────────────────────────────────────
 
     public static NuclearPlant createNuclearPlantEntity(Long id, String name, String location) {
+        if (id == null) {
+            return NuclearPlant.builder()
+                    .name(name)
+                    .location(location)
+                    .createdBy("system")
+                    .build();
+        }
         return NuclearPlant.builder()
                 .id(id)
                 .name(name)
@@ -27,6 +34,12 @@ public class NuclearPlantTestData {
     // ── DTOs ─────────────────────────────────────────
 
     public static NuclearPlantDTO createNuclearPlantDTO(Long id, String name, String location) {
+        if (id == null) {
+            return NuclearPlantDTO.builder()
+                    .name(name)
+                    .location(location)
+                    .build();
+        }
         return NuclearPlantDTO.builder()
                 .id(id)
                 .name(name)
