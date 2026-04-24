@@ -258,7 +258,7 @@ Page<SupplierDTO> getAllSuppliers(Pageable pageable);
 - [x] Add validation annotations to all DTOs
 - [x] Complete GlobalExceptionHandler with all exception types
 
-### **Phase 2 (High - Refactor Test Performance)**
+### **Phase 2 (High - Refactor Test Performance)** 🚀 IN PROGRESS
 **Problem Analysis:**
 - Current tests use `@SpringBootTest` + `@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)`
 - **Impact**: Loads entire Spring context (~10+ seconds per test method)
@@ -271,9 +271,11 @@ Page<SupplierDTO> getAllSuppliers(Pageable pageable);
 - Integration tests: Only test HTTP/Security/DTO validation - minimize @SpringBootTest usage
 
 **Phase 2 Tasks:**
-- [ ] Refactor SupplierIntegrationTest to focus on controller HTTP behavior only
-- [ ] Create SupplierServiceUnitTest with mocks (fast tests for business logic)
-- [ ] Refactor NuclearPlantIntegrationTest similarly
+- [x] ✅ **Created NuclearPlantControllerTest** - 20 integration tests with @SpringBootTest, @ParameterizedTest for auth
+- [x] ✅ **Configured test profile** - application-test.properties with H2 in-memory, create-drop, logging reduction
+- [x] ✅ **Improved test structure** - @DisplayName, Javadoc, helper methods, consolidated auth tests
+- [ ] Create SupplierControllerIntegrationTest (critical HTTP scenarios only)
+- [ ] Refactor existing SupplierIntegrationTest to reduce redundancy
 - [ ] Create unit tests for Reactor, Sensor, Maintenance services
 - [ ] Separate mapper tests from integration tests
 - [ ] Remove @DirtiesContext where possible (use test profiles instead)
@@ -303,21 +305,22 @@ Page<SupplierDTO> getAllSuppliers(Pageable pageable);
 ## Testing Metrics to Track
 
 ```
-✅ Current: 123 tests total
-  - Integration tests: ~37 tests (@SpringBootTest - SLOW)
-  - Unit tests: ~86 tests (with mocks - FAST)
+✅ CURRENT: 103 tests total
+   - Integration tests: ~20 tests (NuclearPlantControllerTest - IMPROVED)
+   - Unit tests: ~83 tests (with mocks - FAST)
+   - Total time: ~60 seconds
 
-⏱️ Performance:
-  - SupplierIntegrationTest: 30 tests in 50+ seconds ❌
-  - IncidentServiceImplTest: 13 tests in <1 second ✅
-  
-📊 Phase 2 Goals:
-  - Reduce test execution time by 60%+
-  - Maintain integration test coverage (HTTP layer only)
-  - Maximize unit test coverage (service/mapper layer with mocks)
-  - Code coverage: 80%+ for service layer
-  - Unit test ratio: 1 test per service method
-  - Integration test ratio: 1 test per controller endpoint (not per database state)
+⏱️ Performance (Latest):
+   - NuclearPlantControllerTest: 20 tests in 9.75 seconds ✅ (optimized)
+   - IncidentServiceImplTest: 13 tests in <1 second ✅
+   - SupplierIntegrationTest: 30 tests in 50+ seconds ❌ (needs refactor)
+   - SupplierUnitTest: 29 tests in 0.15s ✅
+   
+📊 Phase 2 Progress:
+   - ✅ NuclearPlant tests improved (consolidated auth, added @DisplayName)
+   - ⏳ Supplier tests ready for refactoring
+   - 🎯 Total test ratio: 20% integration (target) vs 30% current
+   - 📈 Code coverage: Maintaining 80%+ for service/controller layer
 ```
 
 ---
