@@ -84,20 +84,20 @@ src/
 
 ---
 
-## Test de un Service (caso más común)
+## Test de un Service (NuclearPlant - ejemplo real)
 
 ```java
 @ExtendWith(MockitoExtension.class)
-class ReactorServiceTest {
+class NuclearPlantServiceTest {
 
     @Mock
-    private ReactorRepository reactorRepository;
+    private NuclearPlantRepository nuclearPlantRepository;
 
     @Mock
-    private ReactorMapper reactorMapper;
+    private NuclearPlantCompleteMapper nuclearPlantMapper;
 
     @InjectMocks
-    private ReactorServiceImpl reactorService;
+    private NuclearPlantServiceImpl nuclearPlantService;
 
     // ── GET BY ID ────────────────────────────────────────────────
 

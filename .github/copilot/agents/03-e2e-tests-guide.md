@@ -5,12 +5,10 @@
 
 ## Dependencias necesarias
 
-Estas dependencias **NO están en tu `pom.xml` actual**. Añádelas según el tipo de E2E que necesites.
-
-### Opción A: E2E de API REST con Cucumber (recomendado para backend)
+✅ **Ya incluidas en tu pom.xml**. Verificadas en proyecto actual.
 
 ```xml
-<!-- Cucumber JUnit Platform -->
+<!-- Cucumber JUnit Platform — OK en pom.xml -->
 <dependency>
     <groupId>io.cucumber</groupId>
     <artifactId>cucumber-java</artifactId>
@@ -35,7 +33,7 @@ Estas dependencias **NO están en tu `pom.xml` actual**. Añádelas según el ti
     <scope>test</scope>
 </dependency>
 
-<!-- RestAssured — cliente HTTP para E2E de API -->
+<!-- RestAssured — OK en pom.xml -->
 <dependency>
     <groupId>io.rest-assured</groupId>
     <artifactId>rest-assured</artifactId>
@@ -44,7 +42,6 @@ Estas dependencias **NO están en tu `pom.xml` actual**. Añádelas según el ti
 </dependency>
 ```
 
-### Opción B: E2E con interfaz web (si hay frontend)
 
 ```xml
 <!-- Selenium WebDriver (solo si tienes UI web) -->
@@ -102,19 +99,23 @@ exactamente como lo haría un usuario o cliente real de la API.
 ```
 src/
 └── test/
-    ├── java/com/ihl95/nukepowerplant/
+    ├── java/com/ihl95/nuclear/
     │   ├── e2e/
-    │   │   ├── CucumberE2ERunner.java         ← Runner de Cucumber
+    │   │   ├── NuclearPlantE2ETestSuite.java      ← Runner de Cucumber
     │   │   ├── steps/
-    │   │   │   ├── AuthSteps.java             ← Pasos de autenticación
-    │   │   │   └── ReactorSteps.java          ← Pasos del dominio
-    │   │   └── config/
-    │   │       └── CucumberSpringConfig.java  ← Configuración Spring + Cucumber
+    │   │   │   └── NuclearPlantSteps.java         ← Pasos del dominio (6 escenarios)
+    │   │   └── README.md                          ← Documentación de E2E
+    │   ├── common/mocks/
+    │   │   └── NuclearPlantTestData.java          ← Factories compartidas
+    │   └── reactor/ (similar)
     └── resources/
         └── features/
-            ├── auth.feature                   ← Escenarios de login/JWT
-            └── reactor_crud.feature           ← Escenarios CRUD
+            ├── nuclearplant.feature               ← 6 escenarios CRUD
+            └── reactor.feature
 ```
+
+**Nota**: El patrón es un archivo `.feature` por agregado de dominio con todos sus escenarios.
+Cada step definition comparte estado a través de `@CucumberContextConfiguration` + `@ScenarioScope`.
 
 ---
 
@@ -124,23 +125,21 @@ src/
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
-@ConfigurationParameters({
-    @ConfigurationParameter(
-        key = GLUE_PROPERTY_NAME,
-        value = "com.ihl95.nukepowerplant.e2e"
-    ),
-    @ConfigurationParameter(
-        key = PLUGIN_PROPERTY_NAME,
-        value = "pretty, html:target/cucumber-reports/report.html"
-    ),
-    @ConfigurationParameter(
-        key = FILTER_TAGS_PROPERTY_NAME,
-        value = "not @skip"
-    )
-})
-public class CucumberE2ERunner {
-    // Solo configuración
+@ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME, value = "com.ihl95.nuclear.e2e.steps")
+@ConfigurationParameter(key = Constants.FEATURES_PROPERTY_NAME, value = "src/test/resources/features")
+@ConfigurationParameter(key = Constants.PLUGIN_PROPERTY_NAME, value = "progress,html:target/cucumber-report.html")
+public class NuclearPlantE2ETestSuite {
+    // Suite configuration for running Cucumber features with Gherkin syntax
 }
+```
+
+**Cómo ejecutar:**
+```bash
+# Todos los tests E2E de NuclearPlant
+mvn test -Dtest=NuclearPlantE2ETestSuite
+
+# Solo tests unitarios + integration + E2E de NuclearPlant
+mvn test -Dtest=NuclearPlant*
 ```
 
 ---
@@ -148,300 +147,202 @@ public class CucumberE2ERunner {
 ## Configuración Spring + Cucumber
 
 ```java
+// En NuclearPlantSteps.java — mismo archivo que los pasos
 @CucumberContextConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class CucumberSpringConfig {
-    // Levanta Spring Boot en un puerto aleatorio real
-    // Los steps pueden @Autowired cualquier bean
+public class NuclearPlantSteps {
+    
+    @LocalServerPort
+    private int port;
+
+    @Autowired
+    private NuclearPlantRepository nuclearPlantRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private Response lastResponse;  // io.restassured.response.Response
+    private Long lastCreatedId;
+    
+    @Before
+    public void setUp() {
+        RestAssured.baseURI = "http://localhost:" + port;
+        RestAssured.basePath = "";
+    }
+    
+    // ... pasos (Given/When/Then) aquí
 }
 ```
+
+**Ventajas de este patrón:**
+- ✅ Levanta el servidor en un puerto real (no simulado)
+- ✅ Toda clase Spring injectable (@Autowired)
+- ✅ Estado compartido eficiente con `@LocalServerPort` + `@Before`
+- ✅ RestAssured hace HTTP real contra servidor de test
+
+**Nota sobre autenticación:**
+En `application-test.properties`, la seguridad está desactivada para tests (Spring detecta perfil "test"):
 
 ---
 
 ## Feature files (Gherkin)
 
-### `auth.feature`
+### `nuclearplant.feature`
 
 ```gherkin
-# language: es
-Feature: Autenticación con JWT
-
-  Scenario: Login exitoso con credenciales válidas
-    Given el usuario "admin" con contraseña "admin123" existe en el sistema
-    When envío POST a "/api/auth/login" con:
-      """
-      { "username": "admin", "password": "admin123" }
-      """
-    Then el status de respuesta es 200
-    And la respuesta contiene un campo "token" no vacío
-
-  Scenario: Login fallido con contraseña incorrecta
-    Given el usuario "admin" con contraseña "admin123" existe en el sistema
-    When envío POST a "/api/auth/login" con:
-      """
-      { "username": "admin", "password": "wrongpassword" }
-      """
-    Then el status de respuesta es 401
-```
-
----
-
-### `reactor_crud.feature`
-
-```gherkin
-# language: es
-Feature: Gestión CRUD de Reactores
+Feature: NuclearPlant CRUD Operations
+  As a system administrator
+  I want to manage nuclear power plants
+  So that I can keep track of multiple nuclear facilities
 
   Background:
-    Given estoy autenticado como "ADMIN"
+    Given the authentication server is available
+    And I have a valid JWT token
 
-  Scenario: Listar todos los reactores
-    Given existe un reactor con nombre "Reactor-A" y potencia 1200
-    When envío GET a "/api/reactors"
-    Then el status de respuesta es 200
-    And la respuesta es una lista con al menos 1 elemento
+  Scenario: Create a new nuclear plant
+    Given I want to create a new nuclear plant
+    When I send a POST request with plant name "Planta Zaragoza" and location "Zaragoza"
+    Then the response status should be 201
+    And the response should contain the plant name "Planta Zaragoza"
+    And the new plant should be persisted in the database
 
-  Scenario: Obtener un reactor por ID existente
-    Given existe un reactor con nombre "Reactor-B" y potencia 800
-    When envío GET al reactor recién creado
-    Then el status de respuesta es 200
-    And el campo "name" tiene el valor "Reactor-B"
-    And el campo "power" tiene el valor 800
+  Scenario: Retrieve all nuclear plants
+    Given there are nuclear plants in the system
+    When I send a GET request to retrieve all plants
+    Then the response status should be 200
+    And the response should contain a list of plants
 
-  Scenario: Obtener un reactor con ID inexistente
-    When envío GET a "/api/reactors/9999"
-    Then el status de respuesta es 404
+  Scenario: Retrieve a specific nuclear plant by ID
+    Given a nuclear plant exists with name "Planta Sevilla"
+    When I send a GET request for the plant by ID
+    Then the response status should be 200
+    And the response should contain the plant name "Planta Sevilla"
 
-  Scenario: Crear un reactor válido
-    When envío POST a "/api/reactors" con:
-      """
-      { "name": "Reactor-Nuevo", "power": 600, "status": "INACTIVE" }
-      """
-    Then el status de respuesta es 201
-    And el campo "id" existe en la respuesta
-    And el campo "name" tiene el valor "Reactor-Nuevo"
+  Scenario: Update an existing nuclear plant
+    Given a nuclear plant exists with name "Planta Bilbao"
+    When I update the plant name to "Planta Bilbao Updated" and location to "Bilbao Updated"
+    Then the response status should be 200
+    And the response should contain the updated plant name "Planta Bilbao Updated"
 
-  Scenario Outline: Crear reactor con datos inválidos
-    When envío POST a "/api/reactors" con:
-      """
-      { "name": "<name>", "power": <power>, "status": "<status>" }
-      """
-    Then el status de respuesta es 400
+  Scenario: Delete a nuclear plant
+    Given a nuclear plant exists with name "Planta Temporal"
+    When I send a DELETE request for the plant
+    Then the response status should be 204
+    And the plant should be removed from the database
 
-    Examples:
-      | name         | power | status   |
-      |              | 600   | INACTIVE |
-      | Reactor-Test | -100  | INACTIVE |
-      | Reactor-Test | 600   |          |
-
-  Scenario: Actualizar un reactor existente
-    Given existe un reactor con nombre "Reactor-Viejo" y potencia 500
-    When envío PUT al reactor recién creado con:
-      """
-      { "name": "Reactor-Actualizado", "power": 900, "status": "ACTIVE" }
-      """
-    Then el status de respuesta es 200
-    And el campo "name" tiene el valor "Reactor-Actualizado"
-
-  Scenario: Eliminar un reactor existente
-    Given existe un reactor con nombre "Reactor-A-Borrar" y potencia 300
-    When envío DELETE al reactor recién creado
-    Then el status de respuesta es 204
-    And el reactor ya no existe en la base de datos
-
-  @skip
-  Scenario: Escenario pendiente de implementar
-    Given alguna condición futura
-    When ocurre algo
-    Then debería pasar algo
+  Scenario: Reject creation with missing name
+    Given I want to create a new nuclear plant
+    When I send a POST request with missing name and location "Madrid"
+    Then the response status should be 400
+    And the response should contain validation error for name field
 ```
 
 ---
 
 ## Step Definitions
 
-### `CucumberSpringConfig.java` (contexto compartido)
+### Patrón general en `NuclearPlantSteps.java`
 
 ```java
-// Clase de estado compartido entre steps
-@Component
-@ScenarioScope
-public class ScenarioContext {
-    public String authToken;
-    public Long lastCreatedId;
-    public Response lastResponse; // io.restassured.response.Response
-}
-```
+@CucumberContextConfiguration
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+public class NuclearPlantSteps {
 
----
-
-### `AuthSteps.java`
-
-```java
-@Component
-public class AuthSteps {
-
-    @Autowired
-    private ScenarioContext ctx;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Value("${local.server.port}")
+    @LocalServerPort
     private int port;
 
-    @Given("el usuario {string} con contraseña {string} existe en el sistema")
-    public void userExists(String username, String password) {
-        userRepository.save(User.builder()
-            .username(username)
-            .password(passwordEncoder.encode(password))
-            .role("ROLE_ADMIN")
-            .build());
-    }
-
-    @Given("estoy autenticado como {string}")
-    public void authenticatedAs(String role) {
-        // Crea usuario y hace login para obtener token real
-        String username = role.toLowerCase() + "_test";
-        String password = "password123";
-
-        userRepository.save(User.builder()
-            .username(username)
-            .password(passwordEncoder.encode(password))
-            .role("ROLE_" + role)
-            .build());
-
-        Response response = RestAssured
-            .given().contentType("application/json")
-            .body(Map.of("username", username, "password", password))
-            .when().post("http://localhost:" + port + "/api/auth/login");
-
-        ctx.authToken = response.jsonPath().getString("token");
-    }
-}
-```
-
----
-
-### `ReactorSteps.java`
-
-```java
-@Component
-public class ReactorSteps {
+    @Autowired
+    private NuclearPlantRepository nuclearPlantRepository;
 
     @Autowired
-    private ScenarioContext ctx;
+    private ObjectMapper objectMapper;
 
-    @Autowired
-    private ReactorRepository reactorRepository;
-
-    @Value("${local.server.port}")
-    private int port;
+    private Response lastResponse;
+    private NuclearPlantDTO plantDTO;
+    private NuclearPlant existingPlant;
 
     private String baseUrl() {
         return "http://localhost:" + port;
     }
 
+    // ── SETUP ────────────────────────────────────────────────────
+
+    @Before
+    public void setUp() {
+        RestAssured.baseURI = baseUrl();
+        RestAssured.basePath = "";
+    }
+
     // ── GIVEN ────────────────────────────────────────────────────
 
-    @Given("existe un reactor con nombre {string} y potencia {int}")
-    public void reactorExists(String name, int power) {
-        Reactor saved = reactorRepository.save(
-            Reactor.builder().name(name).power(power).status(ReactorStatus.ACTIVE).build()
+    @Given("there are nuclear plants in the system")
+    public void thereAreNuclearPlantsInSystem() {
+        if (nuclearPlantRepository.findAll().isEmpty()) {
+            nuclearPlantRepository.save(
+                NuclearPlantTestData.createNuclearPlantEntity(null, "Planta Test", "Location Test")
+            );
+        }
+    }
+
+    @Given("a nuclear plant exists with name {string}")
+    public void aPlantExistsWithName(String name) {
+        existingPlant = nuclearPlantRepository.save(
+            NuclearPlantTestData.createNuclearPlantEntity(null, name, "Test Location")
         );
-        ctx.lastCreatedId = saved.getId();
     }
 
     // ── WHEN ─────────────────────────────────────────────────────
 
-    @When("envío GET a {string}")
-    public void sendGet(String path) {
-        ctx.lastResponse = RestAssured
-            .given()
-            .header("Authorization", "Bearer " + ctx.authToken)
-            .when().get(baseUrl() + path);
-    }
+    @When("I send a POST request with plant name {string} and location {string}")
+    public void sendPostWithPlantData(String name, String location) {
+        plantDTO = NuclearPlantTestData.createNuclearPlantDTO(null, name, location);
 
-    @When("envío GET al reactor recién creado")
-    public void sendGetLastCreated() {
-        sendGet("/api/reactors/" + ctx.lastCreatedId);
-    }
-
-    @When("envío POST a {string} con:")
-    public void sendPost(String path, String body) {
-        ctx.lastResponse = RestAssured
-            .given()
-            .header("Authorization", "Bearer " + ctx.authToken)
+        lastResponse = given()
             .contentType("application/json")
-            .body(body)
-            .when().post(baseUrl() + path);
-        
-        // Guardar ID si la respuesta fue exitosa
-        if (ctx.lastResponse.statusCode() == 201) {
-            ctx.lastCreatedId = ctx.lastResponse.jsonPath().getLong("id");
-        }
+            .body(plantDTO)
+            .when()
+            .post("/api/nuclear-plants");
     }
 
-    @When("envío PUT al reactor recién creado con:")
-    public void sendPutLastCreated(String body) {
-        ctx.lastResponse = RestAssured
-            .given()
-            .header("Authorization", "Bearer " + ctx.authToken)
+    @When("I send a GET request to retrieve all plants")
+    public void sendGetAll() {
+        lastResponse = given()
             .contentType("application/json")
-            .body(body)
-            .when().put(baseUrl() + "/api/reactors/" + ctx.lastCreatedId);
-    }
-
-    @When("envío DELETE al reactor recién creado")
-    public void sendDeleteLastCreated() {
-        ctx.lastResponse = RestAssured
-            .given()
-            .header("Authorization", "Bearer " + ctx.authToken)
-            .when().delete(baseUrl() + "/api/reactors/" + ctx.lastCreatedId);
+            .when()
+            .get("/api/nuclear-plants");
     }
 
     // ── THEN ─────────────────────────────────────────────────────
 
-    @Then("el status de respuesta es {int}")
-    public void checkStatus(int status) {
-        assertThat(ctx.lastResponse.statusCode()).isEqualTo(status);
+    @Then("the response status should be {int}")
+    public void checkResponseStatus(int expectedStatus) {
+        assertThat(lastResponse.getStatusCode()).isEqualTo(expectedStatus);
     }
 
-    @Then("el campo {string} tiene el valor {string}")
-    public void checkFieldString(String field, String value) {
-        assertThat(ctx.lastResponse.jsonPath().getString(field)).isEqualTo(value);
+    @Then("the response should contain the plant name {string}")
+    public void checkPlantNameInResponse(String expectedName) {
+        assertThat(lastResponse.jsonPath().getString("name")).isEqualTo(expectedName);
     }
 
-    @Then("el campo {string} tiene el valor {int}")
-    public void checkFieldInt(String field, int value) {
-        assertThat(ctx.lastResponse.jsonPath().getInt(field)).isEqualTo(value);
+    @Then("the new plant should be persisted in the database")
+    public void checkPlantPersisted() {
+        Long plantId = lastResponse.jsonPath().getLong("id");
+        assertThat(nuclearPlantRepository.findById(plantId)).isPresent();
     }
 
-    @Then("el campo {string} existe en la respuesta")
-    public void checkFieldExists(String field) {
-        assertThat(ctx.lastResponse.jsonPath().get(field)).isNotNull();
-    }
-
-    @Then("la respuesta es una lista con al menos {int} elemento")
-    public void checkListSize(int minSize) {
-        assertThat(ctx.lastResponse.jsonPath().getList("$")).hasSizeGreaterThanOrEqualTo(minSize);
-    }
-
-    @Then("la respuesta contiene un campo {string} no vacío")
-    public void checkFieldNotEmpty(String field) {
-        assertThat(ctx.lastResponse.jsonPath().getString(field)).isNotBlank();
-    }
-
-    @Then("el reactor ya no existe en la base de datos")
-    public void checkReactorDeleted() {
-        assertThat(reactorRepository.findById(ctx.lastCreatedId)).isEmpty();
+    @Then("the response should contain a list of plants")
+    public void checkResponseIsList() {
+        assertThat(lastResponse.jsonPath().getList("$.")) .isNotEmpty();
     }
 }
 ```
+
+**Patrón key-value per step:**
+- `@Given` — prepara el estado del sistema (datos en BD)
+- `@When` — ejecuta acciones HTTP (GET, POST, PUT, DELETE)
+- `@Then` — aserta sobre respuestas y persistencia
 
 ---
 

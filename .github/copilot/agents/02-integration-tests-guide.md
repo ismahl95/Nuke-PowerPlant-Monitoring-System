@@ -90,9 +90,13 @@ src/
 ├── main/resources/
 │   └── application.properties           ← configuración de producción
 └── test/
-    ├── java/com/ihl95/nukepowerplant/
-    │   └── controller/
-    │       └── ReactorControllerIntegrationTest.java
+    ├── java/com/ihl95/nuclear/
+    │   ├── nuclearplant/
+    │   │   └── controller/
+    │   │       └── NuclearPlantControllerIntegrationTest.java  (11 tests)
+    │   ├── reactor/ (similar)
+    │   └── common/mocks/
+    │       └── NuclearPlantTestData.java ← Factories reutilizables
     └── resources/
         └── application-test.properties  ← configuración de test con H2
 ```
@@ -140,7 +144,7 @@ jwt.expiration=86400000
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
-class ReactorControllerIntegrationTest {
+class NuclearPlantControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -149,23 +153,53 @@ class ReactorControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ReactorRepository reactorRepository;
+    private NuclearPlantRepository nuclearPlantRepository;
 
-    private Reactor existingReactor;
+    private NuclearPlant existingPlant;
 
     @BeforeEach
     void setUp() {
         // Estado conocido y limpio antes de cada test
-        existingReactor = reactorRepository.save(
-            Reactor.builder()
-                .name("Reactor-A")
-                .power(1200)
-                .status(ReactorStatus.ACTIVE)
-                .build()
+        existingPlant = nuclearPlantRepository.save(
+            NuclearPlantTestData.createNuclearPlantEntity(null, "Planta Central", "Madrid")
         );
     }
 }
 ```
+
+---
+
+## Desactivar autenticación en tests (patrón del proyecto)
+
+En `SecurityConfigurer.java`, detectamos el perfil "test" para permitir acceso sin JWT:
+
+```java
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    boolean isTestProfile = isTestProfile();
+    
+    http.csrf().disable();
+    
+    if (isTestProfile) {
+        // Test mode: allow all requests without authentication
+        http.authorizeRequests().anyRequest().permitAll();
+    } else {
+        // Production mode: require JWT authentication
+        http.authorizeRequests()
+            .antMatchers("/api/auth/authenticate").permitAll()
+            .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+    
+    return http.build();
+}
+```
+
+Esto permite que los tests de integración y E2E corran sin complicaciones de JWT.
 
 ---
 
