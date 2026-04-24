@@ -258,29 +258,65 @@ Page<SupplierDTO> getAllSuppliers(Pageable pageable);
 - [x] Add validation annotations to all DTOs
 - [x] Complete GlobalExceptionHandler with all exception types
 
-### **Phase 2 (High - Refactor Test Performance)** 🚀 IN PROGRESS
-**Problem Analysis:**
-- Current tests use `@SpringBootTest` + `@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)`
-- **Impact**: Loads entire Spring context (~10+ seconds per test method)
-- **Result**: SupplierIntegrationTest (30 tests) takes 50+ seconds
-- **Root cause**: Tests mix integration tests (HTTP layer) with unit tests (service layer)
+### **Phase 2 (Critical - 3-Layer Test Architecture)** 🚀 IN PROGRESS
+**Objective:** Implement 3-layer testing pyramid with proper separation of concerns
 
-**Solution Pattern** (from IncidentServiceImplTest):
-- Separate concerns: Unit tests (fast, with mocks) vs Integration tests (slow, with real context)
-- Unit tests: `@ExtendWith(MockitoExtension.class)` - NO Spring context
-- Integration tests: Only test HTTP/Security/DTO validation - minimize @SpringBootTest usage
+**Architecture:**
+```
+Layer 1: UNITARIOS    → JUnit 5 + Mockito          (⚡ rápidos, millisegundos)
+Layer 2: INTEGRACIÓN  → JUnit 5 + @SpringBootTest  (🐢 lentos, segundos)
+Layer 3: E2E          → Cucumber + RestAssured     (🚗 muy lentos, flujos negocio)
+```
 
-**Phase 2 Tasks:**
-- [x] ✅ **Created NuclearPlantControllerTest** - 20 integration tests with @SpringBootTest, @ParameterizedTest for auth
-- [x] ✅ **Configured test profile** - application-test.properties with H2 in-memory, create-drop, logging reduction
-- [x] ✅ **Improved test structure** - @DisplayName, Javadoc, helper methods, consolidated auth tests
-- [ ] Create SupplierControllerIntegrationTest (critical HTTP scenarios only)
-- [ ] Refactor existing SupplierIntegrationTest to reduce redundancy
-- [ ] Create unit tests for Reactor, Sensor, Maintenance services
-- [ ] Separate mapper tests from integration tests
-- [ ] Remove @DirtiesContext where possible (use test profiles instead)
+**Shared Test Data:** `src/test/java/com/ihl95/nuclear/common/mocks/` (100% reutilizable)
 
-**Expected improvement:** 50+ seconds → ~10 seconds per test class
+#### Phase 2a: Refactor Existing Tests (IN PROGRESS)
+
+**Completed:**
+- [x] ✅ Created `/common/mocks/` structure with reutilizable data
+- [x] ✅ `NuclearPlantTestData.java` - entity + DTO factories + constants
+- [x] ✅ `SupplierTestData.java` - entity + DTO factories + constants
+- [x] ✅ `SecurityTestData.java` - users, credentials, JWT tokens
+- [x] ✅ Documented mocks usage in README
+
+**Next Steps by Module:**
+- [ ] **NuclearPlant Module** (NEXT)
+  - [ ] Unit tests: NuclearPlantService (Mockito)
+  - [ ] Unit tests: NuclearPlantMapper (MapStruct validation)
+  - [ ] Integration tests: NuclearPlantController → fewer, HTTP-focused tests only
+  - [ ] E2E tests (Cucumber): `features/nuclearplant.feature` + Steps
+  
+- [ ] **Supplier Module**
+  - [ ] Unit tests: SupplierService (Mockito)
+  - [ ] Unit tests: SupplierMapper
+  - [ ] Integration tests: SupplierController (refactor from current 30 → 8 tests)
+  - [ ] E2E tests (Cucumber): `features/supplier.feature` + Steps
+
+- [ ] **Reactor Module**
+  - [ ] Create ReactorTestData.java
+  - [ ] Unit tests: ReactorService
+  - [ ] Unit tests: ReactorMapper
+  - [ ] Integration tests: ReactorController (if exists, else create)
+  - [ ] E2E tests: `features/reactor.feature` + Steps
+
+- [ ] **Sensor Module**
+  - [ ] Create SensorTestData.java
+  - [ ] Unit tests: SensorService
+  - [ ] Integration tests: SensorController
+  - [ ] E2E tests: `features/sensor.feature` + Steps
+
+- [ ] **Other Modules** (Anomaly, Incident, Equipment, Maintenance, etc.)
+  - [ ] Follow same pattern: TestData → Unit → Integration → E2E
+
+#### Phase 2b: Dependencies Update (PENDING)
+- [ ] Add Cucumber + RestAssured to pom.xml
+- [ ] Configure cucumber-spring integration
+- [ ] Remove obsolete dependencies (if any)
+
+**Expected Improvement:**
+- Current: ~60 seconds (103 tests)
+- Target: ~15 seconds (150+ tests with better coverage)
+- Ratio: 80% unit (fast) + 15% integration (medium) + 5% E2E (documented)
 
 ### **Phase 3 (High - Week 2-3)**
 - [ ] Add unit tests for Reactor, Sensor, Maintenance modules
@@ -305,22 +341,52 @@ Page<SupplierDTO> getAllSuppliers(Pageable pageable);
 ## Testing Metrics to Track
 
 ```
-✅ CURRENT: 103 tests total
-   - Integration tests: ~20 tests (NuclearPlantControllerTest - IMPROVED)
-   - Unit tests: ~83 tests (with mocks - FAST)
-   - Total time: ~60 seconds
+📊 PHASE 2 GOAL: 3-Layer Testing Pyramid
 
-⏱️ Performance (Latest):
-   - NuclearPlantControllerTest: 20 tests in 9.75 seconds ✅ (optimized)
-   - IncidentServiceImplTest: 13 tests in <1 second ✅
-   - SupplierIntegrationTest: 30 tests in 50+ seconds ❌ (needs refactor)
-   - SupplierUnitTest: 29 tests in 0.15s ✅
+LAYER 1 — UNITARIOS (80% of tests)
+├── Service layer: Mockito@ExtendWith → milliseconds
+├── Mapper layer: MapStruct validation → milliseconds
+├── Utility layer: Pure logic → milliseconds
+├── Repository queries: @DataJpaTest (optional) → seconds
+└── Goal: 1 test per method + edge cases
+
+LAYER 2 — INTEGRACIÓN (15% of tests)
+├── Controller endpoints: @SpringBootTest → seconds
+├── Security/JWT validation: @WithMockUser → seconds
+├── Request/Response serialization: ObjectMapper → seconds
+├── HTTP status codes validation → seconds
+└── Goal: 1 test per endpoint (happy path + 1-2 error cases)
+
+LAYER 3 — E2E (5% of tests)
+├── Cucumber feature files: Gherkin → seconds-minutes
+├── Full business workflows: RestAssured → seconds-minutes
+├── Data persistence verification → seconds-minutes
+└── Goal: 1 feature per module + critical business flows
+
+📈 Current Status:
+   [103 tests] → [250+ tests planned]
+   Unit: ~83 (80%)
+   Integration: ~20 (15%)
+   E2E: ~0 (0%)
    
-📊 Phase 2 Progress:
-   - ✅ NuclearPlant tests improved (consolidated auth, added @DisplayName)
-   - ⏳ Supplier tests ready for refactoring
-   - 🎯 Total test ratio: 20% integration (target) vs 30% current
-   - 📈 Code coverage: Maintaining 80%+ for service/controller layer
+⏱️ Time Projection:
+   Unitarios: 250 × 0.02s = 5 seconds
+   Integración: 40 × 0.5s = 20 seconds
+   E2E: 5 × 3s = 15 seconds
+   ────────────────────
+   TOTAL: ~40 seconds (vs 60 current)
+
+✅ Completed:
+   - Mocks structure with 3 TestData classes
+   - NuclearPlantControllerTest (20 integration)
+   - Configuration for @ExtendWith + @SpringBootTest
+
+⏳ Next:
+   - Delete all existing tests
+   - Add Cucumber + RestAssured dependencies
+   - Create NuclearPlantServiceTest (unit, ~15 tests)
+   - Create SupplierControllerIntegrationTest (refactored, ~8 tests)
+   - Create first Cucumber feature + steps
 ```
 
 ---

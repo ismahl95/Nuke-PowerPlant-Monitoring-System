@@ -1,4 +1,17 @@
-# PHASE 2: Test Performance Refactoring - Detailed Analysis
+# PHASE 2: 3-Layer Testing Architecture Refactor
+
+## Overview
+
+Transitioning from mixed test strategy to clear 3-layer pyramid:
+- **Layer 1**: Unit tests (Mockito) — 80% of tests, milliseconds
+- **Layer 2**: Integration tests (@SpringBootTest) — 15% of tests, seconds
+- **Layer 3**: E2E tests (Cucumber) — 5% of tests, business documentation
+
+All layers share reutilizable test data in `/common/mocks/`
+
+---
+
+## Test Data Reusability Strategy
 
 ## Current Test Architecture
 
