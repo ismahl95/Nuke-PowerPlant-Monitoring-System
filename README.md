@@ -1,5 +1,25 @@
 # Nuke PowerPlant Monitoring System
 
+> Enterprise-grade Spring Boot backend for real-time nuclear power plant monitoring with modern design patterns and comprehensive testing architecture.
+
+---
+
+## 📚 Documentation Hub
+
+**Complete technical documentation is organized in [`docs/`](docs/README.md):**
+
+- 🏗️ **[Architecture](docs/architecture/)** — Modern tech stack, enterprise design, scalability roadmap
+- 🎯 **[Design Patterns](docs/patterns/)** — 10 patterns implementation roadmap (Factory → Strategy → State → Observer → ...)
+- 📊 **[Project Status](docs/project/)** — Testing phases, progress tracking, completion reports
+- 👨‍💻 **[Development Guides](docs/guides/)** — Team conventions, AI agent guides for testing & patterns
+
+**Quick Links:**
+- 🚀 **[Getting Started](docs/patterns/DESIGN_PATTERNS_QUICK_REFERENCE.md)** — 30-minute quick start for implementation
+- 📋 **[Architecture Overview](docs/architecture/MODERN_ARCHITECTURE.md)** — Enterprise design showcase
+- 🎯 **[Design Patterns Roadmap](docs/patterns/DESIGN_PATTERNS_ROADMAP.md)** — Strategic plan with 10 patterns
+
+---
+
 ## Descripción del Proyecto
 
 Nuke PowerPlant Monitoring System es una aplicación diseñada para la **monitorización nacional** de plantas nucleares. El sistema centraliza la gestión de datos críticos, el seguimiento de los sistemas de control, y el mantenimiento de las plantas nucleares, proporcionando una visión integral del estado operativo de los reactores y sus componentes.
