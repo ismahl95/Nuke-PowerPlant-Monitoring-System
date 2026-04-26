@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,12 +19,14 @@ import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantException;
 import com.ihl95.nuclear.nuclearplant.application.mapper.NuclearPlantCompleteMapper;
 import com.ihl95.nuclear.nuclearplant.application.service.NuclearPlantServiceImpl;
+import com.ihl95.nuclear.nuclearplant.application.observer.NuclearPlantObserver;
 import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
 import com.ihl95.nuclear.nuclearplant.infraestructure.NuclearPlantRepository;
 
 /**
  * Unit tests for NuclearPlantServiceImpl using Mockito.
  * Tests business logic in isolation without Spring context.
+ * Note: Uses empty observer list for isolation testing.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("NuclearPlantService Unit Tests")
@@ -37,7 +38,6 @@ class NuclearPlantServiceTest {
     @Mock
     private NuclearPlantCompleteMapper nuclearPlantMapper;
 
-    @InjectMocks
     private NuclearPlantServiceImpl nuclearPlantService;
 
     private NuclearPlant existingPlant;
@@ -45,6 +45,12 @@ class NuclearPlantServiceTest {
 
     @BeforeEach
     void setUp() {
+        // Create service manually with empty observer list for unit test isolation
+        nuclearPlantService = new NuclearPlantServiceImpl(
+            nuclearPlantRepository,
+            nuclearPlantMapper,
+            List.of() // Empty observers for unit tests
+        );
         existingPlant = NuclearPlantTestData.createNuclearPlantEntity();
         plantDTO = NuclearPlantTestData.createNuclearPlantDTO();
     }

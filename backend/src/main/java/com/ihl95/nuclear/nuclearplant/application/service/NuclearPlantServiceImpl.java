@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantException;
 import com.ihl95.nuclear.nuclearplant.application.mapper.NuclearPlantCompleteMapper;
+import com.ihl95.nuclear.nuclearplant.application.observer.NuclearPlantObserver;
 import com.ihl95.nuclear.nuclearplant.infraestructure.NuclearPlantRepository;
 
 import java.util.List;
@@ -23,13 +24,17 @@ public class NuclearPlantServiceImpl implements NuclearPlantService {
 
     private NuclearPlantCompleteMapper nuclearPlantCompleteMapper;
 
+    private List<NuclearPlantObserver> observers;
+
     private static final Logger logger = LoggerFactory.getLogger(NuclearPlantServiceImpl.class);
 
     public NuclearPlantServiceImpl(
             NuclearPlantRepository nuclearPlantRepository,
-            NuclearPlantCompleteMapper nuclearPlantCompleteMapper) {
+            NuclearPlantCompleteMapper nuclearPlantCompleteMapper,
+            List<NuclearPlantObserver> observers) {
         this.nuclearPlantRepository = nuclearPlantRepository;
         this.nuclearPlantCompleteMapper = nuclearPlantCompleteMapper;
+        this.observers = observers;
     }
 
     @Override
@@ -38,14 +43,14 @@ public class NuclearPlantServiceImpl implements NuclearPlantService {
 
         return nuclearPlantRepository.findAll().stream()
         .map(nuclearPlant -> {
-            logger.debug("Fetched NuclearPlant with ID: {}", nuclearPlant.getId()); // Log antes de mapear
-            return nuclearPlantCompleteMapper.toNuclearPlantDTO(nuclearPlant); // Convertir a DTO
+            logger.debug("Fetched NuclearPlant with ID: {}", nuclearPlant.getId());
+            return nuclearPlantCompleteMapper.toNuclearPlantDTO(nuclearPlant);
         })
         .map(dto -> {
-            logger.debug("Mapped NuclearPlant to DTO: {}", dto); // Log después de mapear
-            return dto; // Devolver el DTO mapeado
+            logger.debug("Mapped NuclearPlant to DTO: {}", dto);
+            return dto;
         })
-        .toList(); // Recogerlas en una lista
+        .toList();
     }
 
     @Override
@@ -56,15 +61,14 @@ public class NuclearPlantServiceImpl implements NuclearPlantService {
             logger.error("The provided ID is null");
             throw NuclearPlantException.badRequest(NuclearPlantException.BAD_REQUEST + id);
         }
-        // Utilizamos Optional para el manejo funcional
         return Optional.of(id)
-                .map(nuclearPlantRepository::findById) // Buscamos la planta
-                .flatMap(opt -> opt) // Recuperamos la planta si está presente
-                .map(nuclearPlantCompleteMapper::toNuclearPlantDTO) // Mapeamos a DTO
+                .map(nuclearPlantRepository::findById)
+                .flatMap(opt -> opt)
+                .map(nuclearPlantCompleteMapper::toNuclearPlantDTO)
                 .map(dto -> {
                     logger.debug("Mapped NuclearPlant to DTO: {}", dto);
                     return dto;
-                }) // Log para traza
+                })
                 .orElseThrow(() -> {
                     logger.error(NuclearPlantException.NOT_FOUND_MESSAGE, id);
                     return NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id);
@@ -76,13 +80,17 @@ public class NuclearPlantServiceImpl implements NuclearPlantService {
         logger.info("Creating new nuclear plant");
 
         return Optional.ofNullable(nuclearPlantDTO)
-                .map(nuclearPlantCompleteMapper::toNuclearPlant) // Convertimos DTO a entidad
-                .map(nuclearPlantRepository::save) // Guardamos la planta
-                .map(nuclearPlantCompleteMapper::toNuclearPlantDTO) // Convertimos la entidad de nuevo a DTO
+                .map(nuclearPlantCompleteMapper::toNuclearPlant)
+                .map(nuclearPlantRepository::save)
+                .map(savedPlant -> {
+                    // ── NOTIFY OBSERVERS ──
+                    notifyObserversCreated(savedPlant);
+                    return nuclearPlantCompleteMapper.toNuclearPlantDTO(savedPlant);
+                })
                 .map(dto -> {
                     logger.debug("Created NuclearPlant DTO: {}", dto);
                     return dto;
-                }) // Log para traza
+                })
                 .orElseThrow(() -> {
                     logger.error("Unexpected error while saving nuclear plant");
                     return NuclearPlantException.internalError(NuclearPlantException.UNEXPECTING_ERROR_WHILE_SAVING);
@@ -92,20 +100,23 @@ public class NuclearPlantServiceImpl implements NuclearPlantService {
     @Override
     public NuclearPlantDTO updateNuclearPlant(Long id, NuclearPlantDTO nuclearPlantDTO) {
         logger.info("Updating nuclear plant with ID: {}", id);
-        // Usamos Optional y map para hacer el proceso funcional
         return Optional.of(id)
-                .map(nuclearPlantRepository::findById) // Buscamos la planta
-                .flatMap(opt -> opt) // Convertimos el Optional en valor si existe
+                .map(nuclearPlantRepository::findById)
+                .flatMap(opt -> opt)
                 .map(existingPlant -> {
-                    existingPlant.setName(nuclearPlantDTO.name()); // Actualizamos el nombre
-                    existingPlant.setLocation(nuclearPlantDTO.location()); // Actualizamos la ubicación
-                    return nuclearPlantRepository.save(existingPlant); // Guardamos la planta
+                    existingPlant.setName(nuclearPlantDTO.name());
+                    existingPlant.setLocation(nuclearPlantDTO.location());
+                    return nuclearPlantRepository.save(existingPlant);
                 })
-                .map(nuclearPlantCompleteMapper::toNuclearPlantDTO) // Convertimos la planta guardada en DTO
+                .map(updatedPlant -> {
+                    // ── NOTIFY OBSERVERS ──
+                    notifyObserversUpdated(updatedPlant);
+                    return nuclearPlantCompleteMapper.toNuclearPlantDTO(updatedPlant);
+                })
                 .map(dto -> {
                     logger.debug("Updated NuclearPlant DTO: {}", dto);
                     return dto;
-                }) // Log para traza
+                })
                 .orElseThrow(() -> {
                     logger.error(NuclearPlantException.NOT_FOUND_MESSAGE, id);
                     return NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id);
@@ -118,15 +129,59 @@ public class NuclearPlantServiceImpl implements NuclearPlantService {
         logger.info("Deleting nuclear plant with ID: {}", id);
 
         Optional.of(id)
-                .map(nuclearPlantRepository::findById) // Buscamos la planta por ID
-                .flatMap(opt -> opt) // Recuperamos la planta si existe
+                .map(nuclearPlantRepository::findById)
+                .flatMap(opt -> opt)
                 .ifPresentOrElse(nuclearPlant -> {
-                    nuclearPlantRepository.delete(nuclearPlant); // Eliminamos la planta
-                    logger.debug("Deleted NuclearPlant with ID: {}", id); // Log para traza
+                    nuclearPlantRepository.delete(nuclearPlant);
+                    // ── NOTIFY OBSERVERS ──
+                    notifyObserversDeleted(nuclearPlant);
+                    logger.debug("Deleted NuclearPlant with ID: {}", id);
                 }, () -> {
                     logger.error(NuclearPlantException.NOT_FOUND_MESSAGE, id);
                     throw NuclearPlantException.notFound(NuclearPlantException.NOT_FOUND_MESSAGE + id);
                 });
+    }
+
+    // ── OBSERVER NOTIFICATION METHODS ──
+    /**
+     * Notify all registered observers that a plant was created.
+     * Observers are called asynchronously to prevent blocking on observer failures.
+     */
+    private void notifyObserversCreated(com.ihl95.nuclear.nuclearplant.domain.NuclearPlant plant) {
+        observers.forEach(observer -> {
+            try {
+                observer.onNuclearPlantCreated(plant);
+            } catch (Exception e) {
+                logger.error("Error in observer onNuclearPlantCreated", e);
+                // Don't rethrow - observer failure shouldn't break service
+            }
+        });
+    }
+
+    /**
+     * Notify all registered observers that a plant was updated.
+     */
+    private void notifyObserversUpdated(com.ihl95.nuclear.nuclearplant.domain.NuclearPlant plant) {
+        observers.forEach(observer -> {
+            try {
+                observer.onNuclearPlantUpdated(plant);
+            } catch (Exception e) {
+                logger.error("Error in observer onNuclearPlantUpdated", e);
+            }
+        });
+    }
+
+    /**
+     * Notify all registered observers that a plant was deleted.
+     */
+    private void notifyObserversDeleted(com.ihl95.nuclear.nuclearplant.domain.NuclearPlant plant) {
+        observers.forEach(observer -> {
+            try {
+                observer.onNuclearPlantDeleted(plant);
+            } catch (Exception e) {
+                logger.error("Error in observer onNuclearPlantDeleted", e);
+            }
+        });
     }
 
 }
