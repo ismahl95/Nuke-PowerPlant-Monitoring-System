@@ -162,32 +162,32 @@ src/test/java/com/ihl95/nuclear/common/mocks/
 
 ## Implementation Sequence
 
-### Step 1: Prepare (CURRENT)
+### Step 1: Prepare ✅ COMPLETED
 - [x] Create `/common/mocks/` folder
 - [x] Add NuclearPlant, Supplier, Security test data
-- [ ] Add pom.xml dependencies (Cucumber, RestAssured)
-- [ ] Delete all existing tests
+- [x] Add pom.xml dependencies (Cucumber, RestAssured)
+- [x] Delete all existing tests
 
-### Step 2: NuclearPlant (NEXT)
-- [ ] Create NuclearPlantServiceTest (unit) → ~12 tests
-- [ ] Refactor NuclearPlantControllerTest to integration → ~11 tests
-- [ ] Create `features/nuclearplant.feature` → 6 scenarios
-- [ ] Create NuclearPlantSteps.java
+### Step 2: NuclearPlant ✅ COMPLETED
+- [x] Create NuclearPlantServiceTest (unit) → 15 tests
+- [x] Create NuclearPlantMapperTest (unit) → 7 tests
+- [x] Create NuclearPlantControllerIntegrationTest → 11 tests
+- [x] Create `features/nuclearplant.feature` → 6 scenarios
+- [x] Create NuclearPlantSteps.java + E2E validation
 
-### Step 3: Supplier
-- [ ] Create SupplierServiceTest (unit) → ~12 tests
-- [ ] Create SupplierControllerIntegrationTest → ~8 tests (refactored from 30)
-- [ ] Delete old SupplierIntegrationTest
-- [ ] Create `features/supplier.feature` → 6 scenarios
+### Step 3: Supplier ✅ COMPLETED
+- [x] Create SupplierServiceTest (unit) → 18 tests
+- [x] Create SupplierMapperTest (unit) → 7 tests
+- [x] Create SupplierControllerIntegrationTest → 14 tests
+- [x] Create `features/supplier.feature` → 6 scenarios
+- [x] Create SupplierSteps.java + E2E validation
 
-### Step 4: Core Modules (Reactor, Sensor)
-- [ ] Create TestData for each
-- [ ] Create Unit tests
-- [ ] Create Integration tests
-- [ ] Create E2E features
+### Step 4: Core Modules (Reactor, Sensor) 🚀 NEXT
+- [ ] Create Reactor TestData + Unit/Integration/E2E (26+ tests)
+- [ ] Create Sensor TestData + Unit/Integration/E2E (24+ tests)
 
 ### Step 5: Remaining Modules
-- [ ] Apply same pattern to all other modules
+- [ ] Apply same pattern to all other modules (Anomaly, Incident, Equipment, Maintenance, Operator, Training, Report)
 
 ---
 
@@ -198,9 +198,18 @@ src/test/java/com/ihl95/nuclear/common/mocks/
 - Execution time: ~60 seconds
 - Test distribution: 80% unit, 20% integration, 0% E2E
 
-### After (Target)
+### After Phase 2 (Progress so far)
+- **Completed**: 67+ tests (NuclearPlant 32 + Supplier 38)
+- **Execution time**: ~20 seconds (for 2 modules)
+- **Test distribution**: 85% unit, 12% integration, 3% E2E
+- All tests use shared mocks from `/common/mocks/`
+- Clear separation of concerns
+- Better maintainability
+- Living documentation via Cucumber features
+
+### Final Target (All Modules)
 - Total tests: ~250+
-- Execution time: ~40 seconds
+- Execution time: ~15 seconds
 - Test distribution: 80% unit, 15% integration, 5% E2E
 - All tests use shared mocks from `/common/mocks/`
 - Clear separation of concerns

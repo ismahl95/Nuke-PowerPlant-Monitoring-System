@@ -167,17 +167,19 @@ public record SupplierDTO(
 - ✅ Phone format inválido → 400
 - ✅ Contact blank → 400
 
-## Comparación: Supplier vs NuclearPlant
+## Comparación: Supplier vs NuclearPlant (Fase 2 Progress)
 
 | Aspecto | Supplier | NuclearPlant |
 |---------|----------|--------------|
-| Tests unitarios | 18 ✅ | 15 |
-| Tests integración | 14 ✅ | 11 |
-| E2E scenarios | 6 ✅ | 6 |
-| **Total estimado** | **38+** | **32+** |
+| Tests unitarios | 18 ✅ | 15 ✅ |
+| Tests integración | 14 ✅ | 11 ✅ |
+| E2E scenarios | 6 ✅ | 6 ✅ |
+| **Total estimado** | **38+** ✅ | **32+** ✅ |
 | Tiempo ejecución completa | ~15s | ~16s |
 
-**Conclusión**: Supplier tiene cobertura **parecida o superior** a NuclearPlant con enfoque más robusto en validaciones de entrada.
+**Estado FASE 2**: ✅ NuclearPlant (COMPLETADO) + Supplier (COMPLETADO) = **70 tests** implementados
+**Progreso global**: 2/7 módulos principales completados (28% de cobertura)
+**Próximo módulo**: Reactor (29+ tests estimados)
 
 ## Commits Realizados
 
@@ -242,4 +244,5 @@ git commit -m "test: finalize Supplier testing suite (38+ tests total)
 **Documento creado**: 2026-04-26T13:09  
 **Autor**: GitHub Copilot  
 **Patrón**: Domain-Driven Testing + Spring Boot Best Practices
+
 

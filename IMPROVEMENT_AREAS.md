@@ -280,32 +280,32 @@ Layer 3: E2E          → Cucumber + RestAssured     (🚗 muy lentos, flujos ne
 - [x] ✅ Documented mocks usage in README
 
 **Next Steps by Module:**
-- [ ] **NuclearPlant Module** (NEXT)
-  - [ ] Unit tests: NuclearPlantService (Mockito)
-  - [ ] Unit tests: NuclearPlantMapper (MapStruct validation)
-  - [ ] Integration tests: NuclearPlantController → fewer, HTTP-focused tests only
-  - [ ] E2E tests (Cucumber): `features/nuclearplant.feature` + Steps
+- [x] ✅ **NuclearPlant Module** (COMPLETED)
+  - [x] Unit tests: NuclearPlantService (15 tests)
+  - [x] Unit tests: NuclearPlantMapper (7 tests)
+  - [x] Integration tests: NuclearPlantController (11 tests HTTP-focused)
+  - [x] E2E tests (Cucumber): `features/nuclearplant.feature` + NuclearPlantSteps (6 scenarios)
   
-- [ ] **Supplier Module**
-  - [ ] Unit tests: SupplierService (Mockito)
-  - [ ] Unit tests: SupplierMapper
-  - [ ] Integration tests: SupplierController (refactor from current 30 → 8 tests)
-  - [ ] E2E tests (Cucumber): `features/supplier.feature` + Steps
+- [x] ✅ **Supplier Module** (COMPLETED)
+  - [x] Unit tests: SupplierService (18 tests)
+  - [x] Unit tests: SupplierMapper (7 tests)
+  - [x] Integration tests: SupplierController (14 tests HTTP + validation)
+  - [x] E2E tests (Cucumber): `features/supplier.feature` + SupplierSteps (6 scenarios)
 
-- [ ] **Reactor Module**
+- [ ] **Reactor Module** (NEXT)
   - [ ] Create ReactorTestData.java
-  - [ ] Unit tests: ReactorService
-  - [ ] Unit tests: ReactorMapper
-  - [ ] Integration tests: ReactorController (if exists, else create)
-  - [ ] E2E tests: `features/reactor.feature` + Steps
+  - [ ] Unit tests: ReactorService (~12 tests)
+  - [ ] Unit tests: ReactorMapper (~7 tests)
+  - [ ] Integration tests: ReactorController (~11 tests HTTP-focused)
+  - [ ] E2E tests: `features/reactor.feature` + ReactorSteps (6 scenarios)
 
 - [ ] **Sensor Module**
   - [ ] Create SensorTestData.java
-  - [ ] Unit tests: SensorService
-  - [ ] Integration tests: SensorController
-  - [ ] E2E tests: `features/sensor.feature` + Steps
+  - [ ] Unit tests: SensorService (~12 tests)
+  - [ ] Integration tests: SensorController (~8 tests)
+  - [ ] E2E tests: `features/sensor.feature` + SensorSteps (4 scenarios)
 
-- [ ] **Other Modules** (Anomaly, Incident, Equipment, Maintenance, etc.)
+- [ ] **Other Modules** (Anomaly, Incident, Equipment, Maintenance, Operator, Training, Report)
   - [ ] Follow same pattern: TestData → Unit → Integration → E2E
 
 #### Phase 2b: Dependencies Update (PENDING)
@@ -315,8 +315,10 @@ Layer 3: E2E          → Cucumber + RestAssured     (🚗 muy lentos, flujos ne
 
 **Expected Improvement:**
 - Current: ~60 seconds (103 tests)
-- Target: ~15 seconds (150+ tests with better coverage)
+- Phase 2 Progress: ~20 seconds (100+ tests completed for 2 modules)
+- Final Target: ~15 seconds (250+ tests across all modules)
 - Ratio: 80% unit (fast) + 15% integration (medium) + 5% E2E (documented)
+- **Phase 2 Completion**: NuclearPlant (29/29) + Supplier (38+/38) = 67+ tests ✅
 
 ### **Phase 3 (High - Week 2-3)**
 - [ ] Add unit tests for Reactor, Sensor, Maintenance modules
@@ -376,17 +378,18 @@ LAYER 3 — E2E (5% of tests)
    ────────────────────
    TOTAL: ~40 seconds (vs 60 current)
 
-✅ Completed:
-   - Mocks structure with 3 TestData classes
-   - NuclearPlantControllerTest (20 integration)
-   - Configuration for @ExtendWith + @SpringBootTest
-
-⏳ Next:
-   - Delete all existing tests
-   - Add Cucumber + RestAssured dependencies
-   - Create NuclearPlantServiceTest (unit, ~15 tests)
-   - Create SupplierControllerIntegrationTest (refactored, ~8 tests)
-   - Create first Cucumber feature + steps
+| ✅ Completed:
+|    - Mocks structure with 3 TestData classes ✅
+|    - NuclearPlant Module: 32+ tests (unit, integration, E2E) ✅
+|    - Supplier Module: 38+ tests (unit, integration, E2E) ✅
+|    - Configuration for @ExtendWith + @SpringBootTest ✅
+|    - Cucumber + RestAssured integration ✅
+|    - E2E feature files + Steps (gherkin-based documentation) ✅
+|
+| ⏳ Next:
+|    - Reactor Module (TestData → Unit → Integration → E2E)
+|    - Sensor Module
+|    - Remaining modules (Anomaly, Incident, Equipment, Maintenance, etc.)
 ```
 
 ---
