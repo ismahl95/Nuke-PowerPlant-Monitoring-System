@@ -185,3 +185,11 @@ When modifying an entity, check if other modules depend on it.
 - `data.sql` — Initial test data
 - `NuclearPowerplantBackendApplication.java` — Spring Boot entry point
 
+## Agent Guides Available
+
+Located in `.github/copilot/agents/`:
+- **01-unit-tests-guide.md** — JUnit 5 + Mockito testing patterns
+- **02-integration-tests-guide.md** — @SpringBootTest + MockMvc patterns
+- **03-e2e-tests-guide.md** — Cucumber + RestAssured E2E testing
+- **04-design-patterns-agent.md** — 🆕 Enterprise design patterns implementation (10 patterns phased)
+
