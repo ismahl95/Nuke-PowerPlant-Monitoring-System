@@ -176,8 +176,9 @@ src/test/java/com/ihl95/nuclear/common/mocks/
 - [x] Create NuclearPlantSteps.java + E2E validation
 
 ### Step 3: Supplier ✅ COMPLETED
-- [x] Create SupplierServiceTest (unit) → 18 tests
-- [x] Create SupplierMapperTest (unit) → 7 tests
+- [x] Create SupplierServiceTest (unit) → 16 tests
+- [x] Create SupplierMapperTest (unit) → 2 tests
+- [x] Create SupplierValidatorTest (unit) → 13 tests (Chain of Responsibility)
 - [x] Create SupplierControllerIntegrationTest → 14 tests
 - [x] Create `features/supplier.feature` → 6 scenarios
 - [x] Create SupplierSteps.java + E2E validation
@@ -199,9 +200,10 @@ src/test/java/com/ihl95/nuclear/common/mocks/
 - Test distribution: 80% unit, 20% integration, 0% E2E
 
 ### After Phase 2 (Progress so far)
-- **Completed**: 67+ tests (NuclearPlant 32 + Supplier 38)
-- **Execution time**: ~20 seconds (for 2 modules)
+- **Completed**: 103+ tests (NuclearPlant 52 + Supplier 51)
+- **Execution time**: ~25 seconds (for 2 modules)
 - **Test distribution**: 85% unit, 12% integration, 3% E2E
+- **Patterns**: 2 implemented (Observer in NuclearPlant, Chain of Responsibility in both NuclearPlant & Supplier)
 - All tests use shared mocks from `/common/mocks/`
 - Clear separation of concerns
 - Better maintainability

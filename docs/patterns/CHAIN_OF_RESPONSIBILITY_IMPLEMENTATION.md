@@ -1,15 +1,20 @@
-# 🔗 Implementación del Chain of Responsibility Pattern - NuclearPlant Validation
+# 🔗 Implementación del Chain of Responsibility Pattern - Validation
 
-**Fecha**: Abril 2026  
-**Módulo**: NuclearPlant  
+**Fecha**: Abril 2026 (Actualizado: 27-04-2026)  
+**Módulos**: NuclearPlant + Supplier  
 **Patrón**: Chain of Responsibility (Gang of Four)  
-**Estado**: ✅ **IMPLEMENTADO Y TESTEADO (100/100 tests)**
+**Estado**: ✅ **IMPLEMENTADO Y TESTEADO EN 2 MÓDULOS (113/113 tests)**
 
 ---
 
 ## 📖 Resumen Ejecutivo
 
-Se ha implementado el **Chain of Responsibility Pattern** para la validación de plantas nucleares. Este patrón permite encadenar múltiples validadores que se ejecutan secuencialmente, deteniéndose en el primer error (fail-fast) sin requerir modificaciones en el Service o en el código del cliente.
+El **Chain of Responsibility Pattern** ha sido implementado en **2 módulos principales** (NuclearPlant y Supplier) para la validación de objetos de dominio. Este patrón permite encadenar múltiples validadores que se ejecutan secuencialmente, deteniéndose en el primer error (fail-fast) sin requerir modificaciones en el Service o en el código del cliente.
+
+**Estado de implementación**:
+- ✅ **NuclearPlant**: 3 validadores (Name, Location, UniquePlant) + 13 tests
+- ✅ **Supplier**: 3 validadores (Name, Contact, Phone) + 13 tests
+- ✅ **Total**: 113/113 tests PASANDO
 
 **Beneficios clave**:
 - ✅ **Fail-fast**: Se detiene en la primera validación que falla
@@ -383,11 +388,19 @@ void validatorChain_shouldStopAtFirstError() {
 ### Resultados
 
 ```
+NuclearPlant Module:
 ✅ NuclearPlantValidatorTest: 13/13 tests passing
 ✅ NuclearPlantServiceTest: 20/20 tests passing  
 ✅ NuclearPlantControllerIntegrationTest: 11/11 tests passing
 ✅ NuclearPlantE2ETest: 6/6 tests passing
-✅ TOTAL: 100/100 tests passing
+
+Supplier Module (NEW):
+✅ SupplierValidatorTest: 13/13 tests passing
+✅ SupplierServiceTest: 16/16 tests passing
+✅ SupplierControllerIntegrationTest: 14/14 tests passing
+✅ SupplierE2ETest: 6/6 tests passing
+
+✅ TOTAL GLOBAL: 113/113 tests passing (2 módulos con Chain of Responsibility)
 ```
 
 ---
@@ -513,10 +526,51 @@ Resultado: 3 errores devueltos al cliente
 
 ---
 
+## 📌 Implementación en Supplier Module
+
+El patrón Chain of Responsibility también se ha implementado para **Supplier** de forma idéntica:
+
+### Validadores de Supplier
+
+| Validador | Regla | Orden |
+|-----------|-------|-------|
+| **NameValidator** | Nombre: 3-255 chars, no blank | 1º |
+| **ContactValidator** | Email válido (formato @) | 2º |
+| **PhoneValidator** | Teléfono: +34 + 9 dígitos | 3º |
+
+### Diferencias Mínimas Supplier vs NuclearPlant
+
+```java
+// NuclearPlant
+public abstract class NuclearPlantValidator { }
+class NameValidator extends NuclearPlantValidator { }
+
+// Supplier  
+public abstract class SupplierValidator { }
+class NameValidator extends SupplierValidator { }
+```
+
+**Patrón idéntico, reglas de negocio específicas por módulo**
+
+### Tests de Validadores Supplier
+
+```
+✅ SupplierValidatorTest: 13/13 tests passing
+├─ NameValidator tests: 6
+├─ ContactValidator tests: 5  
+├─ PhoneValidator tests: 7
+└─ ValidatorChain tests: 5
+```
+
+**Archivo**: `src/test/java/com/ihl95/nuclear/supplier/validator/SupplierValidatorTest.java`
+
+---
+
 ## 🚀 Próximos Pasos
 
-### Fase 2: Aplicar a otros módulos
-- 📌 Supplier validation chain
+### Fase 2: Completado ✅
+- ✅ NuclearPlant validation chain  
+- ✅ Supplier validation chain
 - 📌 Reactor validation chain
 - 📌 Sensor validation chain
 
@@ -541,6 +595,11 @@ Resultado: 3 errores devueltos al cliente
 
 **Autor**: GitHub Copilot  
 **Fecha**: 2026-04-27  
-**Estado**: ✅ Implementado y Testeado (100/100 tests pasando)  
+**Estado**: ✅ Implementado en NuclearPlant + Supplier (113/113 tests pasando)  
 **Rama**: quality/validation-and-testing
+
+
+
+
+
 

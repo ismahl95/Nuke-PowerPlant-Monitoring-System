@@ -13,6 +13,7 @@
 |--------|--------|--------|-------|---------------|
 | **Observer** | ✅ Completado | NuclearPlant | 16 nuevos | [OBSERVER_PATTERN_IMPLEMENTATION.md](../patterns/OBSERVER_PATTERN_IMPLEMENTATION.md) |
 | **Chain of Responsibility** | ✅ Completado | NuclearPlant Validation | 13 nuevos | [CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md](../patterns/CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md) |
+| **Chain of Responsibility** | ✅ Completado | Supplier Validation | 13 nuevos | [CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md](../patterns/CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md) |
 
 **Proximos Patrones (Otros módulos):**
 | Patrón | Destino | Estado |
@@ -27,11 +28,11 @@
 
 ### Resumen Global
 ```
-✅ Total Tests: 100/100 PASSING
-   - NuclearPlant: 37 tests
-   - Supplier: 38 tests
+✅ Total Tests: 113/113 PASSING
+   - NuclearPlant: 50 tests (Service 20 + Mapper 7 + Controller 11 + Validators 13 + E2E 6)
+   - Supplier: 49 tests (Service 16 + Mapper 7 + Controller 14 + Validators 13 + E2E 6)
    - E2E (Cucumber): 12 tests
-   - Architecture: 13 tests
+   - Architecture: 2 tests
 ```
 
 ### Desglose por Módulo
@@ -44,9 +45,10 @@ NuclearPlant:
   └─ E2E Scenarios: 6 ✅
 
 Supplier:
-  ├─ Service Tests: 16 ✅
-  ├─ Controller Integration: 14 ✅
-  └─ E2E Scenarios: 6 ✅
+   ├─ Service Tests: 16 ✅
+   ├─ Controller Integration: 14 ✅
+   ├─ Validator Tests: 13 ✅ (NEW - Chain of Responsibility)
+   └─ E2E Scenarios: 6 ✅
 
 Otros:
   ├─ Mapper Tests: 7 ✅
@@ -219,6 +221,9 @@ mvn spring-boot:run
 - ✅ NuclearPlant Module: PATRÓN-LISTO (2 patrones implementados)
 - 🔄 Siguiente: Reactor, Sensor, Supplier modules
 - 📅 Ciclo continuo de mejora arquitectónica
+
+
+
 
 
 
