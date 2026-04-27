@@ -3,7 +3,6 @@ package com.ihl95.nuclear.security.config;
 import com.ihl95.nuclear.security.JwtRequestFilter;
 import com.ihl95.nuclear.user.CustomUserDetailsService;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,7 +55,19 @@ public class SecurityConfigurer {
         // En ambiente de test, permitir acceso a todos los endpoints sin autenticación
         boolean isTestProfile = isTestProfile();
 
-        http.csrf().disable();
+        // CSRF Protection Strategy:
+        // - Test Profile: CSRF disabled (test endpoints don't require it)
+        // - Production Profile: CSRF enabled via default Spring Security (recommended for stateful operations)
+        // - JWT is stateless, so CSRF is less critical, but enabled by default for defense-in-depth
+        if (isTestProfile) {
+            // CSRF is safe to disable in test profile because:
+            // 1. Application uses JWT authentication (stateless, not prone to CSRF)
+            // 2. Tests are not user-initiated HTTP requests from browsers
+            // 3. Test profile has relaxed security constraints
+            // 4. Production profile keeps CSRF enabled by default for defense-in-depth
+            http.csrf().disable(); // NOSONAR: Justified per conditions above
+        }
+        // In production, CSRF is enabled by default (do not disable)
 
         if (isTestProfile) {
             // Test mode: allow all requests without authentication
