@@ -20,6 +20,9 @@ import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantExceptio
 import com.ihl95.nuclear.nuclearplant.application.mapper.NuclearPlantCompleteMapper;
 import com.ihl95.nuclear.nuclearplant.application.service.NuclearPlantServiceImpl;
 import com.ihl95.nuclear.nuclearplant.application.observer.NuclearPlantObserver;
+import com.ihl95.nuclear.nuclearplant.application.validator.NuclearPlantValidator;
+import com.ihl95.nuclear.nuclearplant.application.validator.ValidationResult;
+import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearplant.domain.NuclearPlant;
 import com.ihl95.nuclear.nuclearplant.infraestructure.NuclearPlantRepository;
 
@@ -43,13 +46,28 @@ class NuclearPlantServiceTest {
     private NuclearPlant existingPlant;
     private NuclearPlantDTO plantDTO;
 
+    /**
+     * Simple dummy validator that always returns valid - for unit test isolation.
+     */
+    private static class DummyValidator extends NuclearPlantValidator {
+        @Override
+        protected ValidationResult doValidate(NuclearPlantDTO dto) {
+            return ValidationResult.valid();
+        }
+    }
+
     @BeforeEach
     void setUp() {
-        // Create service manually with empty observer list for unit test isolation
+        // Create service manually with:
+        // - empty observer list for unit test isolation
+        // - dummy validator that always passes
+        NuclearPlantValidator dummyValidator = new DummyValidator();
+
         nuclearPlantService = new NuclearPlantServiceImpl(
             nuclearPlantRepository,
             nuclearPlantMapper,
-            List.of() // Empty observers for unit tests
+            List.of(), // Empty observers for unit tests
+            dummyValidator
         );
         existingPlant = NuclearPlantTestData.createNuclearPlantEntity();
         plantDTO = NuclearPlantTestData.createNuclearPlantDTO();

@@ -8,6 +8,8 @@ import com.ihl95.nuclear.nuclearplant.application.dto.NuclearPlantDTO;
 import com.ihl95.nuclear.nuclearplant.application.exception.NuclearPlantException;
 import com.ihl95.nuclear.nuclearplant.application.mapper.NuclearPlantCompleteMapper;
 import com.ihl95.nuclear.nuclearplant.application.observer.NuclearPlantObserver;
+import com.ihl95.nuclear.nuclearplant.application.validator.NuclearPlantValidator;
+import com.ihl95.nuclear.nuclearplant.application.validator.ValidationResult;
 import com.ihl95.nuclear.nuclearplant.infraestructure.NuclearPlantRepository;
 
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @Service
 @Transactional
@@ -26,15 +30,19 @@ public class NuclearPlantServiceImpl implements NuclearPlantService {
 
     private List<NuclearPlantObserver> observers;
 
+    private NuclearPlantValidator validatorChain;
+
     private static final Logger logger = LoggerFactory.getLogger(NuclearPlantServiceImpl.class);
 
     public NuclearPlantServiceImpl(
             NuclearPlantRepository nuclearPlantRepository,
             NuclearPlantCompleteMapper nuclearPlantCompleteMapper,
-            List<NuclearPlantObserver> observers) {
+            List<NuclearPlantObserver> observers,
+            @Qualifier("nuclearPlantValidatorChain") NuclearPlantValidator validatorChain) {
         this.nuclearPlantRepository = nuclearPlantRepository;
         this.nuclearPlantCompleteMapper = nuclearPlantCompleteMapper;
         this.observers = observers;
+        this.validatorChain = validatorChain;
     }
 
     @Override
@@ -78,6 +86,15 @@ public class NuclearPlantServiceImpl implements NuclearPlantService {
     @Override
     public NuclearPlantDTO createNuclearPlant(NuclearPlantDTO nuclearPlantDTO) {
         logger.info("Creating new nuclear plant");
+
+        // ── CHAIN OF RESPONSIBILITY: Validate through validator chain ──
+        // Validators: Name → Location → Unique
+        ValidationResult validationResult = validatorChain.validate(nuclearPlantDTO);
+        
+        if (!validationResult.isValid()) {
+            logger.warn("Validation failed: {}", validationResult.getMessage());
+            throw NuclearPlantException.badRequest(validationResult.getMessage());
+        }
 
         return Optional.ofNullable(nuclearPlantDTO)
                 .map(nuclearPlantCompleteMapper::toNuclearPlant)
