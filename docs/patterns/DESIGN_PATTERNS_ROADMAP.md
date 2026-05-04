@@ -3,7 +3,7 @@
 > Strategic implementation of 10 design patterns aligned with the domain context.
 > **Goal**: Demonstrate modern technical deployment with enterprise-grade architecture patterns.
 
-**Document Date**: 2026-04-26  
+**Document Date**: 2026-04-26 | **Última revisión**: 2026-05-04  
 **Project**: `nuke-powerplant-back` (Spring Boot 2.7.18, Java 17)  
 **Target Audience**: Engineering team + technical evaluation
 
@@ -11,19 +11,35 @@
 
 ## Executive Summary
 
-### Patterns Already Implemented (Implicit)
+### Patterns Already Implemented
+
 ✅ **Repository Pattern** — `JpaRepository` for data access  
 ✅ **Data Transfer Object (DTO)** — Separate concerns with records  
 ✅ **Builder Pattern** — Lombok `@Builder` for entity construction  
 ✅ **Exception Handler Pattern** — `GlobalExceptionHandler` centralized  
+✅ **Observer Pattern** — NuclearPlant module (Audit, Alert, Metrics observers) — *2026-04-26*  
+✅ **Chain of Responsibility** — NuclearPlant + Supplier validation — *2026-04-27*  
+
+### Current Module Status (2026-05-04)
+
+| Module | CRUD | Patterns Applied |
+|--------|------|-----------------|
+| **NuclearPlant** | ✅ Complete | Observer + Chain of Responsibility |
+| **Supplier** | ✅ Complete | Chain of Responsibility |
+| **Reactor** | ❌ No CRUD yet (domain only) | — |
+| **Sensor** | ❌ No CRUD yet (domain only) | — |
+| **Others** | ❌ Not implemented | — |
+
+> ⚠️ **Prerequisite**: Reactor and Sensor modules need full CRUD before applying design patterns (State, Factory).
 
 ### Patterns to Implement (Strategic Roadmap)
 
-| Priority | Phase | Patterns | Impact | Modules |
-|----------|-------|----------|--------|---------|
-| 🔴 IMMEDIATE | Phase 2 | Factory, Strategy, Template Method | High | Sensor, Reactor, Service layer |
-| 🟠 SHORT-TERM | Phase 3 | State, Observer, Adapter, Facade | High | Reactor, Operator, Monitoring |
-| 🟡 FUTURE | Phase 4+ | Composite, Advanced Builder, Chain of Resp. | Medium | Equipment, Report, Incident |
+| Priority | Phase | Action | Impact | Modules | Prerequisite |
+|----------|-------|--------|--------|---------|-------------|
+| 🔴 IMMEDIATE | Phase 2 | Reactor CRUD + Sensor CRUD | High | Reactor, Sensor | — |
+| 🟠 SHORT-TERM | Phase 3 | State Pattern, Factory Method | High | Reactor, Sensor | Phase 2 CRUD |
+| 🟡 MEDIUM-TERM | Phase 4 | Observer (Supplier), Template Method | Medium | Supplier, Service layer | Phase 2 CRUD |
+| ⚪ FUTURE | Phase 5+ | Strategy, Adapter, Facade, Composite | Medium | Anomaly, Equipment | Phase 3+ |
 
 **Total patterns analyzed**: 23  
 **Patterns omitted** (not applicable): Singleton (Spring ✓), Iterator (Java Streams ✓), Prototype (Builder sufficient), Mediator (premature), Visitor (no recursion needed)  

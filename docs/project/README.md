@@ -1,60 +1,26 @@
 # 📊 Nuke PowerPlant Monitoring System - Project Status
 
-**Última Actualización**: 27 de Abril de 2026  
+**Última Actualización**: 4 de Mayo de 2026  
 **Estado General**: ✅ **PRODUCCIÓN - Design Patterns Phase**
 
 ---
 
 ## 🎯 Estado Actual del Proyecto
 
-### Fase: Design Patterns Implementation - NuclearPlant Module ✅ COMPLETADA
+### Módulos con CRUD completo
 
-| Patrón | Estado | Módulo | Tests | Documentación |
-|--------|--------|--------|-------|---------------|
-| **Observer** | ✅ Completado | NuclearPlant | 16 nuevos | [OBSERVER_PATTERN_IMPLEMENTATION.md](../patterns/OBSERVER_PATTERN_IMPLEMENTATION.md) |
-| **Chain of Responsibility** | ✅ Completado | NuclearPlant Validation | 13 nuevos | [CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md](../patterns/CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md) |
-| **Chain of Responsibility** | ✅ Completado | Supplier Validation | 13 nuevos | [CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md](../patterns/CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md) |
+| Módulo | CRUD | Tests | Patrones aplicados |
+|--------|------|-------|--------------------|
+| **NuclearPlant** | ✅ Completo | 50 tests | Observer + Chain of Responsibility |
+| **Supplier** | ✅ Completo | 49 tests | Chain of Responsibility |
 
-**Proximos Patrones (Otros módulos):**
-| Patrón | Destino | Estado |
-|--------|---------|--------|
-| **State Pattern** | Reactor (ciclo de vida) | 🟡 Planificado |
-| **Factory Pattern** | Sensor (creación por tipo) | 🟡 Planificado |
-| **Decorator Pattern** | Servicios (caching) | 🟡 Planificado |
+### Módulos con estructura de dominio (sin CRUD implementado)
 
----
-
-## 📈 Métricas de Tests
-
-### Resumen Global
-```
-✅ Total Tests: 113/113 PASSING
-   - NuclearPlant: 50 tests (Service 20 + Mapper 7 + Controller 11 + Validators 13 + E2E 6)
-   - Supplier: 49 tests (Service 16 + Mapper 7 + Controller 14 + Validators 13 + E2E 6)
-   - E2E (Cucumber): 12 tests
-   - Architecture: 2 tests
-```
-
-### Desglose por Módulo
-```
-NuclearPlant:
-  ├─ Service Tests: 20 ✅
-  ├─ Controller Integration: 11 ✅
-  ├─ Validator Tests: 13 ✅ (NEW - Chain of Responsibility)
-  ├─ Observer Tests: 16 ✅ (NEW - Observer Pattern)
-  └─ E2E Scenarios: 6 ✅
-
-Supplier:
-   ├─ Service Tests: 16 ✅
-   ├─ Controller Integration: 14 ✅
-   ├─ Validator Tests: 13 ✅ (NEW - Chain of Responsibility)
-   └─ E2E Scenarios: 6 ✅
-
-Otros:
-  ├─ Mapper Tests: 7 ✅
-  ├─ Validator CRUD Tests: Custom ✅
-  └─ Architecture: 1 ✅
-```
+| Módulo | Dominio | Service | Controller/Infra | Estado |
+|--------|---------|---------|------------------|--------|
+| **Reactor** | ✅ Entity + Enums | ✅ Interface + Impl | ❌ Sin infraestructura | 🔴 Pendiente CRUD |
+| **Sensor** | ✅ Entity | ✅ DTOs + Mapper | ❌ Sin infraestructura | 🔴 Pendiente CRUD |
+| **Otros** (anomaly, equipment, incident…) | Parcial | ❌ | ❌ | 🔴 Sin implementar |
 
 ---
 
@@ -68,8 +34,9 @@ Otros:
 - **Documentación**: [Ver detalles completos](../patterns/OBSERVER_PATTERN_IMPLEMENTATION.md)
 
 ### 2️⃣ **Chain of Responsibility Pattern** ✅
-- **Clase Base**: `NuclearPlantValidator`
-- **Validadores**: NameValidator → LocationValidator → UniquePlantValidator
+- **Clase Base**: `NuclearPlantValidator` / `SupplierValidator`
+- **Validadores NuclearPlant**: NameValidator → LocationValidator → UniquePlantValidator
+- **Validadores Supplier**: aplicados de forma análoga
 - **Configuración**: `ValidatorChainConfiguration`
 - **Ventaja**: Fail-fast, validación ordenada, composable
 - **Documentación**: [Ver detalles completos](../patterns/CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md)
@@ -84,23 +51,70 @@ Otros:
 
 ---
 
+## 📈 Métricas de Tests
+
+### Resumen Global
+```
+✅ Total Tests: 113/113 PASSING
+   - NuclearPlant: 50 tests (Service 20 + Mapper 7 + Controller 11 + Validators 13 + Observer 16 + E2E 6)
+   - Supplier: 49 tests (Service 16 + Mapper 7 + Controller 14 + Validators 13 + E2E 6)
+   - E2E (Cucumber): 12 tests
+   - Architecture: 2 tests
+```
+
+### Desglose por Módulo
+```
+NuclearPlant:
+  ├─ Service Tests: 20 ✅
+  ├─ Controller Integration: 11 ✅
+  ├─ Validator Tests: 13 ✅ (Chain of Responsibility)
+  ├─ Observer Tests: 16 ✅ (Observer Pattern)
+  └─ E2E Scenarios: 6 ✅
+
+Supplier:
+   ├─ Service Tests: 16 ✅
+   ├─ Controller Integration: 14 ✅
+   ├─ Validator Tests: 13 ✅ (Chain of Responsibility)
+   └─ E2E Scenarios: 6 ✅
+
+Otros módulos: sin tests (sin CRUD implementado)
+```
+
+---
+
 ## 🚀 Próximos Pasos (Roadmap)
 
-### ✅ Fase 1 COMPLETADA: Pattern Implementation (NuclearPlant)
-- ✅ Observer Pattern → Completado (2026-04-26)
-- ✅ Chain of Responsibility Pattern → Completado (2026-04-27)
+### ✅ Completado
+- ✅ NuclearPlant CRUD completo + Observer Pattern + Chain of Responsibility (2026-04-27)
+- ✅ Supplier CRUD completo + Chain of Responsibility (2026-04-27)
+- ✅ Mejora de validación de email con protección ReDoS (2026-05-04)
 
-**NuclearPlant Module: PATRÓN-LISTO** ✨
+### 🔴 Siguiente prioridad — CRUD de módulos pendientes
 
-### 🚀 Fase 2: Expandir a otros módulos (PRÓXIMA)
-- 📌 **Reactor Module** - State Pattern (ciclo de vida: OPERATIONAL, MAINTENANCE, SHUTDOWN, etc.)
-- 📌 **Sensor Module** - Factory Pattern (creación de sensores por tipo)
-- 📌 **Supplier Module** - Chain of Responsibility Pattern (validadores)
+Antes de aplicar nuevos patrones de diseño, es necesario tener el CRUD funcional
+de los módulos que lo requieran:
 
-### 📌 Fase 3: Architecture Enhancement (FUTURO)
-- 📌 Global Exception Handler (@ControllerAdvice)
-- 📌 Decorator Pattern (caching en servicios críticos)
-- 📌 Builder Pattern (queries complejas)
+| # | Módulo | Acción necesaria | Dependencias |
+|---|--------|-----------------|--------------|
+| 1 | **Reactor** | Implementar infraestructura (Repository, Controller, E2E tests) | NuclearPlant |
+| 2 | **Sensor** | Implementar infraestructura (Repository, Controller, E2E tests) | Reactor |
+| 3 | **Otros módulos** | Evaluar cuáles son necesarios en la siguiente fase | — |
+
+### 🟠 Patrones de diseño pendientes (tras CRUD)
+Una vez que Reactor y Sensor tengan CRUD completo:
+
+| Patrón | Módulo destino | Estado |
+|--------|---------------|--------|
+| **State Pattern** | Reactor (ciclo de vida: OPERATIONAL → MAINTENANCE → SHUTDOWN) | ⏸ Bloqueado — sin CRUD |
+| **Factory Pattern** | Sensor (creación por tipo de sensor) | ⏸ Bloqueado — sin CRUD |
+| **Observer Pattern** | Supplier (replicar el de NuclearPlant) | 🟡 Planificado |
+| **Template Method** | Service layer (CRUD base abstracto) | 🟡 Planificado |
+
+### 📌 Fase futura — Architecture Enhancement
+- Global Exception Handler unificado (@ControllerAdvice)
+- Decorator Pattern (caching en servicios críticos)
+- Strategy Pattern (Anomaly Detection)
+- Adapter Pattern (Control Systems DCS/PLC)
 
 ---
 
@@ -164,16 +178,6 @@ mvn spring-boot:run
 
 ## 📚 Documentación de Patrones
 
-### Para Cada Patrón (Template):
-1. **Resumen Ejecutivo**
-2. **Comparación: Antes vs Después**
-3. **Arquitectura Implementada** (diagramas)
-4. **Componentes Creados** (código)
-5. **Testing** (estrategia + tests)
-6. **Casos de Uso Reales**
-7. **Beneficios a Largo Plazo**
-8. **Próximos Pasos**
-
 ### Acceso Rápido:
 - 🔗 [Observer Pattern](../patterns/OBSERVER_PATTERN_IMPLEMENTATION.md)
 - 🔗 [Chain of Responsibility](../patterns/CHAIN_OF_RESPONSIBILITY_IMPLEMENTATION.md)
@@ -184,7 +188,7 @@ mvn spring-boot:run
 ## ✅ Criterios de Éxito Alcanzados
 
 ### Tests
-- ✅ 100/100 tests pasando
+- ✅ 113/113 tests pasando
 - ✅ 0 breaking changes
 - ✅ 100% backward compatible
 
@@ -210,7 +214,6 @@ mvn spring-boot:run
 
 ## 📞 Notas Importantes
 
-- **Rama Actual**: `quality/validation-and-testing`
 - **JDK**: Java 17+
 - **Spring Boot**: 2.7.18
 - **BD**: H2 (test), PostgreSQL (producción)
@@ -218,13 +221,6 @@ mvn spring-boot:run
 ---
 
 **Status**: 🟢 ACTIVO
-- ✅ NuclearPlant Module: PATRÓN-LISTO (2 patrones implementados)
-- 🔄 Siguiente: Reactor, Sensor, Supplier modules
-- 📅 Ciclo continuo de mejora arquitectónica
-
-
-
-
-
-
-
+- ✅ NuclearPlant Module: PATRÓN-LISTO (Observer + Chain of Responsibility)
+- ✅ Supplier Module: CRUD completo + Chain of Responsibility
+- 🔴 Siguiente: implementar CRUD de Reactor y Sensor antes de aplicar nuevos patrones
