@@ -125,6 +125,10 @@ jobs:
           name: jacoco-report
           path: backend/target/site/jacoco/
 
+      - name: Compile (needed for Sonar java binaries)
+        working-directory: backend
+        run: mvn -B -DskipTests clean compile
+
       - name: Analyze with SonarCloud
         working-directory: backend
         env:
@@ -133,7 +137,8 @@ jobs:
         run: |
           mvn -B sonar:sonar \
             -Dsonar.projectKey=ismahl95_Nuke-PowerPlant-Monitoring-System \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+            -Dsonar.java.binaries=target/classes
 
   # ── Deploy: solo en release, solo ismahl95, reutiliza el JAR ─────────────
   deploy:
